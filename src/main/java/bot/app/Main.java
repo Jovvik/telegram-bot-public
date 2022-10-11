@@ -7,10 +7,10 @@ import org.telegram.telegrambots.updatesreceivers.DefaultBotSession;
 public class Main {
     public static void main(String[] args) {
         try {
-            TelegramBotsApi telegramBotsApi = new TelegramBotsApi(DefaultBotSession.class);
-            telegramBotsApi.registerBot(new TelegramBot());
+            TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
+            botsApi.registerBot(new TelegramBot());
         } catch (TelegramApiException e) {
-//            BotLogger.error(LOGTAG, e);
-        }//end catch()
+            e.printStackTrace();
+        }
     }
 }

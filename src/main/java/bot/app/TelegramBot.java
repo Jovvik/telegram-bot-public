@@ -1,49 +1,50 @@
 package bot.app;
 
+import org.telegram.abilitybots.api.bot.AbilityBot;
+import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 
-public class TelegramBot extends TelegramLongPollingBot {
+import static org.telegram.abilitybots.api.objects.Locality.ALL;
+import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
+public class TelegramBot extends AbilityBot {
 
-    @Override
-    public String getBotUsername() {
-        return null;
+    public TelegramBot() {
+        this("a", "b");
+    }
+    private TelegramBot(String botToken, String botUsername) {
+        super(botToken, botUsername);
+//        addExtension();
     }
 
     @Override
-    public String getBotToken() {
-        return null;
-    }
-
-    @Override
-    public void onUpdateReceived(Update update) {
-        if(update.hasMessage()) {
-            Message message = update.getMessage();
-
-            //check if the message has text. it could also  contain for example a location ( message.hasLocation() )
-            if (message.hasText()) {
-
-                //create a object that contains the information to send back the message
-                SendMessage sendMessageRequest = new SendMessage();
-                sendMessageRequest.setChatId(message.getChatId().toString()); //who should get the message? the sender from which we got the message...
-                sendMessageRequest.setText("you said: " + message.getText());
-//                try {
-////                    sendMessage(sendMessageRequest); //at the end, so some magic and send the message ;)
-//                } catch (TelegramApiException e) {
-//                    //do some error handling
-//                }
-            }
-        }
+    public long creatorId() {
+        return 0;
     }
 
     @Override
     public void onUpdatesReceived(List<Update> updates) {
         super.onUpdatesReceived(updates);
+    }
+
+    @Override
+    public void onClosing() {
+        super.onClosing();
+    }
+
+    public Ability sayHelloWorld() {
+        return Ability
+                .builder()
+                .name("hello")
+                .info("says hello world!")
+                .locality(ALL)
+                .privacy(PUBLIC)
+                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
+                .build();
     }
 }
