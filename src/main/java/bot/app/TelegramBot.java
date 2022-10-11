@@ -1,28 +1,25 @@
 package bot.app;
 
+import bot.app.abilities.AnswerWithButtonsAbility;
 import bot.app.abilities.HelloAbility;
 import org.telegram.abilitybots.api.bot.AbilityBot;
-import org.telegram.abilitybots.api.objects.Ability;
-import org.telegram.telegrambots.bots.TelegramLongPollingBot;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
-
-import static org.telegram.abilitybots.api.objects.Locality.ALL;
-import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 public class TelegramBot extends AbilityBot {
 
     public TelegramBot(String botToken, String botUsername) {
         super(botToken, botUsername);
-        addExtension(new HelloAbility(this));
+        addExtensions(
+                new HelloAbility(this),
+                new AnswerWithButtonsAbility(this)
+        );
     }
 
     @Override
     public long creatorId() {
-        return 0;
+        return 420953808L;
     }
 
     @Override
@@ -35,14 +32,12 @@ public class TelegramBot extends AbilityBot {
         super.onClosing();
     }
 
-//    public Ability sayHelloWorld() {
-//        return Ability
-//                .builder()
-//                .name("hello")
-//                .info("says hello world!")
-//                .locality(ALL)
-//                .privacy(PUBLIC)
-//                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
-//                .build();
-//    }
+    @Override
+    public void onUpdateReceived(Update update) {
+        if (update.hasCallbackQuery()) {
+            silent().send(update.getCallbackQuery().getData(), update.getCallbackQuery().getMessage().getChatId());
+        } else {
+            super.onUpdateReceived(update);
+        }
+    }
 }
