@@ -1,5 +1,6 @@
 package bot.app;
 
+import bot.app.abilities.HelloAbility;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.telegrambots.bots.TelegramLongPollingBot;
@@ -14,12 +15,9 @@ import static org.telegram.abilitybots.api.objects.Privacy.PUBLIC;
 
 public class TelegramBot extends AbilityBot {
 
-    public TelegramBot() {
-        this("a", "b");
-    }
-    private TelegramBot(String botToken, String botUsername) {
+    public TelegramBot(String botToken, String botUsername) {
         super(botToken, botUsername);
-//        addExtension();
+        addExtension(new HelloAbility(this));
     }
 
     @Override
@@ -37,14 +35,14 @@ public class TelegramBot extends AbilityBot {
         super.onClosing();
     }
 
-    public Ability sayHelloWorld() {
-        return Ability
-                .builder()
-                .name("hello")
-                .info("says hello world!")
-                .locality(ALL)
-                .privacy(PUBLIC)
-                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
-                .build();
-    }
+//    public Ability sayHelloWorld() {
+//        return Ability
+//                .builder()
+//                .name("hello")
+//                .info("says hello world!")
+//                .locality(ALL)
+//                .privacy(PUBLIC)
+//                .action(ctx -> silent.send("Hello world!", ctx.chatId()))
+//                .build();
+//    }
 }
