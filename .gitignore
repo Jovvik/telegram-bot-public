@@ -28,4 +28,4 @@ out/
 
 ### Special for Mac ###
 .DS_Store
-/src/main/resources/bot.properties
+**/src/main/resources/bot.properties
