@@ -1,6 +1,7 @@
 package bot.app.abilities;
 
-import bot.app.utils.ButtonMessage;
+import bot.app.utils.Message;
+import bot.app.utils.data.ButtonInfo;
 import bot.app.utils.StringSerialization;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
@@ -36,16 +37,7 @@ public class AnswerWithButtonsAbility extends AbilityTemplate{
                             InlineKeyboardButton button = new InlineKeyboardButton();
                             String answer = String.format("b%d", i * 3 + j);
                             button.setText(answer);
-                            try {
-                                button.setCallbackData(StringSerialization.toString(
-                                        new ButtonMessage(
-                                                question,
-                                                answer
-                                        )
-                                ));
-                            } catch (IOException e) {
-                                System.err.println(e);
-                            }
+                            button.setCallbackData("");
                             buttonsTable.get(i).add(button);
                         }
                     }
@@ -58,7 +50,8 @@ public class AnswerWithButtonsAbility extends AbilityTemplate{
                     try {
                         bot.execute(sm);
                     } catch (TelegramApiException e) {
-                        System.err.println(e.getMessage());
+                        System.err.println("Problem: " + e.getMessage());
+                        e.printStackTrace(System.err);
                     }
                 })
                 .build();

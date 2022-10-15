@@ -1,11 +1,13 @@
-package bot.app.utils;
+package bot.app.utils.data;
 
-public class ButtonMessage extends Message {
+import java.io.Serializable;
+
+public class ButtonInfo implements Serializable {
     private String question;
     private String answer;
 
-    public ButtonMessage() {}
-    public ButtonMessage(String question, String answer) {
+    public ButtonInfo() {}
+    public ButtonInfo(String question, String answer) {
         this.question = question;
         this.answer = answer;
     }
