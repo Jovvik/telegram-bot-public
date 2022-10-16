@@ -11,6 +11,7 @@ import java.util.concurrent.ConcurrentHashMap;
 
 public class PollService {
     private final Map<Long, List<DataBlock<?>>> userIdToInfos = new ConcurrentHashMap<>();
+    private final Map<Long, Question> currQuestionMap = new ConcurrentHashMap<>();
     private final QuestionDataBase questionDataBase;
     private final EventBuilderService eventBuilderService;
 
@@ -27,7 +28,9 @@ public class PollService {
             userIdToInfos.put(userId, new ArrayList<>());
         }
         int qId = getQuestionIdByContext(userIdToInfos.get(userId));
-        return questionDataBase.getQuestion(qId);
+        Question question = questionDataBase.getQuestion(qId);
+        currQuestionMap.put(userId, question);
+        return question;
     }
 
     public void handleAnswer(Long userId, DataBlock<?> answer) {
@@ -37,9 +40,15 @@ public class PollService {
     public void stopPoll(Long userId) {
         List<DataBlock<?>> data = userIdToInfos.getOrDefault(userId, List.of());
         userIdToInfos.remove(userId);
+        currQuestionMap.remove(userId);
         eventBuilderService.handleDataAndStartBuild(data);
     }
 
+    public Question currQuestion(Long usedId) { return currQuestionMap.get(usedId); }
+
+    public List<DataBlock<?>> getUserPollInfos(Long userId) {
+        return userIdToInfos.getOrDefault(userId, List.of());
+    }
 
     private int getQuestionIdByContext(List<DataBlock<?>> dataBlocks) {
         return new Random().nextInt(questionDataBase.numberOfQuestions());

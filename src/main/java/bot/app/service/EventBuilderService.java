@@ -6,5 +6,10 @@ import java.util.List;
 
 public class EventBuilderService {
 
-    public void handleDataAndStartBuild(List<DataBlock<?>> answerData) {}
+    public void handleDataAndStartBuild(List<DataBlock<?>> answerData) {
+        System.out.println("answers: ");
+        for (var answer: answerData) {
+            System.out.println("Q:" + answer.getQuestion() + ", A:" + answer.getAnswer());
+        }
+    }
 }

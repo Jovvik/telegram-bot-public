@@ -1,16 +1,17 @@
 package bot.app.abilities;
 
-import org.telegram.abilitybots.api.bot.AbilityBot;
+import bot.app.TelegramBot;
+import bot.app.utils.data.Question;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.Privacy;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.stream.Collectors;
 
 public class PollAbility extends AbilityTemplate {
-    public PollAbility(AbilityBot bot) {
+    public PollAbility(TelegramBot bot) {
         super(bot);
     }
 
@@ -22,16 +23,19 @@ public class PollAbility extends AbilityTemplate {
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
                 .action(messageContext -> {
+                    Question question = bot.getPollService().getQuestionForUser(messageContext.user().getId());
                     SendMessage sm = new SendMessage();
-                    sm.setText(String.join(", ", bot.abilities().keySet()));
+                    sm.setText(question.getQuestion());
                     sm.setChatId(Long.toString(messageContext.chatId()));
+                    InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
+                    rmu.setKeyboard(question.getButtons());
+                    sm.setReplyMarkup(rmu);
                     try {
                         bot.execute(sm);
                     } catch (TelegramApiException e) {
                         e.printStackTrace();
                     }
                 })
-//                .reply((bt, msg) -> {bot.silent().send("reply to ", msg.getChatMember().getChat().getId());}, upd -> upd.hasMessage())
                 .build();
     }
 }
