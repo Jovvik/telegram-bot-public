@@ -1,5 +1,6 @@
 package bot.app.abilities;
 
+import bot.app.TelegramBot;
 import bot.app.utils.Message;
 import bot.app.utils.data.ButtonInfo;
 import bot.app.utils.StringSerialization;
@@ -17,7 +18,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class AnswerWithButtonsAbility extends AbilityTemplate{
-    public AnswerWithButtonsAbility(AbilityBot bot) {
+    public AnswerWithButtonsAbility(TelegramBot bot) {
         super(bot);
     }
 
