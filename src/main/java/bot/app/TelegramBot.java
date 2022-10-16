@@ -56,74 +56,9 @@ public class TelegramBot extends AbilityBot {
         return pollService;
     }
 
-    public Reply buttonCallback() {
-        BiConsumer<BaseAbilityBot, Update> action = (bot, upd) -> {
-            var tgbot = (TelegramBot) bot;
-            var userId = upd.getCallbackQuery().getFrom().getId();
-            int aID = Integer.parseInt(upd.getCallbackQuery().getData().substring("btn".length()));
-            if (!tgbot.pollService.existUserPollSession(userId)) {
-                System.out.printf("User[%s] try to join closed poll%n", userId);
-                return;
-            }
-            if (aID == -1) {
-                System.out.printf("User[%s] stop poll after %d questions%n",
-                        userId,
-                        tgbot.pollService.getUserPollInfos(userId).size());
-
-                tgbot.pollService.stopPoll(userId);
-                SendMessage sm = new SendMessage();
-                sm.setText("thanks for answers!");
-                sm.setChatId(Long.toString(getChatId(upd)));
-                try {
-                    bot.execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Question question = tgbot.pollService.currQuestion(userId);
-                String answer = question.getAnswers().get(aID);
-                tgbot.pollService.handleAnswer(userId, question.convertAnswer(answer));
-
-                Question newQuestion = tgbot.pollService.getQuestionForUser(userId);
-                SendMessage sm = new SendMessage();
-                sm.setText(newQuestion.getQuestion());
-                sm.setChatId(Long.toString(getChatId(upd)));
-                InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
-                rmu.setKeyboard(newQuestion.getButtons());
-                sm.setReplyMarkup(rmu);
-                try {
-                    bot.execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
-            }
-        };
-
-        return Reply.of(
-                action,
-                Flag.CALLBACK_QUERY,
-                upd -> {
-                    return upd.getCallbackQuery().getData().startsWith("btn");
-                });
-    }
-
     @Override
     public void onUpdateReceived(Update update) {
-//        if (update.hasCallbackQuery()) {
-//            try {
-//                Object data = Message.decompose(update.getCallbackQuery().getData());
-//                if (data instanceof ButtonInfo) {
-//                    ButtonInfo buttonInfo = ((ButtonInfo) data);
-//                    String msg = String.format("%s %s!", buttonInfo.getQuestion(), buttonInfo.getAnswer());
-//                    silent().send(msg, update.getCallbackQuery().getMessage().getChatId());
-//                }
-//            } catch (Exception e) {
-//                System.err.println(e.getMessage());
-//            }
-//        } else {
         super.onUpdateReceived(update);
-//        }
     }
 
 }
