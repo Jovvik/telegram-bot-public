@@ -27,8 +27,10 @@ public class Main {
                 System.err.println(e.getMessage());
                 return;
             }
+
             TelegramBotsApi botsApi = new TelegramBotsApi(DefaultBotSession.class);
             botsApi.registerBot(new TelegramBot(token, name));
+
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
