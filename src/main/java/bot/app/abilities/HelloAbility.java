@@ -1,7 +1,6 @@
 package bot.app.abilities;
 
 import bot.app.TelegramBot;
-import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.Privacy;

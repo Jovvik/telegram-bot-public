@@ -27,18 +27,7 @@ public class PollAbility extends AbilityTemplate {
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
                 .action(messageContext -> {
-                    Question question = bot.getPollService().getQuestionForUser(messageContext.user().getId());
-                    SendMessage sm = new SendMessage();
-                    sm.setText(question.getQuestion());
-                    sm.setChatId(Long.toString(messageContext.chatId()));
-                    InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
-                    rmu.setKeyboard(question.getButtons());
-                    sm.setReplyMarkup(rmu);
-                    try {
-                        bot.execute(sm);
-                    } catch (TelegramApiException e) {
-                        e.printStackTrace();
-                    }
+                    askQuestion(bot, messageContext.chatId(), messageContext.user().getId());
                 })
                 .build();
     }
@@ -47,6 +36,7 @@ public class PollAbility extends AbilityTemplate {
         BiConsumer<BaseAbilityBot, Update> action = (bot, upd) -> {
             var tgbot = (TelegramBot) bot;
             var userId = upd.getCallbackQuery().getFrom().getId();
+            var chatId = getChatId(upd);
             int aID = Integer.parseInt(upd.getCallbackQuery().getData().substring("btn".length()));
             var pollService = tgbot.getPollService();
             
@@ -62,9 +52,9 @@ public class PollAbility extends AbilityTemplate {
                 pollService.stopPoll(userId);
                 SendMessage sm = new SendMessage();
                 sm.setText("thanks for answers!");
-                sm.setChatId(Long.toString(getChatId(upd)));
+                sm.setChatId(Long.toString(chatId));
                 try {
-                    bot.execute(sm);
+                    tgbot.execute(sm);
                 } catch (TelegramApiException e) {
                     e.printStackTrace();
                 }
@@ -72,20 +62,7 @@ public class PollAbility extends AbilityTemplate {
                 Question question = pollService.currQuestion(userId);
                 String answer = question.getAnswers().get(aID);
                 pollService.handleAnswer(userId, question.convertAnswer(answer));
-
-                Question newQuestion = pollService.getQuestionForUser(userId);
-                SendMessage sm = new SendMessage();
-                sm.setText(newQuestion.getQuestion());
-                sm.setChatId(Long.toString(getChatId(upd)));
-                InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
-                rmu.setKeyboard(newQuestion.getButtons());
-                sm.setReplyMarkup(rmu);
-                try {
-                    bot.execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-
+                askQuestion(tgbot, chatId, userId);
             }
         };
 
@@ -93,5 +70,20 @@ public class PollAbility extends AbilityTemplate {
                 action,
                 Flag.CALLBACK_QUERY,
                 upd -> upd.getCallbackQuery().getData().startsWith("btn"));
+    }
+
+    private void askQuestion(TelegramBot bot, Long chatId, Long userId) {
+        Question newQuestion = bot.getPollService().getQuestionForUser(userId);
+        SendMessage sm = new SendMessage();
+        sm.setText(newQuestion.getQuestion());
+        sm.setChatId(Long.toString(chatId));
+        InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
+        rmu.setKeyboard(newQuestion.getButtons());
+        sm.setReplyMarkup(rmu);
+        try {
+            bot.execute(sm);
+        } catch (TelegramApiException e) {
+            e.printStackTrace();
+        }
     }
 }
