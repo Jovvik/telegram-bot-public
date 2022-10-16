@@ -50,6 +50,10 @@ public class PollService {
         return userIdToInfos.getOrDefault(userId, List.of());
     }
 
+    public boolean existUserPollSession(Long userId) {
+        return userIdToInfos.containsKey(userId);
+    }
+
     private int getQuestionIdByContext(List<DataBlock<?>> dataBlocks) {
         return new Random().nextInt(questionDataBase.numberOfQuestions());
     }

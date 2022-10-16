@@ -7,7 +7,7 @@ import java.util.List;
 public class EventBuilderService {
 
     public void handleDataAndStartBuild(List<DataBlock<?>> answerData) {
-        System.out.println("answers: ");
+        System.out.println("Data: ");
         for (var answer: answerData) {
             System.out.println("Q:" + answer.getQuestion() + ", A:" + answer.getAnswer());
         }
