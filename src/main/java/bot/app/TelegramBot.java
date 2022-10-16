@@ -1,14 +1,11 @@
 package bot.app;
 
-import bot.app.abilities.AnswerWithButtonsAbility;
+import bot.app.abilities.TestNewFeaturesAbility;
 import bot.app.abilities.HelloAbility;
 import bot.app.abilities.PollAbility;
 import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
-import bot.app.utils.Message;
-import bot.app.utils.data.ButtonInfo;
-import bot.app.utils.StringSerialization;
 import bot.app.utils.data.Question;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
@@ -21,7 +18,6 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.List;
 import java.util.function.BiConsumer;
-import java.util.function.Consumer;
 
 import static org.telegram.abilitybots.api.util.AbilityUtils.getChatId;
 
@@ -36,7 +32,7 @@ public class TelegramBot extends AbilityBot {
         super(botToken, botUsername);
         addExtensions(
                 new HelloAbility(this),
-                new AnswerWithButtonsAbility(this),
+                new TestNewFeaturesAbility(this),
                 new PollAbility(this)
         );
     }
@@ -60,25 +56,20 @@ public class TelegramBot extends AbilityBot {
         return pollService;
     }
 
-    public Reply sayYuckOnImage() {
-        // getChatId is a public utility function in rg.telegram.abilitybots.api.util.AbilityUtils
-        BiConsumer<BaseAbilityBot, Update> action = (bot, upd) -> bot.silent().send("Yuck", getChatId(upd));
-
-        return Reply.of(action, Flag.PHOTO);
-    }
-
     public Reply buttonCallback() {
-        // getChatId is a public utility function in rg.telegram.abilitybots.api.util.AbilityUtils
         BiConsumer<BaseAbilityBot, Update> action = (bot, upd) -> {
             var tgbot = (TelegramBot) bot;
             var userId = upd.getCallbackQuery().getFrom().getId();
             int aID = Integer.parseInt(upd.getCallbackQuery().getData().substring("btn".length()));
+            if (!tgbot.pollService.existUserPollSession(userId)) {
+                System.out.printf("User[%s] try to join closed poll%n", userId);
+                return;
+            }
             if (aID == -1) {
-                System.out.println(
-                        String.format("User[%s] stop poll after %d questions",
-                                userId,
-                                tgbot.pollService.getUserPollInfos(userId).size())
-                );
+                System.out.printf("User[%s] stop poll after %d questions%n",
+                        userId,
+                        tgbot.pollService.getUserPollInfos(userId).size());
+
                 tgbot.pollService.stopPoll(userId);
                 SendMessage sm = new SendMessage();
                 sm.setText("thanks for answers!");
