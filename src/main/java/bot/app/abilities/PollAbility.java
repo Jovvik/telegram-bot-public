@@ -1,7 +1,7 @@
 package bot.app.abilities;
 
 import bot.app.TelegramBot;
-import bot.app.utils.data.Question;
+import bot.app.utils.data.questions.Question;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
 import org.telegram.abilitybots.api.objects.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;

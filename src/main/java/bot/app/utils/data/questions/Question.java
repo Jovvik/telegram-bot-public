@@ -1,17 +1,19 @@
-package bot.app.utils.data;
+package bot.app.utils.data.questions;
 
+import bot.app.utils.data.DataBlock;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.function.BiFunction;
 import java.util.function.Function;
 
 public class Question {
     private final String question;
     private final List<String> answers;
-    private final Function<String, DataBlock<?>> interpreter;
+    private final BiFunction<String, String, DataBlock<?>> interpreter;
 
-    public Question(String question, List<String> answers, Function<String, DataBlock<?>> interpreter) {
+    public Question(String question, List<String> answers, BiFunction<String, String, DataBlock<?>> interpreter) {
         this.question = question;
         this.answers = answers;
         this.interpreter = interpreter;
@@ -20,7 +22,7 @@ public class Question {
     public Question(String question, List<String> answers) {
         this.question = question;
         this.answers = answers;
-        this.interpreter = (String s) -> new DataBlock<String>(question, s);
+        this.interpreter = DataBlock::new;
     }
 
 
@@ -33,7 +35,7 @@ public class Question {
     }
 
     public DataBlock<?> convertAnswer(String answer) {
-        return interpreter.apply(answer);
+        return interpreter.apply(this.question, answer);
     }
 
     public List<List<InlineKeyboardButton>> getButtons() {
@@ -52,4 +54,11 @@ public class Question {
         return btns;
     }
 
+    @Override
+    public String toString() {
+        return "Question{" +
+                "question='" + question + '\'' +
+                ", answers=" + answers.toString() +
+                '}';
+    }
 }

@@ -39,14 +39,14 @@ public class Main {
 
 
             bot.execute(SetMyCommands.builder()
-                            .commands(
-                                    bot.abilities().values().stream()
-                                            .filter(ability -> ability.privacy() == Privacy.PUBLIC)
-                                            .filter(ability -> ability.info() != null)
-                                            .map(ability -> new BotCommand(ability.name(), ability.info()))
-                                            .collect(Collectors.toList())
-                            )
-                            .build()
+                .commands(
+                    bot.abilities().values().stream()
+                        .filter(ability -> ability.privacy() == Privacy.PUBLIC)
+                        .filter(ability -> ability.info() != null)
+                        .map(ability -> new BotCommand(ability.name(), ability.info()))
+                        .collect(Collectors.toList())
+                )
+                .build()
             );
 
         } catch (TelegramApiException e) {
