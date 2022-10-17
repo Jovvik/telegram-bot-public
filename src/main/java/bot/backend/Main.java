@@ -12,33 +12,34 @@ import java.util.Map;
 
 public class Main {
 
-    // мапа тегов
     static Map<String, Integer> tagsBD = Map.of(
         "Italy", 0,
         "France", 1,
-            "Japan", 2
+        "Japan", 2
     );
 
-    // лист локаций
+    // location list
     public static List<Location> locationsBD = List.of(
-            new Location(0, "Жрем в Италии", List.of(0)),
-            new Location(1, "Евразiya", List.of(0, 2)),
-            new Location(2, "Japan", List.of(2)),
-            new Location(3, "Viva la France", List.of(1))
+            new Location(0, "Жрем в Италии", List.of(tagsBD.get("Italy"))),
+            new Location(1, "Евразiya", List.of(tagsBD.get("Italy"), tagsBD.get("Japan"))),
+            new Location(2, "Japan", List.of(tagsBD.get("Japan"))),
+            new Location(3, "Viva la France", List.of(tagsBD.get("France")))
     );
 
-    // мапим индекс тега c желанием его получить
+    // map tag index to the wish to get it
+    // 1 - Yes
+    // 0 - No
     static Map<Integer, Integer> answers = Map.of(
-        0, 1,
-        1, 0,
-            2, 1
+            tagsBD.get("Italy"), 1,
+            tagsBD.get("France"), 0,
+            tagsBD.get("Japan"), 1
     );
 
-    // мапим индекс тега c желанием его получить
+    // map tag index to the wish to get it
     static Map<Integer, Integer> answers2 = Map.of(
-            0, 1,
-            2, 1,
-            1, 1
+            tagsBD.get("Italy"), 1,
+            tagsBD.get("Japan"), 1,
+            tagsBD.get("France"), 1
     );
 
     public static void main(String[] args) {
@@ -52,9 +53,7 @@ public class Main {
         ResultEvent resultEvent = predictService.predict();
         StringBuilder res = new StringBuilder();
         for (Event event: resultEvent.events) {
-            for (Location location : event.locations) {
-                res.append(location.name).append("\n");
-            }
+            event.locations.forEach(loc -> res.append(loc.name).append("\n"));
         }
         System.out.println(res);
     }
