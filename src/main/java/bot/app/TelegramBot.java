@@ -6,6 +6,7 @@ import bot.app.abilities.PollAbility;
 import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
+import bot.app.utils.data.questions.SpreadSheetConfig;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -14,7 +15,7 @@ import java.util.List;
 public class TelegramBot extends AbilityBot {
 
     private final PollService pollService = new PollService(
-            new QuestionDataBase(List.of("a", "b")),
+            new QuestionDataBase(List.of(SpreadSheetConfig.BaseQuestions)),
             new EventBuilderService()
     );
 

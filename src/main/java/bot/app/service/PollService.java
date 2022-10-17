@@ -1,7 +1,7 @@
 package bot.app.service;
 
 import bot.app.utils.data.DataBlock;
-import bot.app.utils.data.Question;
+import bot.app.utils.data.questions.Question;
 
 import java.util.ArrayList;
 import java.util.List;
