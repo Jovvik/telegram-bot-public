@@ -1,5 +1,6 @@
 package bot.app.utils.data.questions;
 
+import bot.app.utils.compressing.BestViewTask;
 import bot.app.utils.data.DataBlock;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
 
@@ -40,13 +41,26 @@ public class Question {
 
     public List<List<InlineKeyboardButton>> getButtons() {
         List<List<InlineKeyboardButton>> btns = new ArrayList<>();
-        int btnIndex = 0;
-        for (String answer : answers) {
-            InlineKeyboardButton btn = new InlineKeyboardButton();
-            btn.setCallbackData("btn" + (btnIndex++));
-            btn.setText(answer);
-            btns.add(new ArrayList<>(List.of(btn)));
+
+        List<List<Integer>> bestFit = BestViewTask.fit(answers, question.length());
+        int btnRow = 0;
+        for (List<Integer> row : bestFit) {
+            btns.add(new ArrayList<>());
+            for (Integer btnIndex: row) {
+                InlineKeyboardButton btn = new InlineKeyboardButton();
+                btn.setCallbackData("btn" + btnIndex);
+                btn.setText(answers.get(btnIndex));
+                btns.get(btnRow).add(btn);
+            }
+            btnRow++;
         }
+//        int btnIndex = 0;
+//        for (String answer : answers) {
+//            InlineKeyboardButton btn = new InlineKeyboardButton();
+//            btn.setCallbackData("btn" + (btnIndex++));
+//            btn.setText(answer);
+//            btns.add(new ArrayList<>(List.of(btn)));
+//        }
         InlineKeyboardButton btn = new InlineKeyboardButton();
         btn.setCallbackData("btn-1");
         btn.setText("stop");
