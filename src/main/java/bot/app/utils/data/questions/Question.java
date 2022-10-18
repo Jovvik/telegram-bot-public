@@ -54,17 +54,6 @@ public class Question {
             }
             btnRow++;
         }
-//        int btnIndex = 0;
-//        for (String answer : answers) {
-//            InlineKeyboardButton btn = new InlineKeyboardButton();
-//            btn.setCallbackData("btn" + (btnIndex++));
-//            btn.setText(answer);
-//            btns.add(new ArrayList<>(List.of(btn)));
-//        }
-        InlineKeyboardButton btn = new InlineKeyboardButton();
-        btn.setCallbackData("btn-1");
-        btn.setText("stop");
-        btns.add(new ArrayList<>(List.of(btn)));
         return btns;
     }
 
