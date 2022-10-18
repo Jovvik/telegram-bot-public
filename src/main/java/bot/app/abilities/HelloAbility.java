@@ -1,6 +1,6 @@
 package bot.app.abilities;
 
-import org.telegram.abilitybots.api.bot.AbilityBot;
+import bot.app.TelegramBot;
 import org.telegram.abilitybots.api.objects.Ability;
 import org.telegram.abilitybots.api.objects.Locality;
 import org.telegram.abilitybots.api.objects.Privacy;
@@ -9,7 +9,7 @@ import org.telegram.telegrambots.meta.api.objects.InputFile;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 public class HelloAbility extends AbilityTemplate {
-    public HelloAbility(AbilityBot bot) {
+    public HelloAbility(TelegramBot bot) {
         super(bot);
     }
 

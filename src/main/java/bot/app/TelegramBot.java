@@ -1,33 +1,56 @@
 package bot.app;
 
-import bot.app.abilities.AnswerWithButtonsAbility;
-import bot.app.abilities.HelloAbility;
-import bot.app.abilities.PollAbility;
+import bot.app.abilities.*;
 import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
-import bot.app.utils.Message;
-import bot.app.utils.data.ButtonInfo;
-import bot.app.utils.StringSerialization;
+import bot.app.utils.data.questions.SpreadSheetConfig;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
 import java.util.List;
+import java.util.Objects;
+import java.util.stream.Collectors;
 
 public class TelegramBot extends AbilityBot {
+    private static final String abilitiesPath = "bot/app/abilities";
 
+    private final EventBuilderService eventBuilderService = new EventBuilderService();
     private final PollService pollService = new PollService(
-            new QuestionDataBase(List.of()),
-            new EventBuilderService()
+            new QuestionDataBase(List.of(SpreadSheetConfig.BaseQuestions)),
+            eventBuilderService
     );
 
     public TelegramBot(String botToken, String botUsername) {
         super(botToken, botUsername);
-        addExtensions(
-                new HelloAbility(this),
-                new AnswerWithButtonsAbility(this),
-                new PollAbility(this)
+        addAllExtensions();
+    }
+
+    private void addAllExtensions() {
+        BufferedReader br = new BufferedReader(
+                new InputStreamReader(
+                        Objects.requireNonNull(ClassLoader
+                                .getSystemClassLoader()
+                                .getResourceAsStream(abilitiesPath))
+                )
         );
+        addExtensions(br.lines()
+                .filter(s -> s.endsWith("Ability.class"))
+                .map(s -> abilitiesPath.replaceAll("/", "\\.") + "." + s.split("\\.")[0])
+                .map(s -> {
+                    try {
+                        return (AbilityTemplate)
+                                Class.forName(s)
+                                        .getConstructor(TelegramBot.class)
+                                        .newInstance(this);
+                    } catch (Exception e) {
+                        return null;
+                    }
+                })
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList()));
     }
 
     @Override
@@ -45,25 +68,19 @@ public class TelegramBot extends AbilityBot {
         super.onClosing();
     }
 
+
+    @Override
+    public void onUpdateReceived(Update update) {
+        super.onUpdateReceived(update);
+    }
+
+
     public PollService getPollService() {
         return pollService;
     }
 
-    @Override
-    public void onUpdateReceived(Update update) {
-        if (update.hasCallbackQuery()) {
-            try {
-                Object data = Message.decompose(update.getCallbackQuery().getData());
-                if (data instanceof ButtonInfo) {
-                    ButtonInfo buttonInfo = ((ButtonInfo) data);
-                    String msg = String.format("%s %s!", buttonInfo.getQuestion(), buttonInfo.getAnswer());
-                    silent().send(msg, update.getCallbackQuery().getMessage().getChatId());
-                }
-            } catch (Exception e) {
-                System.err.println(e.getMessage());
-            }
-        } else {
-            super.onUpdateReceived(update);
-        }
+    public EventBuilderService getEventBuilderService() {
+        return eventBuilderService;
     }
+
 }

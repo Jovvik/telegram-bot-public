@@ -1,4 +1,4 @@
-package bot.app.utils;
+package bot.app.utils.compressing;
 
 import java.io.IOException;
 import java.io.Serializable;
