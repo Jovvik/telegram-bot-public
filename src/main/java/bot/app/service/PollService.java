@@ -41,7 +41,7 @@ public class PollService {
         List<DataBlock<?>> data = userIdToInfos.getOrDefault(userId, List.of());
         userIdToInfos.remove(userId);
         currQuestionMap.remove(userId);
-        eventBuilderService.handleDataAndStartBuild(data);
+        eventBuilderService.handleDataAndStartBuild(userId, data);
     }
 
     public Question currQuestion(Long usedId) { return currQuestionMap.get(usedId); }

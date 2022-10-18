@@ -44,26 +44,11 @@ public class PollAbility extends AbilityTemplate {
                 System.out.printf("User[%s] try to join closed poll%n", userId);
                 return;
             }
-            if (aID == -1) {
-                System.out.printf("User[%s] stop poll after %d questions%n",
-                        userId,
-                        pollService.getUserPollInfos(userId).size());
 
-                pollService.stopPoll(userId);
-                SendMessage sm = new SendMessage();
-                sm.setText("thanks for answers!");
-                sm.setChatId(Long.toString(chatId));
-                try {
-                    tgbot.execute(sm);
-                } catch (TelegramApiException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Question question = pollService.currQuestion(userId);
-                String answer = question.getAnswers().get(aID);
-                pollService.handleAnswer(userId, question.convertAnswer(answer));
-                askQuestion(tgbot, chatId, userId);
-            }
+            Question question = pollService.currQuestion(userId);
+            String answer = question.getAnswers().get(aID);
+            pollService.handleAnswer(userId, question.convertAnswer(answer));
+            askQuestion(tgbot, chatId, userId);
         };
 
         return Reply.of(
