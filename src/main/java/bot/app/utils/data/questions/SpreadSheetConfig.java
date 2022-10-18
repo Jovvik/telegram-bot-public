@@ -5,7 +5,7 @@ import bot.app.utils.data.DataBlock;
 import java.util.function.BiFunction;
 
 public enum SpreadSheetConfig {
-    BaseQuestions("Лист1", "A2:B10", DataBlock::new);
+    BaseQuestions("Лист1", "A2:F", DataBlock::new);
 
     private String listWithData;
     private String range;
