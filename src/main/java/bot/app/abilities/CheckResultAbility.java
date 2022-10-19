@@ -43,7 +43,13 @@ public class CheckResultAbility extends AbilityTemplate {
                     } else {
                         SendMessage sm = new SendMessage();
                         sm.setChatId(Long.toString(getChatId(messageContext.update())));
-                        sm.setText("Plan is not done yet");
+                        int userPosition = 1 + eventService.queuePosition(userId);
+                        if (userPosition == 0) {
+                            sm.setText("Your event is creating right know!");
+                        } else {
+                            sm.setText("Your request in queue, before you *" + (userPosition - 1) + "* people.");
+                        }
+                        sm.enableMarkdown(true);
                         try {
                             bot.execute(sm);
                         } catch (TelegramApiException e) {
