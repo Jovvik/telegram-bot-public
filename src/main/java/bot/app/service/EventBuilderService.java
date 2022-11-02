@@ -8,7 +8,7 @@ import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 public class EventBuilderService {
-    private static final boolean ADD_TESTING_USERS = true;
+    private static final boolean ADD_TESTING_USERS = false;
     public static class Event {
         int tStart;
         int tEnd;

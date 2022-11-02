@@ -24,8 +24,12 @@ public class QuestionDataBase {
 
     private void setUpQuestions(SpreadSheetConfig config) {
         try {
-            questions.addAll(SheetsQuickstart.getQuestions(config));
-        } catch (Exception ignore) {}
+            List<Question> newQuestions = SheetsQuickstart.getQuestions(config);
+            questions.addAll(newQuestions);
+            System.out.println(config.name() + " added " + newQuestions.size() + " questions");
+        } catch (Exception e) {
+            e.printStackTrace(System.err);
+        }
     }
 
     public Question getQuestion(int i) {

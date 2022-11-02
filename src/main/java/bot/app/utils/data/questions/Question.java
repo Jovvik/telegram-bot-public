@@ -1,17 +1,21 @@
 package bot.app.utils.data.questions;
 
+import bot.app.TelegramBot;
 import bot.app.utils.compressing.BestViewTask;
 import bot.app.utils.data.DataBlock;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.api.objects.Message;
+import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
 
 public class Question {
     private final String question;
-    private final List<String> answers;
+    protected final List<String> answers;
     private final BiFunction<String, String, DataBlock<?>> interpreter;
 
     public Question(String question, List<String> answers, BiFunction<String, String, DataBlock<?>> interpreter) {
@@ -55,6 +59,16 @@ public class Question {
             btnRow++;
         }
         return btns;
+    }
+
+    public Message send(TelegramBot bot, Long chatId) throws TelegramApiException {
+        SendMessage sm = new SendMessage();
+        sm.setText(getQuestion());
+        sm.setChatId(Long.toString(chatId));
+        InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
+        rmu.setKeyboard(getButtons());
+        sm.setReplyMarkup(rmu);
+        return bot.execute(sm);
     }
 
     @Override
