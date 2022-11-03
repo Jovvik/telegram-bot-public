@@ -3,6 +3,7 @@ package bot.app.utils.data.questions;
 import bot.app.TelegramBot;
 import bot.app.utils.compressing.BestViewTask;
 import bot.app.utils.data.DataBlock;
+import lombok.Getter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -14,7 +15,9 @@ import java.util.List;
 import java.util.function.BiFunction;
 
 public class Question {
+    @Getter
     private final String question;
+    @Getter
     protected final List<String> answers;
     private final BiFunction<String, String, DataBlock<?>> interpreter;
 
@@ -30,15 +33,6 @@ public class Question {
         this.interpreter = DataBlock::new;
     }
 
-
-    public String getQuestion() {
-        return question;
-    }
-
-    public List<String> getAnswers() {
-        return answers;
-    }
-
     public DataBlock<?> convertAnswer(String answer) {
         return interpreter.apply(this.question, answer);
     }
@@ -51,10 +45,11 @@ public class Question {
         for (List<Integer> row : bestFit) {
             btns.add(new ArrayList<>());
             for (Integer btnIndex: row) {
-                InlineKeyboardButton btn = new InlineKeyboardButton();
-                btn.setCallbackData("btn" + btnIndex);
-                btn.setText(answers.get(btnIndex));
-                btns.get(btnRow).add(btn);
+                btns.get(btnRow).add(
+                        InlineKeyboardButton.builder()
+                        .callbackData("btn" + btnIndex)
+                        .text(answers.get(btnIndex))
+                        .build());
             }
             btnRow++;
         }
