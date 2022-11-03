@@ -1,15 +1,17 @@
-package bot.backend.services;
+package bot.backend.services.description;
 
 import bot.backend.Main;
 import bot.backend.locations.Location;
 import bot.backend.nodes.QuestionNode;
 import bot.backend.nodes.categories.Category;
 import bot.backend.results.Event;
+import bot.backend.services.Service;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
+@Deprecated
 public class FoodService implements Service {
 
     private List<Location> findLocations(QuestionNode node) {

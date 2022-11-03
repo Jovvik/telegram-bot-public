@@ -6,6 +6,7 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.results.Event;
 import bot.backend.results.ResultEvent;
 import bot.backend.nodes.QuestionNode;
+import bot.backend.services.description.FoodService;
 
 import java.util.*;
 import java.util.stream.Collectors;
