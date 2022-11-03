@@ -4,9 +4,7 @@ import bot.app.TelegramBot;
 import bot.app.utils.data.questions.Question;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
 import org.telegram.abilitybots.api.objects.*;
-import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.util.function.BiConsumer;
@@ -27,7 +25,11 @@ public class PollAbility extends AbilityTemplate {
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
                 .action(messageContext -> {
-                    askQuestion(bot, messageContext.chatId(), messageContext.user().getId());
+                    try {
+                        askQuestion(bot, messageContext.chatId(), messageContext.user().getId());
+                    } catch (Exception e) {
+                        e.printStackTrace(System.err);
+                    }
                 })
                 .build();
     }
@@ -59,14 +61,8 @@ public class PollAbility extends AbilityTemplate {
 
     private void askQuestion(TelegramBot bot, Long chatId, Long userId) {
         Question newQuestion = bot.getPollService().getQuestionForUser(userId);
-        SendMessage sm = new SendMessage();
-        sm.setText(newQuestion.getQuestion());
-        sm.setChatId(Long.toString(chatId));
-        InlineKeyboardMarkup rmu = new InlineKeyboardMarkup();
-        rmu.setKeyboard(newQuestion.getButtons());
-        sm.setReplyMarkup(rmu);
         try {
-            bot.execute(sm);
+            newQuestion.send(bot, chatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
