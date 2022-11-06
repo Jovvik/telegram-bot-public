@@ -29,3 +29,4 @@ out/
 ### Special for Mac ###
 .DS_Store
 **/src/main/resources/tokens/
+**/src/maun/resources/google/
