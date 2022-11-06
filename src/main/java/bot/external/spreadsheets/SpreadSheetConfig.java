@@ -1,15 +1,15 @@
-package bot.app.utils.data.questions;
+package bot.external.spreadsheets;
 
 import bot.app.utils.data.DataBlock;
-
 import java.util.function.BiFunction;
 
 public enum SpreadSheetConfig {
-    BaseQuestions("Лист1", "A2:F", DataBlock::new);
+    BaseQuestions("Лист1", "A2:F", DataBlock::new),
+    TimeQuestions("Время", "A1:N2", SpreadSheetUtils.timeInterpreter);
 
-    private String listWithData;
-    private String range;
-    private BiFunction<String, String, DataBlock<?>> interpreter;
+    private final String listWithData;
+    private final String range;
+    private final BiFunction<String, String, DataBlock<?>> interpreter;
 
     SpreadSheetConfig(String listWithData, String range, BiFunction<String, String, DataBlock<?>> interpreter) {
         this.listWithData = listWithData;

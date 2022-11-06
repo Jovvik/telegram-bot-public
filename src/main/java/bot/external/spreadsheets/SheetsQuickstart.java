@@ -1,7 +1,6 @@
-package bot.external;
+package bot.external.spreadsheets;
 
 import bot.app.utils.data.questions.Question;
-import bot.app.utils.data.questions.SpreadSheetConfig;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Properties;
-import java.util.stream.Collectors;
 
 public class SheetsQuickstart {
     private static final String APPLICATION_NAME = "bed-project";

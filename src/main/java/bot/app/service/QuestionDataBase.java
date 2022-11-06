@@ -1,16 +1,11 @@
 package bot.app.service;
 
 import bot.app.utils.data.questions.Question;
-import bot.app.utils.data.questions.SpreadSheetConfig;
-import bot.external.SheetsQuickstart;
+import bot.external.spreadsheets.SpreadSheetConfig;
+import bot.external.spreadsheets.SheetsQuickstart;
 
-import java.io.IOException;
-import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-import java.util.stream.IntStream;
 
 public class QuestionDataBase {
     private final List<Question> questions;

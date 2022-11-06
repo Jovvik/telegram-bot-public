@@ -4,12 +4,13 @@ import bot.app.abilities.*;
 import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
-import bot.app.utils.data.questions.SpreadSheetConfig;
+import bot.external.spreadsheets.SpreadSheetConfig;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -19,7 +20,9 @@ public class TelegramBot extends AbilityBot {
 
     private final EventBuilderService eventBuilderService = new EventBuilderService();
     private final PollService pollService = new PollService(
-            new QuestionDataBase(List.of(SpreadSheetConfig.BaseQuestions)),
+            new QuestionDataBase(
+                    Arrays.asList(SpreadSheetConfig.values())
+            ),
             eventBuilderService
     );
 
