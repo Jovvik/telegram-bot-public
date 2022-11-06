@@ -17,10 +17,10 @@ import java.util.stream.Collectors;
 public class Main {
     public static void main(String[] args) {
         try {
-            String token = "";
-            String name = "";
+            String token;
+            String name;
 
-            try (InputStream input = new FileInputStream("src/main/resources/bot.properties")) {
+            try (InputStream input = new FileInputStream("src/main/resources/application.properties")) {
                 Properties properties = new Properties();
                 properties.load(input);
 
