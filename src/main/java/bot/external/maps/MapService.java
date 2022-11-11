@@ -5,13 +5,11 @@ import lombok.Getter;
 import lombok.Setter;
 import lombok.NoArgsConstructor;
 
-import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStreamReader;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLEncoder;
-import java.nio.charset.StandardCharsets;
+import java.net.*;
+import java.net.http.HttpClient;
+import java.net.http.HttpRequest;
+import java.net.http.HttpResponse;
 
 @AllArgsConstructor
 @NoArgsConstructor
@@ -28,49 +26,26 @@ public class MapService {
     private double radiusLong = 0.03;
     private double radiusLati = 0.03;
 
-    private String toUrl(String from) {
-            StringBuilder sb = new StringBuilder();
-
-            for(char ch : from.toCharArray()) {
-                if(ch < (char)128) {
-                    sb.append(ch);
-                } else {
-                    // this is ONLY valid if the uri was decoded using ISO-8859-1
-                    sb.append(String.format("%%%02X", (int)ch));
-                }
-            }
-
-            return sb.toString();
-        }
     public String sendRequest() {
         StringBuilder urlConstructor = new StringBuilder(API_URL);
 
         urlConstructor
-                .append("&text=").append(toUrl(text))
-                .append("&lang=").append(toUrl(lang))
+                .append("&text=").append(text)
+                .append("&lang=").append(lang)
                 .append("&ll=").append(userLong).append(",").append(userLati)
                 .append("&spn=").append(radiusLong).append(",").append(radiusLati);
 
         try {
-            URL url = new URL(urlConstructor.toString());
+            URI uri = new URI(urlConstructor.toString());
 
-            System.out.println(url);
-            HttpURLConnection connection = (HttpURLConnection) url.openConnection();
+            System.out.println(uri);
 
-            connection.setRequestMethod("GET");
+            HttpClient client = HttpClient.newHttpClient();
+            HttpRequest request = HttpRequest.newBuilder(uri).GET().build();
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
 
-
-            BufferedReader in = new BufferedReader(new InputStreamReader(connection.getInputStream()));
-            String inputLine;
-            StringBuilder response = new StringBuilder();
-
-            while ((inputLine = in.readLine()) != null) {
-                response.append(inputLine);
-            }
-            in.close();
-
-            return response.toString();
-        } catch (IOException e) {
+            return response.body();
+        } catch (IOException | InterruptedException | URISyntaxException e) {
             System.err.println(e.getMessage());
         }
 
