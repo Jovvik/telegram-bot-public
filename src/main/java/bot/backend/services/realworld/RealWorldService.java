@@ -1,7 +1,7 @@
 package bot.backend.services.realworld;
 
-import bot.backend.locations.Location;
 import bot.backend.nodes.description.Description;
+import bot.backend.nodes.location.Location;
 
 import java.util.List;
 
