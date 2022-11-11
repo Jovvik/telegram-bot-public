@@ -1,15 +1,5 @@
 package bot.backend;
 
-import bot.backend.locations.Location;
-import bot.backend.nodes.QuestionNode;
-import bot.backend.nodes.categories.Category;
-import bot.backend.results.Event;
-import bot.backend.results.ResultEvent;
-import bot.backend.services.PredictService;
-
-import java.util.List;
-import java.util.Map;
-
 public class Main {
 
     static Map<String, Integer> tagsBD = Map.of(

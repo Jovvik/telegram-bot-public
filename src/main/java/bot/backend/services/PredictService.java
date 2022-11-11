@@ -3,10 +3,10 @@ package bot.backend.services;
 import bot.backend.Main;
 import bot.backend.locations.Location;
 import bot.backend.nodes.categories.Category;
-import bot.backend.results.Event;
-import bot.backend.results.ResultEvent;
-import bot.backend.nodes.QuestionNode;
-import bot.backend.services.description.FoodService;
+import bot.backend.nodes.location.Location;
+import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.results.Event;
+import bot.backend.nodes.results.MassEvent;
 
 import java.util.*;
 import java.util.stream.Collectors;
