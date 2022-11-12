@@ -17,7 +17,7 @@ import java.net.http.HttpResponse;
 @Setter
 public class MapService {
     private static final String API_KEY = "4c1b7a9c-d166-41d1-801c-04271f2f7ed4";
-    private static final String API_URL = "https://search-maps.yandex.ru/v1/?apikey=" + API_KEY;
+    private static final String API_URL = "https://search-maps.yandex.ru/v1/?type=biz&apikey=" + API_KEY;
 
     private String text;
     private String lang = "ru_RU";
