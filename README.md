@@ -1,5 +1,9 @@
 # telegram-bot
 
-Current pipeline:
+Current pipeline of front:
 
-![alt text](graphviz.png "Title")
+![front](graphviz.png "Front")
+
+Back pipeline:
+
+![back](back.png "Back")
