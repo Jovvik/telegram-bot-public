@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
@@ -19,7 +20,7 @@ import java.nio.charset.StandardCharsets;
 @Setter
 public class MapService {
     private static final String API_KEY = "4c1b7a9c-d166-41d1-801c-04271f2f7ed4";
-    private static final String API_URL = "https://search-maps.yandex.ru/v1/?apikey=" + API_KEY;
+    private static final String API_URL = "https://search-maps.yandex.ru/v1/?type=biz&apikey=" + API_KEY;
 
     private String text;
     private String lang = "ru_RU";
@@ -38,15 +39,16 @@ public class MapService {
                     // this is ONLY valid if the uri was decoded using ISO-8859-1
                     sb.append(String.format("%%%02X", (int)ch));
                 }
+//                sb.append(ch);
             }
 
             return sb.toString();
         }
-    public String sendRequest() {
+    public String sendRequest() throws UnsupportedEncodingException {
         StringBuilder urlConstructor = new StringBuilder(API_URL);
 
         urlConstructor
-                .append("&text=").append(toUrl(text))
+                .append("&text=").append(URLEncoder.encode(text, "UTF-8"))
                 .append("&lang=").append(toUrl(lang))
                 .append("&ll=").append(userLong).append(",").append(userLati)
                 .append("&spn=").append(radiusLong).append(",").append(radiusLati);
