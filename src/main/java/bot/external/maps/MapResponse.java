@@ -107,6 +107,9 @@ public class MapResponse {
                         @JsonProperty("Intervals")
                         public List<Interval> intervals;
 
+                        @JsonProperty("TwentyFourHours")
+                        public Boolean twentyFourHour = false;
+
                         @JsonProperty("Everyday")
                         public Boolean everyDay = false;
 
