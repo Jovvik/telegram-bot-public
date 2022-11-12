@@ -8,9 +8,7 @@ public class Main {
         MapService service = new MapService();
         service.setText("кинотеатр");
 
-        String response = service.sendRequest();
-
-        MapResponse mapResponse = new ObjectMapper().readValue(response, MapResponse.class);
+        MapResponse mapResponse = service.sendMapRequest();
         mapResponse.features.forEach(f -> System.out.println(f.properties.name + ": " + f.geometry.coordinates));
     }
 }

@@ -1,5 +1,7 @@
 package bot.external.maps;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -27,6 +29,23 @@ public class MapService {
     private double radiusLati = 0.03;
 
     public String sendRequest() {
+        return sendRequest(HttpResponse.BodyHandlers.ofString());
+    }
+
+    public MapResponse sendMapRequest() {
+        return sendRequest(responseInfo ->
+                HttpResponse.BodySubscribers.mapping(
+                        HttpResponse.BodyHandlers.ofString().apply(responseInfo),
+                        s -> {
+                            try {
+                                return new ObjectMapper().readValue(s, MapResponse.class);
+                            } catch (JsonProcessingException e) {
+                                return null;
+                            }
+                        }));
+    }
+
+    public <T> T sendRequest(HttpResponse.BodyHandler<T> handler) {
         StringBuilder urlConstructor = new StringBuilder(API_URL);
 
         urlConstructor
@@ -42,13 +61,13 @@ public class MapService {
 
             HttpClient client = HttpClient.newHttpClient();
             HttpRequest request = HttpRequest.newBuilder(uri).GET().build();
-            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            HttpResponse<T> response = client.send(request, handler);
 
             return response.body();
         } catch (IOException | InterruptedException | URISyntaxException e) {
             System.err.println(e.getMessage());
         }
 
-        return "";
+        return null;
     }
 }
