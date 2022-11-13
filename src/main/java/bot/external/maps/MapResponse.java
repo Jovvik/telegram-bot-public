@@ -3,6 +3,7 @@ package bot.external.maps;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.ToString;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @ToString
@@ -51,7 +52,14 @@ public class MapResponse {
         @ToString
         public static class Geometry {
             public String type;
-            public List<Double> coordinates;
+            private List<Double> coordinates;
+
+            public List<Double> getCoordinates() {
+                List<Double> swappedCoordinates = new ArrayList<>();
+                swappedCoordinates.add(coordinates.get(1));
+                swappedCoordinates.add(coordinates.get(0));
+                return swappedCoordinates;
+            }
         }
 
         @ToString
