@@ -9,16 +9,16 @@ import java.util.stream.Collectors;
 
 public abstract class DescriptionService<D extends Description> {
 
-    private Category category;
+    private final Category category;
 
     public DescriptionService(Category category) {
         this.category = category;
     }
 
-    public List<Description> generateDescriptions(List<DataBlock<?>> data) {
-        Description mostCommon = getMostCommonDescription(data);
+    public List<D> generateDescriptions(List<DataBlock<?>> data) {
+        D mostCommon = getMostCommonDescription(data);
 
-        List<Description> children = tryModify(mostCommon);
+        List<D> children = tryModify(mostCommon);
         if (children == null) {
             return List.of(mostCommon);
         }
@@ -28,12 +28,12 @@ public abstract class DescriptionService<D extends Description> {
     }
 
     // best Description for DataBlocks
-    abstract Description getMostCommonDescription(List<DataBlock<?>> data);
+    abstract D getMostCommonDescription(List<DataBlock<?>> data);
 
     // try to modify current description
     // and each server know how you can change this
     // if can't modify, return null
-    abstract List<Description> tryModify(Description description);
+    abstract List<D> tryModify(D description);
 
 //    public Boolean customEquals(Description d1, Description d2) {
 //        return d1.equals(d2);

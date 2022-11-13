@@ -2,7 +2,7 @@ package bot.backend.nodes.description;
 
 import bot.backend.nodes.restriction.Restriction;
 import bot.backend.nodes.restriction.TimeRestriction;
-import bot.backend.nodes.results.Event;
+import bot.backend.nodes.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
@@ -10,12 +10,10 @@ import java.util.Arrays;
 import java.util.List;
 
 @AllArgsConstructor
-public class Description {
+public abstract class Description<E extends Event> {
 
     @Getter
     private TimeRestriction timeRestriction;
-
-
 
     public List<Restriction<?>> getAllRestrictions() {
 
@@ -24,6 +22,6 @@ public class Description {
         return null;
     }
 
-//    public Event createEvent();
+    public abstract E generateEvent();
 
 }

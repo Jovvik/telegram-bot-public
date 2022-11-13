@@ -14,12 +14,12 @@ public class FoodDescriptionService extends DescriptionService<FoodDescription> 
     }
 
     @Override
-    Description getMostCommonDescription(List<DataBlock<?>> data) {
+    FoodDescription getMostCommonDescription(List<DataBlock<?>> data) {
         return null;
     }
 
     @Override
-    List<Description> tryModify(Description description) {
+    List<FoodDescription> tryModify(FoodDescription description) {
         return null;
     }
 }

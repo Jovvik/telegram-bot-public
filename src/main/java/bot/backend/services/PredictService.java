@@ -1,31 +1,35 @@
 package bot.backend.services;
 
+import bot.app.utils.data.DataBlock;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.Description;
 import bot.backend.nodes.location.Location;
-import bot.backend.nodes.restriction.Restriction;
-import bot.backend.nodes.results.Event;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.results.MassEvent;
+import bot.backend.services.description.DescriptionService;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
 public class PredictService {
 
-    private ComposeService composeService;
-
-    private List<Event> events;
+    private final ComposeService composeService;
+    
+    private Map<Category, DescriptionService<?>> descriptionServices;
 
     public PredictService(ComposeService composeService) {
         this.composeService = composeService;
     }
 
-    public void fillEvent(List<Description> descriptions) {
-
-//        List<Description> filteredDescriptions = descriptions.stream().filter(description ->
-//                description.getAllRestrictions().stream().allMatch(descRest ->
-//                        restrictions.stream().allMatch(restriction -> restriction.validate(descRest)))
-//                .collect(Collectors.toList());
+    private Map<Category, List<Description<?>>> createDescriptions(List<DataBlock<?>> dataBlocks) {
+        Map<Category, List<Description<?>>> resultMap = new HashMap<>();
+        Map<Category, List<DataBlock<?>>> splitBlocks = dataBlocks.stream().collect(Collectors.groupingBy(
+                DataBlock::getCategory, Collectors.toList()
+                ));
+        splitBlocks.forEach((category, blocks) ->
+                resultMap.put(category,
+                        (List<Description<?>>) descriptionServices.get(category).generateDescriptions(blocks)));
+        return resultMap;
     }
 
 //    public void addEvent(List<Location> locations, Restriction restriction) {

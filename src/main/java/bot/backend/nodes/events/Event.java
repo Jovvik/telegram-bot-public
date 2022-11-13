@@ -1,4 +1,4 @@
-package bot.backend.nodes.results;
+package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.location.Location;
@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
-public class Event {
+public abstract class Event {
 
     @Getter
     public Location location;
