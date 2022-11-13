@@ -52,7 +52,7 @@ public class MapResponse {
         @ToString
         public static class Geometry {
             public String type;
-            private List<Double> coordinates;
+            public List<Double> coordinates;
 
             public List<Double> getCoordinates() {
                 List<Double> swappedCoordinates = new ArrayList<>();
