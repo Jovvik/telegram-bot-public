@@ -24,9 +24,8 @@ public class ComposeService {
     }
 
     public MassEvent composeEvents(List<Event> events) {
-        // TODO sort by from
-//        events.sort(Comparator.comparing((a, b) -> b.from - a.from));
-        List<Event> resultedList = new ArrayList<Event>();
+        events.sort(Comparator.comparing(Event::getFrom));
+        List<Event> resultedList = new ArrayList<>();
         for (int i = 0; i < events.size(); ++i) {
             Event currentEvent = events.get(i);
             resultedList.add(currentEvent);
