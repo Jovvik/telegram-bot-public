@@ -7,18 +7,9 @@ import lombok.Getter;
 import java.util.List;
 import java.util.Locale;
 
-public class Restriction {
+public abstract class Restriction<T> {
 
-    @Getter
-    private Integer from;
+    public abstract boolean validate(T object);
 
-    @Getter
-    private Integer to;
-
-//    @Getter
-//    private List<String> tags;
-
-    public boolean test(Location location) {
-        return location.getOpenTime() >= to && location.getCloseTime() <= from;
-    }
+    public abstract List<T> validValues();
 }

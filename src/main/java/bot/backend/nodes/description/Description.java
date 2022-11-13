@@ -4,8 +4,18 @@ import java.util.Date;
 
 public class Description {
 
-    private Date date;
+    @Getter
+    private TimeRestriction timeRestriction;
 
-    private Double cost;
+
+
+    public List<Restriction<?>> getAllRestrictions() {
+
+        System.out.println(Arrays.toString(this.getClass().getFields()));
+
+        return null;
+    }
+
+//    public Event createEvent();
 
 }

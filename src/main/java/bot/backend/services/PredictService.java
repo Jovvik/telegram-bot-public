@@ -19,15 +19,23 @@ public class PredictService {
         this.composeService = composeService;
     }
 
-    public void addEvent(List<Location> locations, Restriction restriction) {
+    public void fillEvent(List<Description> descriptions) {
 
-        List<Location> filteredLocations = locations.stream().filter(restriction::test).collect(Collectors.toList());
-
-        events.add(new Event(getBestLocation(filteredLocations),
-                restriction.getFrom(),
-                restriction.getTo(),
-                Category.SETTINGS));
+//        List<Description> filteredDescriptions = descriptions.stream().filter(description ->
+//                description.getAllRestrictions().stream().allMatch(descRest ->
+//                        restrictions.stream().allMatch(restriction -> restriction.validate(descRest)))
+//                .collect(Collectors.toList());
     }
+
+//    public void addEvent(List<Location> locations, Restriction restriction) {
+//
+//        List<Location> filteredLocations = locations.stream().filter(restriction::test).collect(Collectors.toList());
+//
+//        events.add(new Event(getBestLocation(filteredLocations),
+//                restriction.getFrom(),
+//                restriction.getTo(),
+//                Category.SETTINGS));
+//    }
 
     public MassEvent generateMassEvent() {
         return composeService.composeEvents(events);
