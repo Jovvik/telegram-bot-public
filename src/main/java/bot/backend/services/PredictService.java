@@ -42,9 +42,27 @@ public class PredictService {
 //                Category.SETTINGS));
 //    }
 
-    public MassEvent generateMassEvent() {
+    public MassEvent generateMassEvent(List<DataBlock<?>> dataBlocks) {
+        Map<Category, List<Description<?>>> descriptions = createDescriptions(dataBlocks);
+
+        List<Event> events = descriptions.values().stream()
+                .flatMap(List::stream)
+                .map(Description::generateEvent)
+                .collect(Collectors.toList());
+
+
+
         return composeService.composeEvents(events);
     }
+
+
+
+    private static class TimeTable {
+
+
+
+    }
+
 
     public Location getBestLocation(List<Location> locations) {
         return locations.get(0);
