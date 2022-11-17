@@ -15,15 +15,16 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Properties;
-import java.util.stream.Collectors;
 
+@Component
 public class SheetsQuickstart {
     private static final String APPLICATION_NAME = "bed-project";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
@@ -32,27 +33,16 @@ public class SheetsQuickstart {
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "src/main/resources/google/credentials.json";
 
-    private static String spreedSheetId = "";
+    private static String SHEET_ID_STATIC;
 
-    static {
-
-        try (InputStream input = new FileInputStream("src/main/resources/google/spreadsheets.properties")) {
-            Properties properties = new Properties();
-            properties.load(input);
-
-            spreedSheetId = properties.getProperty("sheetId");
-
-        } catch (Exception e) {
-            System.err.println(e.getMessage());
-        }
+    @Value("${sheetId}")
+    public void setNameStatic(String name){
+        SheetsQuickstart.SHEET_ID_STATIC = name;
     }
 
     private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
-        if (in == null) {
-            throw new FileNotFoundException("Resource not found: " + CREDENTIALS_FILE_PATH);
-        }
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
 
         // Build flow and trigger user authorization request.
@@ -73,7 +63,7 @@ public class SheetsQuickstart {
                 .setApplicationName(APPLICATION_NAME)
                 .build();
         ValueRange response = service.spreadsheets().values()
-                .get(spreedSheetId, range)
+                .get(SHEET_ID_STATIC, range)
                 .execute();
         List<List<Object>> values = response.getValues();
         List<Question> result = new ArrayList<>();
