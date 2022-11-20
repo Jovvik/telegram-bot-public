@@ -21,6 +21,7 @@ public class PredictService {
         this.composeService = composeService;
     }
 
+
     private Map<Category, List<Description<?>>> createDescriptions(List<DataBlock<?>> dataBlocks) {
         Map<Category, List<Description<?>>> resultMap = new HashMap<>();
         Map<Category, List<DataBlock<?>>> splitBlocks = dataBlocks.stream().collect(Collectors.groupingBy(
@@ -50,7 +51,20 @@ public class PredictService {
                 .map(Description::generateEvent)
                 .collect(Collectors.toList());
 
+        // Task1:
+        // List<Event> -> List<Event> но в правильном порядке (в compose event)
+        // не забыть что есть compose Events которая добавляет промежутки отдыха если нужно
+        //
 
+        // Есть List<DataBlocks> на данную тему нужно найти самую похожее описание и взять его
+        // getMostCommonDescription
+        // tryModify пока что не трогаем
+
+        // Есть Description generateEvent
+        // нужно добавить логику чтобы по description искало event
+        // по сути Description - это набор Restrictions
+        // Нужно залезть в базенку и найти по данным restrictions подходящие локации
+        // Время на данном этапе смотрим только глобальное, которое есть в TimeRestriction (время работы данного заведения)
 
         return composeService.composeEvents(events);
     }
@@ -58,7 +72,6 @@ public class PredictService {
 
 
     private static class TimeTable {
-
 
 
     }

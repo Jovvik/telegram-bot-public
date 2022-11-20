@@ -22,6 +22,6 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.Kitchen> 
     }
 
     public enum Kitchen {
-        ITALIAN, JAPANESE, RUSSIAN, ALL;
+        ITALIAN, JAPANESE, RUSSIAN, ALL,
     }
 }
