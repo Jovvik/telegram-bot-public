@@ -26,7 +26,10 @@ out/
 !**/src/main/**/out/
 !**/src/test/**/out/
 
+### Local Properties and configs ###
+/src/main/resources/application-local.properties
+/src/main/resources/tokens/
+/src/main/resources/google/
+
 ### Special for Mac ###
 .DS_Store
-**/src/main/resources/tokens/
-/src/main/resources/google/
