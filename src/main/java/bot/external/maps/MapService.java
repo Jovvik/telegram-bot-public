@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-import lombok.NoArgsConstructor;
 
 import java.io.IOException;
 import java.net.*;
@@ -14,19 +13,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 
 @AllArgsConstructor
-@NoArgsConstructor
 @Getter
 @Setter
 public class MapService {
     private static final String API_KEY = "4c1b7a9c-d166-41d1-801c-04271f2f7ed4";
     private static final String API_URL = "https://search-maps.yandex.ru/v1/?type=biz&apikey=" + API_KEY;
 
-    private String text;
-    private String lang = "ru_RU";
-    private double userLong = 30.313729;
-    private double userLati = 59.954380;
-    private double radiusLong = 0.03;
-    private double radiusLati = 0.03;
+    private MapRequest request;
 
     public String sendRequest() {
         return sendRequest(HttpResponse.BodyHandlers.ofString());
@@ -49,10 +42,11 @@ public class MapService {
         StringBuilder urlConstructor = new StringBuilder(API_URL);
 
         urlConstructor
-                .append("&text=").append(text)
-                .append("&lang=").append(lang)
-                .append("&ll=").append(userLong).append(",").append(userLati)
-                .append("&spn=").append(radiusLong).append(",").append(radiusLati);
+                .append("&text=").append(request.getText())
+                .append("&lang=").append(request.getLang())
+                .append("&ll=").append(request.getUserLong()).append(",").append(request.getUserLati())
+                .append("&spn=").append(request.getRadiusLong()).append(",").append(request.getRadiusLati())
+                .append("&results=").append(request.getResultsSize());
 
         try {
             URI uri = new URI(urlConstructor.toString());
