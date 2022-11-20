@@ -9,7 +9,6 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.Kitchen> 
 
     List<Kitchen> kitchens;
 
-
     @Override
     public boolean validate(Kitchen kitchen) {
         if (kitchens.contains(Kitchen.ALL)) return true;
@@ -22,6 +21,6 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.Kitchen> 
     }
 
     public enum Kitchen {
-        ITALIAN, JAPANESE, RUSSIAN, ALL,
+        ITALIAN, JAPANESE, RUSSIAN, ALL
     }
 }
