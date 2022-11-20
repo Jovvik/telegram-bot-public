@@ -45,7 +45,8 @@ public class MapService {
                 .append("&text=").append(request.getText())
                 .append("&lang=").append(request.getLang())
                 .append("&ll=").append(request.getUserLong()).append(",").append(request.getUserLati())
-                .append("&spn=").append(request.getRadiusLong()).append(",").append(request.getRadiusLati());
+                .append("&spn=").append(request.getRadiusLong()).append(",").append(request.getRadiusLati())
+                .append("&results=").append(request.getResultsSize());
 
         try {
             URI uri = new URI(urlConstructor.toString());
