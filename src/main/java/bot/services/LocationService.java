@@ -5,6 +5,8 @@ import bot.repositories.LocationRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
+
 @Service
 @RequiredArgsConstructor
 public class LocationService {
@@ -13,6 +15,10 @@ public class LocationService {
 
     public LocationEntity save(LocationEntity location) {
         return locationRepository.save(location);
+    }
+
+    public List<LocationEntity> getLocations() {
+        return locationRepository.findAll();
     }
 
 }

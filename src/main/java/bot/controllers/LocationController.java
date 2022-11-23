@@ -28,4 +28,13 @@ public class LocationController {
         locationEntities.add(locationEntity);
         locationEntities.forEach(locationService::save);
     }
+
+    @GetMapping("/getLocations")
+    public void getTable() {
+        locationService.getLocations().forEach(
+                location -> {
+                    System.out.println(location.address);
+                }
+        );
+    }
 }
