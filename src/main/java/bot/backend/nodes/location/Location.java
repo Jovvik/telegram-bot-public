@@ -3,6 +3,7 @@ package bot.backend.nodes.location;
 import bot.backend.nodes.categories.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.util.List;
 
@@ -10,12 +11,14 @@ import java.util.List;
 public class Location {
 
     @AllArgsConstructor
-    private static class Time {
+    public static class Time {
 
         @Getter
+        @Setter
         private Integer openTime;
 
         @Getter
+        @Setter
         private Integer closeTime;
 
     }
