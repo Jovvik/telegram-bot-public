@@ -1,23 +1,18 @@
 package bot.entities;
 
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
+import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 public class TagEntity {
 
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
-    private Long id;
+    public Long id;
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String name;
 
-    @Id
-    public Long getId() {
-        return id;
-    }
 }

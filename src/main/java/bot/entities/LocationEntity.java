@@ -1,8 +1,6 @@
 package bot.entities;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.location.Location;
-import lombok.Getter;
 
 import javax.persistence.*;
 import java.util.List;
@@ -16,53 +14,47 @@ public class LocationEntity {
 
     public String locationName;
 
-    @OneToMany
+    @OneToMany(mappedBy="location")
     public List<TagEntity> tags;
-
-    @Getter
+    
     public Category category;
-
-
-    @Getter
-    private String name;
+    
+    public String name;
 
     // shirota
-    @Getter
-    private Double latitude;
+    public Double latitude;
 
     // dolgota
-    @Getter
-    private Double longitude;
+    public Double longitude;
 
-    @Getter
-    private String phoneNumber;
+    
+    public String phoneNumber;
 
-    @Getter
-    private String url;
+    
+    public String url;
 
-    @Getter
-    private String address;
+    
+    public String address;
 
-    @Getter
+    
     public String timeMonday;
 
-    @Getter
+    
     public String timeTuesday;
 
-    @Getter
+    
     public String timeWednesday;
 
-    @Getter
+    
     public String timeThursday;
 
-    @Getter
+    
     public String timeFriday;
 
-    @Getter
+    
     public String timeSaturday;
 
-    @Getter
+    
     public String timeSunday;
-
 
 }
