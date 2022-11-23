@@ -1,11 +1,16 @@
 package bot.external.maps;
 
+import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.converters.LocationConverter;
+import bot.entities.LocationEntity;
+import bot.entities.TagEntity;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Getter
 @Setter
@@ -36,8 +41,8 @@ public class ResponseConverter {
         return dayAvailability;
     }
 
-    private StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
-                                           String joiner) {
+    private List<StringBuilder> createDaysAvailabilities
+            (List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities) {
         List<StringBuilder> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new StringBuilder("[ - ]")));
 
         availabilities.forEach(a -> {
@@ -58,6 +63,12 @@ public class ResponseConverter {
             }
         });
 
+        return daysAvailabilities;
+    }
+
+    private StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
+                                           String joiner) {
+        List<StringBuilder> daysAvailabilities = createDaysAvailabilities(availabilities);
         return daysAvailabilities.stream().reduce(new StringBuilder(), (acc, now) -> acc.append(now).append(joiner));
     }
 
@@ -107,6 +118,53 @@ public class ResponseConverter {
         });
 
         return result.toString();
+    }
+
+    public List<LocationEntity> toLocationEntity(Category category, String text) {
+        if (mapResponse == null) {
+            return null;
+        }
+
+
+        List<LocationEntity> locationEntities = new ArrayList<>();
+
+        mapResponse.features.forEach(f -> {
+            LocationEntity entity = new LocationEntity();
+            LocationConverter converter = new LocationConverter();
+
+            entity.locationName = f.properties.name;
+            entity.tags = converter.stringToTags(List.of(text));
+            entity.category = category;
+            entity.latitude = f.geometry.getCoordinates().get(0);
+            entity.longitude = f.geometry.getCoordinates().get(1);
+
+            if (f.properties.companyMetaData.phones != null) {
+                entity.phoneNumber = f.properties.companyMetaData.phones.get(0).formatted;
+            } else {
+                entity.phoneNumber = "";
+            }
+
+            entity.url = Objects.requireNonNullElse(f.properties.companyMetaData.url, "");
+
+            entity.address = f.properties.companyMetaData.address;
+
+            List<StringBuilder> timeIntervals = new ArrayList<>(Collections.nCopies(7, new StringBuilder("[ - ]")));
+            if (f.properties.companyMetaData.hours != null) {
+                timeIntervals = createDaysAvailabilities(f.properties.companyMetaData.hours.availabilities);
+            }
+
+            entity.timeMonday = timeIntervals.get(0).toString();
+            entity.timeTuesday = timeIntervals.get(1).toString();
+            entity.timeWednesday = timeIntervals.get(2).toString();
+            entity.timeThursday = timeIntervals.get(3).toString();
+            entity.timeFriday = timeIntervals.get(4).toString();
+            entity.timeSaturday = timeIntervals.get(5).toString();
+            entity.timeSunday = timeIntervals.get(6).toString();
+
+            locationEntities.add(entity);
+        });
+
+        return locationEntities;
     }
 
 }
