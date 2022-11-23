@@ -15,4 +15,8 @@ public class TagEntity {
 
     public String name;
 
+    @ManyToOne
+    @JoinColumn(name="location_entity_id")
+    public LocationEntity location;
+
 }
