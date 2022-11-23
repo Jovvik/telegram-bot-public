@@ -13,7 +13,7 @@ import java.util.List;
 public abstract class Description<E extends Event> {
 
     @Getter
-    private TimeRestriction timeRestriction;
+    private List<TimeRestriction> timeRestriction;
 
     public List<Restriction<?>> getAllRestrictions() {
 

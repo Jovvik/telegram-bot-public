@@ -8,7 +8,11 @@ import java.util.List;
 
 public class FoodRealWorldService extends RealWorldService<FoodDescription> {
 
+    // TODO request to bd
     @Override
-    TablePredicate createPredicate(List<FoodDescription> descriptions) { return null; }
+    TablePredicate createPredicate(FoodDescription descriptions) {
+        String request = "here need the request to bd";
+        return new TablePredicate(request);
+    }
 
 }

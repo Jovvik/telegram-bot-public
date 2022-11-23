@@ -9,23 +9,44 @@ import java.util.List;
 @AllArgsConstructor
 public class Location {
 
+    @AllArgsConstructor
+    private static class Time {
+
+        @Getter
+        private Integer openTime;
+
+        @Getter
+        private Integer closeTime;
+
+    }
+
     @Getter
     private String name;
 
-    // For food: Italic, France
-    // For culture: ballet, cinema
-    //
     @Getter
     private List<String> tags;
 
     @Getter
     private Category category;
 
+    // shirota
     @Getter
-    private Integer openTime;
+    private Double latitude;
+
+    // dolgota
+    @Getter
+    private Double longitude;
 
     @Getter
-    private Integer closeTime;
+    private String phoneNumber;
 
+    @Getter
+    private String url;
+
+    @Getter
+    private String address;
+
+    @Getter
+    private List<Time> times;
 
 }

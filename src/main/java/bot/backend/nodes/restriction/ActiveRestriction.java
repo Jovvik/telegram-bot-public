@@ -2,7 +2,7 @@ package bot.backend.nodes.restriction;
 
 import java.util.List;
 
-public class SportRestriction extends Restriction<SportRestriction.SportType> {
+public class ActiveRestriction extends Restriction<ActiveRestriction.SportType> {
 
     List<SportType> sportTypes;
 
@@ -12,11 +12,11 @@ public class SportRestriction extends Restriction<SportRestriction.SportType> {
     }
 
     @Override
-    public List<SportRestriction.SportType> validValues() {
+    public List<ActiveRestriction.SportType> validValues() {
         return sportTypes;
     }
 
     public enum SportType {
-        MOVIE, THEATRE, MUSICAL
+
     }
 }
