@@ -52,6 +52,10 @@ public class PollAbility extends AbilityTemplate {
             Question question = pollService.currQuestion(userId);
             Answer<String> answer = question.getAnswers().get(aID);
             pollService.handleAnswer(userId, question.convertAnswer(answer));
+            if (!pollService.hasNextQuestion(userId)) {
+                StopPollAbility.stopPoll(tgbot, userId, chatId, pollService);
+                return;
+            }
             askQuestion(tgbot, chatId, userId);
         };
 
@@ -61,13 +65,12 @@ public class PollAbility extends AbilityTemplate {
                 upd -> upd.getCallbackQuery().getData().startsWith("btn"));
     }
 
-    private boolean askQuestion(TelegramBot bot, Long chatId, Long userId) {
+    private void askQuestion(TelegramBot bot, Long chatId, Long userId) {
         Question newQuestion = bot.getPollService().getQuestionForUser(userId);
         try {
             newQuestion.send(bot, chatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
-        return true;
     }
 }

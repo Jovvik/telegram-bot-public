@@ -49,6 +49,14 @@ public class PollService {
         eventBuilderService.handleDataAndStartBuild(userId, data);
     }
 
+    public boolean hasNextQuestion(Long userId) {
+        if (userIdToInfos.containsKey(userId)) {
+            var dataBlocks = userIdToInfos.get(userId);
+            return getQuestionIdByContext(dataBlocks) > 0;
+        }
+        return false;
+    }
+
     public Question currQuestion(Long usedId) {
         return currQuestionMap.get(usedId);
     }

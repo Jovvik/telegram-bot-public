@@ -11,12 +11,10 @@ public class QuestionDataBase {
     private final List<Question> questions;
 
     public Question getQuestionById(int id) {
-        for (Question question : questions) {
-            if (question.getId() == id) {
-                return question;
-            }
-        }
-        return null;
+        Question q = questionMap.get(id);
+        if (q == null) return null;
+        if (q instanceof ChangeableQuestion) return ((ChangeableQuestion) q).copy();
+        return q;
     }
 
     public QuestionDataBase(List<SpreadSheetConfig> configs) {
