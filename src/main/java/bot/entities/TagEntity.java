@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 public class TagEntity {
@@ -15,8 +16,7 @@ public class TagEntity {
 
     public String name;
 
-    @ManyToOne
-    @JoinColumn(name="location_entity_id")
-    public LocationEntity location;
+    @ManyToMany
+    public List<LocationEntity> location;
 
 }

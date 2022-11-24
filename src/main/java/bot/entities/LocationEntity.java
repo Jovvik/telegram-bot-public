@@ -14,7 +14,7 @@ public class LocationEntity {
 
     public String locationName;
 
-    @OneToMany(mappedBy="location")
+    @ManyToMany
     public List<TagEntity> tags;
     
     public Category category;
