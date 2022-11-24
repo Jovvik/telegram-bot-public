@@ -6,6 +6,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.List;
+import java.util.Set;
 
 @AllArgsConstructor
 public class Location {
@@ -27,7 +28,7 @@ public class Location {
     private String name;
 
     @Getter
-    private List<String> tags;
+    private Set<String> tags;
 
     @Getter
     private Category category;
@@ -51,5 +52,9 @@ public class Location {
 
     @Getter
     private List<Time> times;
+
+    @Getter
+    private Integer rating;
+
 
 }

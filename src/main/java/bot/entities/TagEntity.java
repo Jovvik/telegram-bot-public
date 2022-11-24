@@ -16,7 +16,4 @@ public class TagEntity {
 
     public String name;
 
-    @ManyToMany
-    public List<LocationEntity> location;
-
 }
