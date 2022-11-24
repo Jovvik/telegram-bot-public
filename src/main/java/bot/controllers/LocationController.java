@@ -1,7 +1,9 @@
 package bot.controllers;
 
+import bot.backend.nodes.categories.Category;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
+import bot.external.maps.MapMain;
 import bot.services.LocationService;
 import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
@@ -16,16 +18,11 @@ import java.util.List;
 public class LocationController {
 
     private final LocationService locationService;
+    private final TagService tagService;
 
     @GetMapping("/addLocations")
     public void fillTable() {
-        List<LocationEntity> locationEntities = new ArrayList<>();
-        LocationEntity locationEntity = new LocationEntity();
-        locationEntity.address = "ksdjfkjdskfs";
-        TagEntity tagEntity = new TagEntity();
-        tagEntity.name = "fastfood";
-        locationEntity.tags = List.of(tagEntity);
-        locationEntities.add(locationEntity);
+        List<LocationEntity> locationEntities = MapMain.collectAllEntities(Category.FOOD, tagService);
         locationEntities.forEach(locationService::save);
     }
 

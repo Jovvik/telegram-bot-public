@@ -19,12 +19,9 @@ public class TagService {
         return tagRepository.findById(id);
     }
 
-    public void save(TagEntity tag) {
-        tagRepository.save(tag);
-    }
-
-    public List<LocationEntity> findAllByName(String name) {
-        return tagRepository.findAllByName(name);
+    public TagEntity save(TagEntity tag) {
+        Optional<TagEntity> optionalTag = tagRepository.findByName(tag.name);
+        return optionalTag.orElseGet(() -> tagRepository.save(tag));
     }
 
 }

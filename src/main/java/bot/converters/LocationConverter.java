@@ -1,16 +1,27 @@
-package bot.backend.nodes.converters;
+package bot.converters;
 
 import bot.backend.nodes.location.Location;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
+import bot.services.TagService;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 public class LocationConverter {
 
-    public List<TagEntity> stringToTags(List<String> stringTags) {
-        return null; // TODO Миша
+    public Set<TagEntity> stringToTags(Set<String> stringTags, TagService tagService) {
+        Set<TagEntity> tags = new HashSet<>();
+
+        stringTags.forEach(str -> {
+            TagEntity tag = new TagEntity();
+            tag.name = str;
+            tags.add(tagService.save(tag));
+        });
+
+        return tags;
     }
 
     private String prettyStringTime(int time) {
@@ -35,8 +46,8 @@ public class LocationConverter {
         return res.toString();
     }
 
-    private List<String> tagsToString(List<TagEntity> entityTags) {
-        List<String> res = new ArrayList<>();
+    private Set<String> tagsToString(Set<TagEntity> entityTags) {
+        Set<String> res = new HashSet<>();
         entityTags.forEach(t -> res.add(t.name));
         return res;
     }
@@ -81,11 +92,11 @@ public class LocationConverter {
         return times;
     }
 
-    public LocationEntity convertToEntity(Location location) {
+    public LocationEntity convertToEntity(Location location, TagService tagService) {
         LocationEntity entity = new LocationEntity();
 
         entity.locationName = location.getName();
-        entity.tags = stringToTags(location.getTags());
+        entity.tags = stringToTags(location.getTags(), tagService);
         entity.category = location.getCategory();
         entity.latitude = location.getLatitude();
         entity.longitude = location.getLongitude();
@@ -99,6 +110,7 @@ public class LocationConverter {
         entity.timeFriday = timeToString(location.getTimes(), 4);
         entity.timeSaturday = timeToString(location.getTimes(), 5);
         entity.timeSunday = timeToString(location.getTimes(), 6);
+        entity.rating = location.getRating();
 
         return entity;
     }
@@ -119,7 +131,8 @@ public class LocationConverter {
                         entity.timeThursday,
                         entity.timeFriday,
                         entity.timeSaturday,
-                        entity.timeSunday)
+                        entity.timeSunday),
+                entity.rating
         );
     }
 }

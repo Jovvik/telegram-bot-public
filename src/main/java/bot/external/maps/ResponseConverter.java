@@ -1,22 +1,21 @@
 package bot.external.maps;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.converters.LocationConverter;
+import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
-import bot.entities.TagEntity;
+import bot.services.TagService;
 import lombok.Getter;
 import lombok.Setter;
+import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 @Getter
 @Setter
 public class ResponseConverter {
     private MapResponse mapResponse;
     private String text;
+    private TagService tagService;
 
     public ResponseConverter(MapResponse mapResponse) {
         this.mapResponse = mapResponse;
@@ -25,6 +24,12 @@ public class ResponseConverter {
     public ResponseConverter(MapResponse mapResponse, String text) {
         this.mapResponse = mapResponse;
         this.text = text;
+    }
+
+    public ResponseConverter(MapResponse mapResponse, String text, TagService tagService) {
+        this.mapResponse = mapResponse;
+        this.text = text;
+        this.tagService = tagService;
     }
 
     private StringBuilder getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
@@ -128,16 +133,19 @@ public class ResponseConverter {
 
         List<LocationEntity> locationEntities = new ArrayList<>();
 
-        mapResponse.features.forEach(f -> {
+        List<MapResponse.Feature> features = mapResponse.features;
+
+        for (int i = 0; i < features.size(); i++) {
+            MapResponse.Feature f = features.get(i);
             LocationEntity entity = new LocationEntity();
             LocationConverter converter = new LocationConverter();
 
             entity.locationName = f.properties.name;
-            entity.tags = converter.stringToTags(List.of(text));
+            entity.tags = converter.stringToTags(Set.of(text), tagService);
             entity.category = category;
             entity.latitude = f.geometry.getCoordinates().get(0);
             entity.longitude = f.geometry.getCoordinates().get(1);
-
+            entity.rating = i;
             if (f.properties.companyMetaData.phones != null) {
                 entity.phoneNumber = f.properties.companyMetaData.phones.get(0).formatted;
             } else {
@@ -162,7 +170,7 @@ public class ResponseConverter {
             entity.timeSunday = timeIntervals.get(6).toString();
 
             locationEntities.add(entity);
-        });
+        }
 
         return locationEntities;
     }

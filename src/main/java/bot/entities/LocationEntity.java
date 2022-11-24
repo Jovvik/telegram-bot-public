@@ -4,6 +4,7 @@ import bot.backend.nodes.categories.Category;
 
 import javax.persistence.*;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 public class LocationEntity {
@@ -15,11 +16,9 @@ public class LocationEntity {
     public String locationName;
 
     @ManyToMany
-    public List<TagEntity> tags;
+    public Set<TagEntity> tags;
     
     public Category category;
-    
-    public String name;
 
     // shirota
     public Double latitude;
@@ -57,4 +56,22 @@ public class LocationEntity {
     
     public String timeSunday;
 
+    public Integer rating;
+
+
+    public Set<TagEntity> getTags() {
+        return tags;
+    }
+
+    public void setTags(Set<TagEntity> tags) {
+        this.tags = tags;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
 }
