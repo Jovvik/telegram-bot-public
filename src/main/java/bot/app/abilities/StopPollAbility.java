@@ -21,6 +21,7 @@ public class StopPollAbility extends AbilityTemplate {
                 .info("stop active poll")
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
+                .input(0)
                 .action(messageContext -> {
                     var tgbot = bot;
                     var userId = messageContext.user().getId();

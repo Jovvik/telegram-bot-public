@@ -28,8 +28,8 @@ public class ChangeableQuestion extends Question {
             String upString,
             String downString,
             BiFunction<String, String, String> changeFunction,
-            BiFunction<String, String, DataBlock<?>> interpreter) {
-        super(question, List.of(defaultValue), interpreter);
+            BiFunction<String, Answer<String>, DataBlock<?>> interpreter) {
+        super(239, question, List.of(new Answer<>(defaultValue, -239)), interpreter);
         this.currValue = defaultValue;
         this.upString = upString;
         this.downString = downString;
@@ -75,7 +75,7 @@ public class ChangeableQuestion extends Question {
     }
 
     @Override
-    public List<String> getAnswers() {
+    public List<Answer<String>> getAnswers() {
         return super.getAnswers();
     }
 

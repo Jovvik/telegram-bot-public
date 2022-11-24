@@ -1,6 +1,7 @@
 package bot.app.abilities;
 
 import bot.app.TelegramBot;
+import bot.app.utils.data.questions.Answer;
 import bot.app.utils.data.questions.Question;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
 import org.telegram.abilitybots.api.objects.*;
@@ -24,6 +25,7 @@ public class PollAbility extends AbilityTemplate {
                 .info("start poll with questions")
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
+                .input(0)
                 .action(messageContext -> {
                     try {
                         askQuestion(bot, messageContext.chatId(), messageContext.user().getId());
@@ -41,14 +43,14 @@ public class PollAbility extends AbilityTemplate {
             var chatId = getChatId(upd);
             int aID = Integer.parseInt(upd.getCallbackQuery().getData().substring("btn".length()));
             var pollService = tgbot.getPollService();
-            
+
             if (!pollService.existUserPollSession(userId)) {
                 System.out.printf("User[%s] try to join closed poll%n", userId);
                 return;
             }
 
             Question question = pollService.currQuestion(userId);
-            String answer = question.getAnswers().get(aID);
+            Answer<String> answer = question.getAnswers().get(aID);
             pollService.handleAnswer(userId, question.convertAnswer(answer));
             askQuestion(tgbot, chatId, userId);
         };
@@ -59,12 +61,13 @@ public class PollAbility extends AbilityTemplate {
                 upd -> upd.getCallbackQuery().getData().startsWith("btn"));
     }
 
-    private void askQuestion(TelegramBot bot, Long chatId, Long userId) {
+    private boolean askQuestion(TelegramBot bot, Long chatId, Long userId) {
         Question newQuestion = bot.getPollService().getQuestionForUser(userId);
         try {
             newQuestion.send(bot, chatId);
         } catch (TelegramApiException e) {
             e.printStackTrace();
         }
+        return true;
     }
 }

@@ -10,6 +10,15 @@ import java.util.List;
 public class QuestionDataBase {
     private final List<Question> questions;
 
+    public Question getQuestionById(int id) {
+        for (Question question : questions) {
+            if (question.getId() == id) {
+                return question;
+            }
+        }
+        return null;
+    }
+
     public QuestionDataBase(List<SpreadSheetConfig> configs) {
         questions = new ArrayList<>();
         for (var config : configs) {

@@ -1,5 +1,6 @@
 package bot.external;
 
+import bot.app.utils.data.questions.Answer;
 import bot.app.utils.data.questions.Question;
 import bot.external.spreadsheets.SpreadSheetConfig;
 import com.google.api.client.auth.oauth2.Credential;
@@ -36,7 +37,7 @@ public class SheetsQuickstart {
     private static String SHEET_ID_STATIC;
 
     @Value("${sheetId}")
-    public void setNameStatic(String name){
+    public void setNameStatic(String name) {
         SheetsQuickstart.SHEET_ID_STATIC = name;
     }
 
@@ -73,17 +74,25 @@ public class SheetsQuickstart {
         } else {
             for (List<Object> row : values) {
                 if (row.isEmpty()) continue;
-                String qStr = (String) row.get(0);
-                List<String> answers = new ArrayList<>();
-                for (var c: row.subList(1, row.size())) {
-                    answers.add((String) c);
+                int questionId = Integer.parseInt((String) row.get(0));
+                String questionText = (String) row.get(1);
+                List<Answer<String>> answers = new ArrayList<>();
+                var answersFromTableIterator = row.subList(2, row.size()).iterator();
+                while (answersFromTableIterator.hasNext()) {
+                    answers.add(
+                            new Answer<>(
+                                    (String) answersFromTableIterator.next(),
+                                    Integer.parseInt((String) answersFromTableIterator.next())
+                            )
+                    );
                 }
-                Question q = new Question(qStr, answers, spreadSheetConfig.getInterpreter());
+                Question q = new Question(questionId, questionText, answers, spreadSheetConfig.getInterpreter());
                 result.add(q);
             }
             return result;
         }
     }
 
-    private static class NoSpreadSheetException extends RuntimeException {}
+    private static class NoSpreadSheetException extends RuntimeException {
+    }
 }

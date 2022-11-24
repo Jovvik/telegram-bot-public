@@ -38,6 +38,7 @@ public class TestNewFeaturesAbility extends AbilityTemplate{
                 .name("test")
                 .privacy(Privacy.CREATOR)
                 .locality(Locality.ALL)
+                .input(0)
                 .action(messageContext -> {
                     q = new ChangeableQuestion(
                             "Time?",

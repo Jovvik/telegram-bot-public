@@ -20,6 +20,7 @@ public class HelloAbility extends AbilityTemplate {
                 .info("say hello")
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
+                .input(0)
                 .action(messageContext -> {
                     bot.silent().send("Sir, I have gone left.", messageContext.chatId());
                     try {
