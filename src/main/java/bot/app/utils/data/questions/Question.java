@@ -16,12 +16,12 @@ import java.util.function.BiFunction;
 
 public class Question {
     @Getter
-    final int id;
+    protected final int id;
     @Getter
-    private final String question;
+    protected final String question;
     @Getter
     protected final List<Answer<String>> answers;
-    private final BiFunction<String, Answer<String>, DataBlock<?>> interpreter;
+    protected final BiFunction<String, Answer<String>, DataBlock<?>> interpreter;
 
     public Question(int id, String question, List<Answer<String>> answers, BiFunction<String, Answer<String>, DataBlock<?>> interpreter) {
         this.id = id;

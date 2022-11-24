@@ -2,7 +2,7 @@ package bot.app.service;
 
 import bot.app.utils.data.DataBlock;
 import bot.app.utils.data.questions.Question;
-import org.springframework.beans.factory.annotation.Value;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,10 +12,11 @@ import java.util.concurrent.ConcurrentHashMap;
 public class PollService {
     private final Map<Long, List<DataBlock<?>>> userIdToInfos = new ConcurrentHashMap<>();
     private final Map<Long, Question> currQuestionMap = new ConcurrentHashMap<>();
+    @Getter
     private final QuestionDataBase questionDataBase;
     private final EventBuilderService eventBuilderService;
 
-    private final int FIRST_QUESTION_ID = 2;
+    private static final int FIRST_QUESTION_ID = 2;
 
     public PollService(
             QuestionDataBase questionDataBase,

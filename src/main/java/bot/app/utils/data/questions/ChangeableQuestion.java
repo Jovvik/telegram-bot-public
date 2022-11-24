@@ -2,6 +2,7 @@ package bot.app.utils.data.questions;
 
 import bot.app.TelegramBot;
 import bot.app.utils.data.DataBlock;
+import lombok.Builder;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -15,7 +16,6 @@ import java.util.function.BiFunction;
 public class ChangeableQuestion extends Question {
     private String upString;
     private String downString;
-
     private String currValue;
 
     private BiFunction<String, String, String> changeFunction;
@@ -101,4 +101,15 @@ public class ChangeableQuestion extends Question {
         bot.execute(changeMarkUp);
     }
 
+    public ChangeableQuestion copy() {
+        ChangeableQuestion changeableQuestion = new ChangeableQuestion(
+                question,
+                currValue,
+                upString,
+                downString,
+                changeFunction,
+                interpreter
+        );
+        return changeableQuestion;
+    }
 }

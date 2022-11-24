@@ -1,5 +1,6 @@
 package bot.app;
 
+import bot.external.graphviz.Vizualization;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
@@ -35,5 +36,6 @@ public class BotStart implements CommandLineRunner {
                 )
                 .build()
         );
+        System.out.println(Vizualization.vizulize(bot.getPollService().getQuestionDataBase()));
     }
 }

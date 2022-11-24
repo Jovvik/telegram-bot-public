@@ -1,14 +1,19 @@
 package bot.app.service;
 
+import bot.app.utils.data.questions.ChangeableQuestion;
 import bot.app.utils.data.questions.Question;
 import bot.external.SheetsQuickstart;
 import bot.external.spreadsheets.SpreadSheetConfig;
+import lombok.Getter;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 public class QuestionDataBase {
-    private final List<Question> questions;
+    @Getter
+    private final Map<Integer, Question> questionMap;
 
     public Question getQuestionById(int id) {
         Question q = questionMap.get(id);
@@ -18,7 +23,7 @@ public class QuestionDataBase {
     }
 
     public QuestionDataBase(List<SpreadSheetConfig> configs) {
-        questions = new ArrayList<>();
+        questionMap = new HashMap<>();
         for (var config : configs) {
             setUpQuestions(config);
         }
@@ -27,19 +32,12 @@ public class QuestionDataBase {
     private void setUpQuestions(SpreadSheetConfig config) {
         try {
             List<Question> newQuestions = SheetsQuickstart.getQuestions(config);
-            questions.addAll(newQuestions);
+            newQuestions.forEach(q -> {
+                questionMap.put(q.getId(), q);
+            });
             System.out.println(config.name() + " added " + newQuestions.size() + " questions");
         } catch (Exception e) {
             e.printStackTrace(System.err);
         }
     }
-
-    public Question getQuestion(int i) {
-        return questions.get(i);
-    }
-
-    public int numberOfQuestions() {
-        return questions.size();
-    }
-
 }
