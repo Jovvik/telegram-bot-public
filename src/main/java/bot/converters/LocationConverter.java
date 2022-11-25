@@ -37,10 +37,10 @@ public class LocationConverter {
 
     public String timeToString(List<Location.Time> times, int index) {
         StringBuilder res = new StringBuilder();
+        Location.Time t = times.get(index);
 
-        times.forEach(t ->
-                res.append("[").append(intTimeToString(t.getOpenTime())).append(" - ")
-                   .append(intTimeToString(t.getCloseTime())).append("]; "));
+        res.append("[").append(intTimeToString(t.getOpenTime())).append(" - ")
+           .append(intTimeToString(t.getCloseTime())).append("]; ");
         res.delete(res.length() - 2, res.length());
 
         return res.toString();

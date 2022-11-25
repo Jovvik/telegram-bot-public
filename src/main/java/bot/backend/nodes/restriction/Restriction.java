@@ -10,4 +10,9 @@ public abstract class Restriction<T> {
     public abstract boolean validate(T object);
 
     public abstract List<T> validValues();
+
+    public interface EventType {
+
+    }
+
 }

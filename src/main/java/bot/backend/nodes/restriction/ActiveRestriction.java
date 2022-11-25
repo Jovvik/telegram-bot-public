@@ -16,7 +16,7 @@ public class ActiveRestriction extends Restriction<ActiveRestriction.SportType> 
         return sportTypes;
     }
 
-    public enum SportType {
-
+    public enum SportType implements EventType {
+        BASKETBALL, FOOTBALL, TENNIS, SWIMMING, SKIING
     }
 }

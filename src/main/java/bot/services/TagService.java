@@ -24,4 +24,8 @@ public class TagService {
         return optionalTag.orElseGet(() -> tagRepository.save(tag));
     }
 
+    public Optional<TagEntity> findByName(String tagName) {
+        return tagRepository.findByName(tagName);
+    }
+
 }

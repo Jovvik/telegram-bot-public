@@ -19,7 +19,7 @@ public class MassEventRestriction extends Restriction<MassEventRestriction.MassE
         return massEventTypes;
     }
 
-    public enum MassEventType {
+    public enum MassEventType implements EventType {
         FOOTBALL, BASKETBALL, FESTIVAL, FAIR, HOCKEY, TENNIS, UNKNOWN
     }
 }
