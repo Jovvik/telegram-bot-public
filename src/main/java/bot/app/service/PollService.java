@@ -2,18 +2,21 @@ package bot.app.service;
 
 import bot.app.utils.data.DataBlock;
 import bot.app.utils.data.questions.Question;
+import lombok.Getter;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.Random;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PollService {
     private final Map<Long, List<DataBlock<?>>> userIdToInfos = new ConcurrentHashMap<>();
     private final Map<Long, Question> currQuestionMap = new ConcurrentHashMap<>();
+    @Getter
     private final QuestionDataBase questionDataBase;
     private final EventBuilderService eventBuilderService;
+
+    private static final int FIRST_QUESTION_ID = 2;
 
     public PollService(
             QuestionDataBase questionDataBase,
@@ -28,7 +31,10 @@ public class PollService {
             userIdToInfos.put(userId, new ArrayList<>());
         }
         int qId = getQuestionIdByContext(userIdToInfos.get(userId));
-        Question question = questionDataBase.getQuestion(qId);
+        if (qId < 0) {
+            return null;
+        }
+        Question question = questionDataBase.getQuestionById(qId);
         currQuestionMap.put(userId, question);
         return question;
     }
@@ -44,7 +50,17 @@ public class PollService {
         eventBuilderService.handleDataAndStartBuild(userId, data);
     }
 
-    public Question currQuestion(Long usedId) { return currQuestionMap.get(usedId); }
+    public boolean hasNextQuestion(Long userId) {
+        if (userIdToInfos.containsKey(userId)) {
+            var dataBlocks = userIdToInfos.get(userId);
+            return getQuestionIdByContext(dataBlocks) > 0;
+        }
+        return false;
+    }
+
+    public Question currQuestion(Long usedId) {
+        return currQuestionMap.get(usedId);
+    }
 
     public List<DataBlock<?>> getUserPollInfos(Long userId) {
         return userIdToInfos.getOrDefault(userId, List.of());
@@ -55,7 +71,11 @@ public class PollService {
     }
 
     private int getQuestionIdByContext(List<DataBlock<?>> dataBlocks) {
-        return new Random().nextInt(questionDataBase.numberOfQuestions());
+        if (dataBlocks.size() == 0) {
+            return FIRST_QUESTION_ID;
+        }
+        var lastDataBlock = dataBlocks.get(dataBlocks.size() - 1);
+        return lastDataBlock.getAnswer().getNextQuestionId();
     }
 
 }

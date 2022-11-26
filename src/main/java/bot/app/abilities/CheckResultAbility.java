@@ -22,6 +22,7 @@ public class CheckResultAbility extends AbilityTemplate {
                 .info("check results")
                 .privacy(Privacy.PUBLIC)
                 .locality(Locality.ALL)
+                .input(0)
                 .action(messageContext -> {
                     var eventService = bot.getEventBuilderService();
                     var userId = messageContext.user().getId();

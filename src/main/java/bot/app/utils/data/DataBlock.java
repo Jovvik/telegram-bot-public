@@ -1,5 +1,6 @@
 package bot.app.utils.data;
 
+import bot.app.utils.data.questions.Answer;
 import bot.backend.nodes.categories.Category;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -19,9 +20,9 @@ public class DataBlock<T> {
     private final String question;
 
     @Getter
-    private final T answer;
+    private final Answer<T> answer;
 
-    public DataBlock(String question, T answer) {
+    public DataBlock(String question, Answer<T> answer) {
         this(Category.DEFAULT, question, answer);
     }
 }
