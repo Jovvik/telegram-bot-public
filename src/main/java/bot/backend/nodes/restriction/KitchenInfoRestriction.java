@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor
-public class KitchenRestriction extends Restriction<KitchenRestriction.Kitchen> {
+public class KitchenInfoRestriction extends Restriction<KitchenInfo> {
 
     List<KitchenInfo> kitchens;
 
