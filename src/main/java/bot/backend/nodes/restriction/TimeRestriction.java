@@ -1,30 +1,39 @@
 package bot.backend.nodes.restriction;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import bot.backend.nodes.events.Event.Time;
 
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
-@AllArgsConstructor
-public class TimeRestriction extends Restriction<TimeRestriction.Interval> {
-    private Interval interval;
 
-    @Override
-    public boolean validate(Interval object) {
-        return interval.from <= object.from && object.to <= interval.to;
+public class TimeRestriction extends Restriction<Time> {
+
+    private Time time;
+
+    public TimeRestriction(Time time) {
+        this.time = time;
     }
 
     @Override
-    public List<Interval> validValues() {
-        return List.of(interval);
+    public boolean validate(Time object) {
+        return time.from <= object.from && object.to <= time.to;
     }
 
-    @AllArgsConstructor
-    public static class Interval {
-        @Getter
-        private Integer from;
+    @Override
+    public List<Time> validValues() {
+        int fullDiff = time.to - time.from;
+        if (fullDiff <= 30) {
+            return List.of(time);
+        }
 
-        @Getter
-        private Integer to;
+        return IntStream.range(0, fullDiff / 30)
+                .mapToObj(i ->
+                        new Time(
+                                time.from + i * 30,
+                                time.from + (i + 1) * 30
+                        )
+                )
+                .collect(Collectors.toList());
     }
 }

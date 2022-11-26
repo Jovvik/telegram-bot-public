@@ -1,22 +1,15 @@
 package bot.backend.nodes.description;
 
 import bot.backend.nodes.events.FoodEvent;
-import bot.backend.nodes.restriction.KitchenRestriction;
-import bot.backend.nodes.restriction.TimeRestriction;
-import lombok.Getter;
+import bot.backend.nodes.restriction.Restriction;
+
+import java.util.Map;
 
 
 public class FoodDescription extends Description<FoodEvent> {
 
-    @Getter
-    private final KitchenRestriction kitchenRestriction;
-
-    public FoodDescription(
-            TimeRestriction timeRestriction,
-            KitchenRestriction kitchenRestriction
-    ) {
-        super(timeRestriction);
-        this.kitchenRestriction = kitchenRestriction;
+    public FoodDescription(Map<String, Restriction<?>> restrictions) {
+        super(FoodEvent.class, restrictions);
     }
 
     @Override

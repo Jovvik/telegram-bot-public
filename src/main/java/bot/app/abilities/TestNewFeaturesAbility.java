@@ -1,36 +1,23 @@
 package bot.app.abilities;
 
 import bot.app.TelegramBot;
-import bot.app.utils.data.questions.ChangeableQuestion;
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.SliderQuestion;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
 import org.telegram.abilitybots.api.objects.*;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
-import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.Update;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.ReplyKeyboardRemove;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardButton;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.KeyboardRow;
-import org.telegram.telegrambots.meta.api.objects.webapp.WebAppInfo;
 import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 import java.util.function.BiConsumer;
 
 import static org.telegram.abilitybots.api.util.AbilityUtils.getChatId;
 
-public class TestNewFeaturesAbility extends AbilityTemplate{
+public class TestNewFeaturesAbility extends AbilityTemplate {
     public TestNewFeaturesAbility(TelegramBot bot) {
         super(bot);
     }
 
-    ChangeableQuestion q;
+    SliderQuestion q;
 
     @Override
     public Ability create() {
@@ -40,7 +27,7 @@ public class TestNewFeaturesAbility extends AbilityTemplate{
                 .locality(Locality.ALL)
                 .input(0)
                 .action(messageContext -> {
-                    q = new ChangeableQuestion(
+                    q = new SliderQuestion(
                             "Time?",
                             "13:00",
                             "+30m",

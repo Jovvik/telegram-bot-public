@@ -2,11 +2,10 @@ package bot.app.service;
 
 import bot.app.utils.data.questions.ChangeableQuestion;
 import bot.app.utils.data.questions.Question;
-import bot.external.SheetsQuickstart;
+import bot.external.spreadsheets.SheetsQuickstart;
 import bot.external.spreadsheets.SpreadSheetConfig;
 import lombok.Getter;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

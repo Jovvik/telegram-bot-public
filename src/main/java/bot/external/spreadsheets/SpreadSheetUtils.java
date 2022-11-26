@@ -6,14 +6,14 @@ import bot.backend.nodes.categories.Category;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.experimental.UtilityClass;
 
 import java.util.function.BiFunction;
 
-@NoArgsConstructor
+@UtilityClass
 public class SpreadSheetUtils {
 
-    public interface Interpreter extends BiFunction<String, String, DataBlock<?>> {
-    }
+    public interface Interpreter extends BiFunction<String, String, DataBlock<?>> { }
 
     @AllArgsConstructor
     public static class Time {

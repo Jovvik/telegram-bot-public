@@ -1,27 +1,38 @@
 package bot.backend.nodes.description;
 
-import bot.backend.nodes.restriction.Restriction;
-import bot.backend.nodes.restriction.TimeRestriction;
 import bot.backend.nodes.events.Event;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import bot.backend.nodes.events.utils.RequiredField;
+import bot.backend.nodes.restriction.Restriction;
 
-import java.util.Arrays;
-import java.util.List;
+import java.lang.reflect.Field;
+import java.util.*;
+import java.util.stream.Collectors;
 
-@AllArgsConstructor
 public abstract class Description<E extends Event> {
 
-    @Getter
-    private TimeRestriction timeRestriction;
+    public Map<String, Restriction<?>> restrictions;
+    public Class<E> eventClass;
 
-    public List<Restriction<?>> getAllRestrictions() {
+    public Description(Class<E> eventClass, Map<String, Restriction<?>> restrictions) {
+        this.eventClass = eventClass;
+        List<String> fields = new ArrayList<>(restrictions.keySet());
+        List<String> allRequiredFields = new java.util.ArrayList<>(requiredFields());
+        System.out.println(allRequiredFields);
+        if (!new HashSet<>(fields).containsAll(allRequiredFields)) {
+            allRequiredFields.removeAll(fields);
+            throw new IllegalArgumentException("not all required restrictions provided: " + allRequiredFields);
+        }
+        this.restrictions = restrictions;
+    }
 
-        System.out.println(Arrays.toString(this.getClass().getFields()));
-
-        return null;
+    protected List<String> requiredFields() {
+        return Arrays.stream(eventClass.getFields())
+                .filter(f -> f.isAnnotationPresent(RequiredField.class))
+                .map(Field::getName)
+                .collect(Collectors.toList());
     }
 
     public abstract E generateEvent();
+
 
 }
