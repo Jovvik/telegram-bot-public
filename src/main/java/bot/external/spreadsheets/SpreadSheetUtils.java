@@ -2,7 +2,9 @@ package bot.external.spreadsheets;
 
 
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.events.SportEvent;
+import bot.backend.nodes.restriction.MovieRestriction;
 import bot.backend.nodes.restriction.SportRestriction;
 import bot.backend.nodes.restriction.TimeRestriction;
 import lombok.experimental.UtilityClass;
@@ -65,6 +67,18 @@ public class SpreadSheetUtils {
 
     public SportRestriction applySport(SportEvent.SportType sportType) {
         return new SportRestriction(List.of(sportType));
+    }
+
+    /**
+     *    MOVIE QUESTIONS
+     **/
+
+    public MovieEvent.MovieType parseMovie(String sport) {
+        return MovieEvent.MovieType.map.get(sport);
+    }
+
+    public MovieRestriction applyMovie(MovieEvent.MovieType movieType) {
+        return new MovieRestriction(List.of(movieType));
     }
 
 
