@@ -3,6 +3,7 @@ package bot.app.utils.data.questions;
 import bot.app.TelegramBot;
 import bot.app.utils.compressing.BestViewTask;
 import bot.app.utils.data.DataBlock;
+import bot.backend.nodes.restriction.Restriction;
 import lombok.Getter;
 import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
 import org.telegram.telegrambots.meta.api.objects.Message;
@@ -13,6 +14,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class Question {
     @Getter
@@ -22,6 +24,9 @@ public class Question {
     @Getter
     protected final List<Answer<String>> answers;
     protected final BiFunction<String, Answer<String>, DataBlock<?>> interpreter;
+
+    @Getter
+    protected Function<Answer<String>, Restriction<?>> restrict;
 
     public Question(int id, String question, List<Answer<String>> answers, BiFunction<String, Answer<String>, DataBlock<?>> interpreter) {
         this.id = id;
@@ -34,6 +39,14 @@ public class Question {
         this.id = id;
         this.question = question;
         this.answers = answers;
+        this.interpreter = DataBlock::new;
+    }
+
+    public Question(int id, String question, List<Answer<String>> answers, Function<Answer<String>, Restriction<?>> restrict) {
+        this.id = id;
+        this.question = question;
+        this.answers = answers;
+        this.restrict = restrict;
         this.interpreter = DataBlock::new;
     }
 

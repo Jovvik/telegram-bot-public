@@ -13,32 +13,28 @@ import java.util.function.BiFunction;
 @UtilityClass
 public class SpreadSheetUtils {
 
-    public interface Interpreter extends BiFunction<String, String, DataBlock<?>> { }
+    /**
+     *    TIME QUESTIONS
+     **/
 
-    @AllArgsConstructor
-    public static class Time {
-        @Getter
-        private int hours;
+    private static final String DATE_FORMAT = "hh:mm";
 
-        @Getter
-        private int minutes;
+    private int parseTime(String time, String dateFormat) {
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+
+        int result = 0;
+        try {
+            Date date = format.parse(time);
+            result = date.getHours() * 60 + date.getMinutes();
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+        }
+        return result;
     }
 
-    public static Interpreter timeInterpreter = (q, a) -> {
-        String[] parts = a.split(":");
+    public Event.Time parseTimeFrom(String time) {
+        int timeFrom = parseTime(time, DATE_FORMAT);
+        return new Event.Time(timeFrom, Integer.MAX_VALUE);
+    }
 
-        return DataBlock.<Time>builder()
-                .question(q)
-                .category(Category.SETTINGS)
-                .answer(
-                        new Answer<>(
-                                new Time(
-                                        Integer.parseInt(parts[0]),
-                                        Integer.parseInt(parts[1])
-                                ),
-                                -1
-                        )
-                )
-                .build();
-    };
 }

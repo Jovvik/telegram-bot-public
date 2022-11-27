@@ -2,6 +2,7 @@ package bot.app.utils.data.questions;
 
 import bot.app.TelegramBot;
 import bot.app.utils.data.DataBlock;
+import bot.backend.nodes.restriction.Restriction;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
@@ -11,6 +12,7 @@ import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 public class SliderQuestion extends ChangeableQuestion {
     private String upString;
@@ -39,6 +41,14 @@ public class SliderQuestion extends ChangeableQuestion {
                           String downString, BiFunction<String, String, String> changeFunction) {
         this(question, defaultValue, upString, downString, changeFunction, DataBlock::new);
     }
+
+    public SliderQuestion(String question, String defaultValue, String upString,
+                          String downString, BiFunction<String, String, String> changeFunction,
+                          Function<Answer<String>, Restriction<?>> restrict) {
+        this(question, defaultValue, upString, downString, changeFunction, DataBlock::new);
+        this.restrict = restrict;
+    }
+
 
     @Override
     public Message send(TelegramBot bot, Long chatId) throws TelegramApiException {
