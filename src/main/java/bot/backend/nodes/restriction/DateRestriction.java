@@ -18,6 +18,6 @@ public class DateRestriction extends Restriction<LocalDate> {
 
     @Override
     public List<LocalDate> validValues() {
-        return null;
+        return List.of(date);
     }
 }

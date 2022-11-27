@@ -20,6 +20,6 @@ public class BudgetRestriction extends Restriction<Budget> {
 
     @Override
     public List<Budget> validValues() {
-        return null;
+        return List.of(budget);
     }
 }

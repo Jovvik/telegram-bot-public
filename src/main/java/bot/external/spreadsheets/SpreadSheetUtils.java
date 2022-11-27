@@ -2,11 +2,9 @@ package bot.external.spreadsheets;
 
 
 import bot.backend.nodes.events.Event.*;
+import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.events.SportEvent;
-import bot.backend.nodes.restriction.BudgetRestriction;
-import bot.backend.nodes.restriction.DateRestriction;
-import bot.backend.nodes.restriction.SportRestriction;
-import bot.backend.nodes.restriction.TimeRestriction;
+import bot.backend.nodes.restriction.*;
 import lombok.experimental.UtilityClass;
 import org.springframework.format.datetime.DateFormatter;
 
@@ -100,4 +98,69 @@ public class SpreadSheetUtils {
     }
 
 
+    /**
+     * COUNT PEOPLE
+     */
+    public Integer parseCount(String count) {
+        return Integer.parseInt(count);
+    }
+
+    public CountRestriction applyCount(Integer count) {
+        return new CountRestriction(count);
+    }
+
+
+    /**
+     * FOOD PLACE TYPE
+     */
+    public FoodEvent.FoodPlaceType parseFoodPlace(String place) {
+        return FoodEvent.FoodPlaceType.map.get(place);
+    }
+
+    public FoodPlaceTypeRestriction applyFoodPlace(FoodEvent.FoodPlaceType placeType) {
+        return new FoodPlaceTypeRestriction(List.of(placeType));
+    }
+
+    /**
+     * KITCHEN TYPE
+     */
+    public KitchenRestriction.KitchenType parseKitchen(String kitchen) {
+        return KitchenRestriction.KitchenType.map.get(kitchen);
+    }
+
+    public KitchenRestriction applyKitchen(KitchenRestriction.KitchenType placeType) {
+        return new KitchenRestriction(List.of(placeType));
+    }
+
+    /**
+     * DURATION INFO
+     */
+    public Duration parseDuration(String duration) {
+        var vals = duration.split(" ");
+        if (vals[1].equals("часа")) {
+            return new Duration(60, 120);
+        }
+        var borders = vals[0].split("-");
+        if (borders.length == 1) {
+            return new Duration(120, Integer.MAX_VALUE);
+        }
+        int from = Integer.parseInt(borders[0]);
+        int to = Integer.parseInt(borders[1]);
+        return new Duration(from, to);
+    }
+
+    public DurationRestriction applyDuration(Duration duration) {
+        return new DurationRestriction(duration);
+    }
+
+    /**
+     * FOOD TYPE
+     */
+    public FoodEvent.FoodType parseFoodType(String foodType) {
+        return FoodEvent.FoodType.map.get(foodType);
+    }
+
+    public FoodTypeRestriction applyFoodType(FoodEvent.FoodType foodType) {
+        return new FoodTypeRestriction(foodType);
+    }
 }
