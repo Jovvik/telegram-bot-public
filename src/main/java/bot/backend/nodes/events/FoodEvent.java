@@ -52,16 +52,6 @@ public class FoodEvent extends Event {
         }
     }
 
-    @AllArgsConstructor
-    public enum Budget {
-        LOW(0, 1000),
-        MIDDLE(1000, 2000),
-        HIGH(2000, Integer.MAX_VALUE);
-
-        public final int to;
-        public final int from;
-    }
-
     public enum FoodPlaceType {
         RESTAURANT, BAR, CAFE;
     }
