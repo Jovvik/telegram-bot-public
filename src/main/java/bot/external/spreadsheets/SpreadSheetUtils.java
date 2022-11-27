@@ -1,37 +1,73 @@
 package bot.external.spreadsheets;
 
-import bot.app.utils.data.DataBlock;
-import bot.backend.nodes.categories.Category;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
 
-import java.util.function.BiFunction;
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.SportEvent;
+import bot.backend.nodes.restriction.SportRestriction;
+import bot.backend.nodes.restriction.TimeRestriction;
+import lombok.experimental.UtilityClass;
 
-@NoArgsConstructor
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.List;
+
+@UtilityClass
 public class SpreadSheetUtils {
 
-    public interface Interpreter extends BiFunction<String, String, DataBlock<?>> {}
+    /**
+     *    TIME QUESTIONS
+     **/
 
-    @AllArgsConstructor
-    public static class Time {
-        @Getter
-        private int hours;
+    private static final String DATE_FORMAT = "hh:mm";
 
-        @Getter
-        private int minutes;
+    private int parseTime(String time, String dateFormat) {
+        SimpleDateFormat format = new SimpleDateFormat(dateFormat);
+
+        int result = 0;
+        try {
+            Date date = format.parse(time);
+            result = date.getHours() * 60 + date.getMinutes();
+        } catch (ParseException exception) {
+            exception.printStackTrace();
+        }
+        return result;
     }
 
-    public static Interpreter timeInterpreter = (q, a) -> {
-        String[] parts = a.split(":");
+    public Event.Time parseTimeFrom(String time) {
+        int timeFrom = parseTime(time, DATE_FORMAT);
+        return new Event.Time(timeFrom, Integer.MAX_VALUE);
+    }
 
-        return DataBlock.<Time>builder()
-                .question(q)
-                .category(Category.SETTINGS)
-                .answer(new Time(
-                        Integer.parseInt(parts[0]),
-                        Integer.parseInt(parts[1]))
-                )
-                .build();
-    };
+    public Event.Time parseTimeTo(String time) {
+        int timeTo = parseTime(time, DATE_FORMAT);
+        return new Event.Time(0, timeTo);
+    }
+
+    public Event.Time parseTime(String time) {
+        String[] arguments = time.split("-");
+        int timeFrom = parseTime(arguments[0], DATE_FORMAT);
+        int timeTo = parseTime(arguments[1], DATE_FORMAT);
+        return new Event.Time(timeFrom, timeTo);
+    }
+
+    public TimeRestriction applyTime(Event.Time time) {
+        return new TimeRestriction(time);
+    }
+
+    /**
+     *    SPORT QUESTIONS
+     **/
+
+    public SportEvent.SportType parseSport(String sport) {
+        return SportEvent.SportType.map.get(sport);
+    }
+
+    public SportRestriction applySport(SportEvent.SportType sportType) {
+        return new SportRestriction(List.of(sportType));
+    }
+
+
+
+
 }

@@ -1,14 +1,16 @@
 package bot.backend;
 
 import bot.backend.nodes.description.FoodDescription;
-import bot.backend.nodes.restriction.KitchenRestriction;
-import bot.backend.nodes.restriction.TimeRestriction;
 
-import java.util.List;
+import java.util.Map;
 
 public class Main {
 
     public static void main(String[] args) {
-
+        try {
+            new FoodDescription(Map.of());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

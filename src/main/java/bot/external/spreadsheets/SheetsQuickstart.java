@@ -1,7 +1,9 @@
-package bot.external;
+package bot.external.spreadsheets;
 
+import bot.app.utils.data.questions.Answer;
 import bot.app.utils.data.questions.Question;
-import bot.external.spreadsheets.SpreadSheetConfig;
+import bot.external.spreadsheets.questions.ChooseQuestionForm;
+import bot.external.spreadsheets.questions.QuestionType;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -23,6 +25,7 @@ import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.function.BiFunction;
 
 @Component
 public class SheetsQuickstart {
@@ -36,7 +39,7 @@ public class SheetsQuickstart {
     private static String SHEET_ID_STATIC;
 
     @Value("${sheetId}")
-    public void setNameStatic(String name){
+    public void setNameStatic(String name) {
         SheetsQuickstart.SHEET_ID_STATIC = name;
     }
 
@@ -55,8 +58,7 @@ public class SheetsQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-
-    public static List<Question> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+    private static List<Question> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, Question> toQuestionFunction) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String range = spreadSheetConfig.getListWithData() + "!" + spreadSheetConfig.getRange();
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -72,18 +74,50 @@ public class SheetsQuickstart {
             throw new NoSpreadSheetException();
         } else {
             for (List<Object> row : values) {
-                if (row.isEmpty()) continue;
-                String qStr = (String) row.get(0);
-                List<String> answers = new ArrayList<>();
-                for (var c: row.subList(1, row.size())) {
-                    answers.add((String) c);
-                }
-                Question q = new Question(qStr, answers, spreadSheetConfig.getInterpreter());
+                Question q = toQuestionFunction.apply(row, spreadSheetConfig);
+                if (q == null) continue;
                 result.add(q);
             }
             return result;
         }
     }
 
-    private static class NoSpreadSheetException extends RuntimeException {}
+
+    public static List<Question> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+        return getQuestions(spreadSheetConfig, (row, ssc) -> {
+            if (row.isEmpty()) return null;
+            int questionId = Integer.parseInt((String) row.get(0));
+            String questionText = (String) row.get(1);
+            List<Answer<String>> answers = new ArrayList<>();
+            var answersFromTableIterator = row.subList(2, row.size()).iterator();
+            while (answersFromTableIterator.hasNext()) {
+                answers.add(
+                        new Answer<>(
+                                (String) answersFromTableIterator.next(),
+                                Integer.parseInt((String) answersFromTableIterator.next())
+                        )
+                );
+            }
+            return new Question(questionId, questionText, answers, ssc.getInterpreter());
+        });
+    }
+
+    public static List<Question> getQuestions2(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+        return getQuestions(spreadSheetConfig, (row, ssc) -> {
+            if (row.isEmpty()) return null;
+            try {
+
+                QuestionType qt = QuestionType.valueOf((String) row.get(1));
+                switch (qt) {
+                    case Choose: return new ChooseQuestionForm(row).getQuestion();
+                    default: return null;
+                }
+            } catch (NoSuchMethodException e) {
+                return null;
+            }
+        });
+    }
+
+
+    private static class NoSpreadSheetException extends RuntimeException { }
 }

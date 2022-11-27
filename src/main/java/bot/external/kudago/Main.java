@@ -2,14 +2,13 @@ package bot.external.kudago;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 
+import java.io.IOException;
+import java.util.List;
+
 public class Main {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         KudaGoServer server = new KudaGoServer();
-        try {
-            server.getPlaces();
-        } catch (Exception exception) {
-
-        }
+        server.getMovieByGenres(List.of("comedy"));
     }
 }

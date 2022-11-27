@@ -16,7 +16,7 @@ public class CultureRestriction extends Restriction<CultureRestriction.CultureTy
         return cultureTypes;
     }
 
-    public enum CultureType implements EventType {
+    public enum CultureType {
         MOVIE, THEATRE, MUSICAL
     }
 }

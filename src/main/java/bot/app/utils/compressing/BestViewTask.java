@@ -1,5 +1,7 @@
 package bot.app.utils.compressing;
 
+import bot.app.utils.data.questions.Answer;
+
 import java.util.*;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
@@ -8,14 +10,20 @@ public class BestViewTask {
 
     private static final int NUMBER_OF_TRIES = 20;
 
-    public static List<List<Integer>> fit(List<String> strings, int minLength) {
+    public static List<List<Integer>> fit(List<Answer<String>> strings, int minLength) {
 
         List<List<Integer>> bestResult =
                 IntStream.range(0, strings.size())
                         .mapToObj(List::of)
                         .collect(Collectors.toList());
 
-        int bestX = (int) (0.618 * Math.max(strings.stream().mapToInt(String::length).max().getAsInt(), minLength));
+        int bestX = (int) (0.618 * Math.max(
+                strings.stream()
+                        .map(Answer::getAnswer)
+                        .mapToInt(String::length)
+                        .max().getAsInt(),
+                minLength)
+        );
         int bestY = 2 * strings.size();
 
         for (int i = 0; i < NUMBER_OF_TRIES; i++) {
@@ -33,7 +41,7 @@ public class BestViewTask {
                     currElement++;
                 }
                 int currX = candidate.get(bucketIndex).stream()
-                        .mapToInt(el -> strings.get(el).length())
+                        .mapToInt(el -> strings.get(el).getAnswer().length())
                         .sum();
                 if (currX > maxX) {
                     maxX = currX;
@@ -47,14 +55,14 @@ public class BestViewTask {
             for (var row : candidate) {
                 int btnSize = currX / row.size();
                 for (var btnId : row) {
-                    if ((0.618 * strings.get(btnId).length()) > btnSize) {
+                    if ((0.618 * strings.get(btnId).getAnswer().length()) > btnSize) {
                         skipResult = true;
                         break;
                     }
                 }
                 if (skipResult) break;
             }
-            if (skipResult) continue;;
+            if (skipResult) continue;
 
             if (minFunction(currX, currY) < minFunction(bestX, bestY)) {
                 bestX = currX;
