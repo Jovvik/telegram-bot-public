@@ -7,8 +7,6 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
 @Getter
 @Setter
 public class FoodEvent extends Event {
@@ -50,7 +48,7 @@ public class FoodEvent extends Event {
         }
 
         public enum SubKitchen {
-            ITALIAN, JAPANESE, RUSSIAN, ASIAN, CAUCASIAN, ALL,
+            SUSHI, PIZZA, BURGERS, MEAT, FISH, COCKTAIL
         }
     }
 

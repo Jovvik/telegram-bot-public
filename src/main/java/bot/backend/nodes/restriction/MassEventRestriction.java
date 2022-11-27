@@ -1,25 +1,24 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.CrowdEvent;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-public class MassEventRestriction extends Restriction<MassEventRestriction.MassEventType> {
+public class MassEventRestriction extends Restriction<CrowdEvent.CrowdEventType> {
 
-    List<MassEventType> massEventTypes;
+    List<CrowdEvent.CrowdEventType> massEventTypes;
 
     @Override
-    public boolean validate(MassEventType massEvent) {
+    public boolean validate(CrowdEvent.CrowdEventType massEvent) {
         return massEventTypes.contains(massEvent);
     }
 
     @Override
-    public List<MassEventType> validValues() {
+    public List<CrowdEvent.CrowdEventType> validValues() {
         return massEventTypes;
     }
 
-    public enum MassEventType {
-        FOOTBALL, BASKETBALL, FESTIVAL, FAIR, HOCKEY, TENNIS, UNKNOWN
-    }
+
 }
