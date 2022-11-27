@@ -13,12 +13,11 @@ import java.util.Set;
 public class Location {
 
     @AllArgsConstructor
+    @Setter
     public static class Time {
 
-        @Setter
         private Integer openTime;
 
-        @Setter
         private Integer closeTime;
 
     }
