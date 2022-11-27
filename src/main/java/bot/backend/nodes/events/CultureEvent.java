@@ -5,7 +5,7 @@ import bot.backend.nodes.location.Location;
 
 public class CultureEvent extends Event {
 
-    public CultureEvent(Location location, Integer from, Integer to, Category category) {
-        super(location, from, to, category);
+    public CultureEvent(Location location, Category category, Time time) {
+        super(location, category, time);
     }
 }

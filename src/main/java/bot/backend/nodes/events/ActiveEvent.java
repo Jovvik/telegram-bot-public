@@ -7,7 +7,6 @@ import lombok.experimental.SuperBuilder;
 
 public class ActiveEvent extends Event {
 
-
     public ActiveEvent(Location location, Category category, Time time) {
         super(location, category, time);
     }

@@ -9,6 +9,7 @@ import kotlin.Pair;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -23,7 +24,7 @@ public class MapMain {
     private static final List<String> gg = List.of("шины");
 
     public static void main(String[] args) throws JsonProcessingException {
-
+        collectDataCsv("фастфуд", new BufferedWriter(new OutputStreamWriter(System.out)));
     }
 
     public static List<LocationEntity> collectAllEntities(Category category, TagService tagService) {

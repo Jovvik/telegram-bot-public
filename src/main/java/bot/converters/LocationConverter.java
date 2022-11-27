@@ -1,5 +1,6 @@
 package bot.converters;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
@@ -35,12 +36,12 @@ public class LocationConverter {
         return prettyStringTime(hours) + ":" + prettyStringTime(mins);
     }
 
-    public String timeToString(List<Location.Time> times, int index) {
+    public String timeToString(List<Event.Time> times, int index) {
         StringBuilder res = new StringBuilder();
 
         times.forEach(t ->
-                res.append("[").append(intTimeToString(t.getOpenTime())).append(" - ")
-                   .append(intTimeToString(t.getCloseTime())).append("]; "));
+                res.append("[").append(intTimeToString(t.from)).append(" - ")
+                   .append(intTimeToString(t.to)).append("]; "));
         res.delete(res.length() - 2, res.length());
 
         return res.toString();
@@ -57,28 +58,28 @@ public class LocationConverter {
         return Integer.parseInt(splitted[0]) * 60 + Integer.parseInt(splitted[1]);
     }
 
-    private Location.Time stringToTime(String string) {
-        Location.Time time = new Location.Time(-1, -1);
+    private Event.Time stringToTime(String string) {
+        Event.Time time = new Event.Time(-1, -1);
         if (string.equals("[ - ]")) {
             return time;
         }
 
         String[] splittedTime = string.substring(1, string.length() - 1).split("-");
-        time.setOpenTime(parseTime(splittedTime[0]));
-        time.setCloseTime(parseTime(splittedTime[1]));
+        time.from = parseTime(splittedTime[0]);
+        time.to = parseTime(splittedTime[1]);
 
         return time;
     }
 
-    private List<Location.Time> stringToTime(String timeMonday,
-                                             String timeTuesday,
-                                             String timeWednesday,
-                                             String timeThursday,
-                                             String timeFriday,
-                                             String timeSaturday,
-                                             String timeSunday) {
+    private List<Event.Time> stringToTime(String timeMonday,
+                                          String timeTuesday,
+                                          String timeWednesday,
+                                          String timeThursday,
+                                          String timeFriday,
+                                          String timeSaturday,
+                                          String timeSunday) {
 
-        List<Location.Time> times = new ArrayList<>();
+        List<Event.Time> times = new ArrayList<>();
 
         times.add(stringToTime(timeMonday));
         times.add(stringToTime(timeTuesday));
