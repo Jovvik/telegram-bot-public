@@ -13,6 +13,7 @@ import java.util.Set;
 @Repository
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
 
-    @Query("SELECT * FROM location_entity WHERE category = ?1 AND tags CONTAINS ?2 AND ")
-    List<LocationEntity> getLocations(Category category, Set<TagEntity> tags, String interval);
+//    @Query("SELECT * FROM location_entity WHERE category = ?1 AND tags CONTAINS ?2 AND ")
+    @Query(value = "SELECT * FROM location_entity", nativeQuery = true)
+    List<LocationEntity> getLocations(Category category, Set<TagEntity> tags, Integer timeFrom, Integer timeTo);
 }

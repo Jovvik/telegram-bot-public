@@ -11,8 +11,12 @@ import java.util.Set;
 @AllArgsConstructor
 public class Location {
 
-    @AllArgsConstructor
     public static class Time {
+
+        public Time(Integer openTime, Integer closeTime) {
+            this.openTime = openTime;
+            this.closeTime = closeTime <= openTime ? closeTime + 24 * 60 : closeTime;
+        }
 
         @Getter
         @Setter
