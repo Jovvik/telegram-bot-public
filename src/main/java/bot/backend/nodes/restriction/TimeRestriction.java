@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
 
 public class TimeRestriction extends Restriction<Time> {
 
-    private Time time;
+    private final Time time;
 
     public TimeRestriction(Time time) {
         this.time = time;

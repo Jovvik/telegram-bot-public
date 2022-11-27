@@ -2,7 +2,8 @@ package bot.external.spreadsheets;
 
 import bot.app.utils.data.questions.Answer;
 import bot.app.utils.data.questions.Question;
-import bot.backend.nodes.restriction.Restriction;
+import bot.external.spreadsheets.questions.ChooseQuestionForm;
+import bot.external.spreadsheets.questions.QuestionType;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -16,22 +17,15 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import com.google.api.services.sheets.v4.Sheets;
 import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
-import lombok.Setter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 import java.io.*;
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.GeneralSecurityException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 @Component
 public class SheetsQuickstart {
@@ -104,8 +98,7 @@ public class SheetsQuickstart {
                         )
                 );
             }
-            Question q = new Question(questionId, questionText, answers, ssc.getInterpreter());
-            return q;
+            return new Question(questionId, questionText, answers, ssc.getInterpreter());
         });
     }
 
@@ -113,72 +106,18 @@ public class SheetsQuickstart {
         return getQuestions(spreadSheetConfig, (row, ssc) -> {
             if (row.isEmpty()) return null;
             try {
-                RowForm rowForm = new RowForm(row);
 
-                return null;
+                QuestionType qt = QuestionType.valueOf((String) row.get(1));
+                switch (qt) {
+                    case Choose: return new ChooseQuestionForm(row).getQuestion();
+                    default: return null;
+                }
             } catch (NoSuchMethodException e) {
                 return null;
             }
         });
     }
 
-    @Getter
-    @Setter
-    private static class RowForm {
-        public int id;
-        public String question;
-
-        public Function<?, Restriction<?>> applying;
-        public Function<String, ?> parseFunction;
-
-        public List<AnswerCell> answers;
-
-        public RowForm(List<Object> row) throws NoSuchMethodException {
-            List<String> strRow = row.stream().map(e -> (String)e).collect(Collectors.toList());
-            this.id = Integer.parseInt(strRow.get(0));
-            this.question = strRow.get(1);
-
-            String   createPart   = strRow.get(2);
-            Method   createMethod = SpreadSheetUtils.class.getMethod(createPart, Object.class);
-            this.applying = obj -> {
-                try {
-                    return (Restriction<?>) createMethod.invoke(null, obj);
-                } catch (Exception e) {
-                    return null;
-                }
-            };
-
-
-            String   parsePart   = strRow.get(3);
-            Method   parseMethod = SpreadSheetUtils.class.getMethod(parsePart, String.class);
-            this.parseFunction = s -> {
-                try {
-                    return parseMethod.invoke(null, s);
-                } catch (Exception e) {
-                    return null;
-                }
-            };
-
-            this.answers = strRow.subList(4, strRow.size())
-                    .stream()
-                    .map(AnswerCell::new)
-                    .collect(Collectors.toList());
-        }
-
-
-        @Getter
-        @Setter
-        public static class AnswerCell {
-            public String key;
-            public int nextId;
-
-            public AnswerCell(String s) {
-                String[] parts = s.split(";");
-                this.key = parts[0];
-                this.nextId = Integer.parseInt(parts[1]);
-            }
-        }
-    }
 
     private static class NoSpreadSheetException extends RuntimeException { }
 }
