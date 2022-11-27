@@ -1,5 +1,6 @@
 package bot.backend.nodes.movie;
 
+import bot.backend.nodes.events.MovieEvent;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -9,9 +10,9 @@ public class Movie {
 
     String title;
 
+
     Integer runningTime;
 
-    List<String> genres;
-
+    List<MovieEvent.MovieType> genres;
 
 }
