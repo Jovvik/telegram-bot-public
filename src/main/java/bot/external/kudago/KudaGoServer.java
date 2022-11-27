@@ -1,8 +1,10 @@
 package bot.external.kudago;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.Movie;
+import bot.backend.nodes.movie.MovieSession;
 import bot.entities.LocationEntity;
 import bot.external.maps.MapResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -77,8 +79,8 @@ public class KudaGoServer {
     }
 
 
-    public List<MovieResponse> getMoviesByGenres(Set<String> genres) throws IOException {
-        final String API_URL = "https://kudago.com/public-api/v1.4/movies/?location=spb&fields=id,title,genres&page_size=100";
+    public List<MovieSession> getMoviesByGenres(Set<String> genres) throws IOException {
+        final String API_URL = "https://kudago.com/public-api/v1.4/movies/?location=spb&fields=id,title,genres,running_time&page_size=100";
         JSONObject jsonObject = new JSONObject(getRequest(API_URL));
         JSONArray myResponse = jsonObject.getJSONArray("results");
         List<MovieResponse> responses = new ArrayList<>();
@@ -96,8 +98,42 @@ public class KudaGoServer {
                 System.out.println(e.getMessage());
             }
         }
-        return responses.stream().filter(movieResponse ->
+
+        List<MovieResponse> movieResponses =  responses.stream().filter(movieResponse ->
                 movieResponse.genres.stream().anyMatch(it -> genres.contains(it.name))).collect(Collectors.toList());
+
+        return movieResponses.stream().map(this::createMovieSession).collect(Collectors.toList());
+
+    }
+
+    private MovieSession createMovieSession(MovieResponse movieResponse) {
+        final String API_URL = "https://kudago.com/public-api/v1.4/movies/" + movieResponse.id + "/showings/?expand=movie,place";
+        JSONObject jsonObject = null;
+        try {
+            jsonObject = new JSONObject(getRequest(API_URL));
+        } catch (Exception ignored) {
+
+        }
+        assert jsonObject != null;
+        JSONArray myResponse = jsonObject.getJSONArray("results");
+        List<MovieSession> responses = new ArrayList<>();
+        //TODO get all times ...
+        for (int i = 0; i < myResponse.length(); ++i) {
+            JSONObject current = myResponse.getJSONObject(i);
+            try {
+                Movie movie = new Movie(
+                        movieResponse.title,
+                        movieResponse.runningTime,
+                        movieResponse.genres.stream().map(it->it.slug).collect(Collectors.toList()));
+                MovieSession session = new MovieSession(movie,
+                        new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),
+                        new String(current.getJSONObject("place").getString("title").getBytes(), StandardCharsets.UTF_8));
+                return session;
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
+            }
+        }
+        return null;
     }
 
 

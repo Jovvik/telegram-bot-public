@@ -9,6 +9,9 @@ public class Movie {
 
     String title;
 
+    Integer runningTime;
+
     List<String> genres;
+
 
 }

@@ -20,9 +20,15 @@ public class LocationController {
     private final LocationService locationService;
     private final TagService tagService;
 
-    @GetMapping("/addLocations")
+    @GetMapping("/addLocationsFood")
     public void fillTable() {
         List<LocationEntity> locationEntities = MapMain.collectAllEntities(Category.FOOD, tagService);
+        locationEntities.forEach(locationService::save);
+    }
+
+    @GetMapping("/addLocationsKudaGo")
+    public void fillTableKudaGo() {
+        List<LocationEntity> locationEntities = MapMain.collectAllEntities(Category.CULTURE, tagService);
         locationEntities.forEach(locationService::save);
     }
 

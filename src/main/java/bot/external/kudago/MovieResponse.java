@@ -13,6 +13,9 @@ public class MovieResponse {
     @JsonProperty("title")
     String title;
 
+    @JsonProperty("running_time")
+    Integer runningTime;
+
     @JsonProperty("genres")
     List<Genre> genres;
 
