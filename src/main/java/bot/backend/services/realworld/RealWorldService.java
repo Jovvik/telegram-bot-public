@@ -1,8 +1,11 @@
 package bot.backend.services.realworld;
 
 import bot.backend.nodes.description.Description;
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.TimeRestriction;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
 import bot.repositories.LocationRepository;
@@ -15,7 +18,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Component
-public abstract class RealWorldService<D extends Description> {
+public abstract class RealWorldService<E extends Event, D extends Description<E>> {
 
     @Autowired
     protected LocationRepository locationRepository;
@@ -37,10 +40,21 @@ public abstract class RealWorldService<D extends Description> {
         return handleRaw(locations);
     }
 
-    abstract public TablePredicate createPredicate(List<Restriction<? extends Restriction.EventType>> restrictions);
+    abstract public TablePredicate createPredicate(Description<E> description);
+
+    abstract public E generateEvent(Description<E> description);
 
     protected List<Location> handleRaw(List<Location> locations) {
         // DEFAULT
         return locations;
+    }
+
+    protected void setTimeInterval(TablePredicate predicate, Description<E> description) {
+        List<TimeRestriction> timeRestrictions = description.getTypedRestrictions(TimeRestriction.class);
+
+        predicate.setTimeFrom(timeRestrictions.get(0).validValues().get(0).getFrom());
+
+        List<Event.Time> lastIntervals = timeRestrictions.get(timeRestrictions.size() - 1).validValues();
+        predicate.setTimeTo(lastIntervals.get(lastIntervals.size() - 1).getTo());
     }
 }

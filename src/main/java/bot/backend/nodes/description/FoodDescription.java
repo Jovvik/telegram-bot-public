@@ -15,11 +15,6 @@ public class FoodDescription extends Description<FoodEvent> {
 
     @Override
     public FoodEvent generateEvent() {
-//        TablePredicate predicate = foodRealWorldService.createPredicate(this.getRestrictions());
-//        this.setTimeInterval(predicate);
-//
-//        List<Location> matchedLocations = foodRealWorldService.findLocations(predicate);
-//        return new FoodEvent(matchedLocations.get(0), 0, 24*60, Category.FOOD);
         return null;
     }
 }

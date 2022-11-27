@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.util.List;
 import java.util.Set;
 
+// TODO update database to remove time stuff
 @Entity
 public class LocationEntity {
 

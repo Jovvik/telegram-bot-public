@@ -3,6 +3,8 @@ package bot.backend.nodes.description;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.TimeRestriction;
+import bot.backend.services.realworld.TablePredicate;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -25,15 +27,18 @@ public abstract class Description<E extends Event> {
         this.restrictions = restrictions;
     }
 
-    protected void setTimeInterval(TablePredicate predicate) {
-        predicate.setTimeFrom(timeRestrictions.get(0).validValues().get(0).getFrom());
-
-        List<TimeRestriction.Interval> lastIntervals = timeRestrictions.get(timeRestrictions.size() - 1).validValues();
-        predicate.setTimeTo(lastIntervals.get(lastIntervals.size() - 1).getTo());
     protected List<String> requiredFields() {
         return Arrays.stream(eventClass.getFields())
                 .filter(f -> f.isAnnotationPresent(RequiredField.class))
                 .map(Field::getName)
+                .collect(Collectors.toList());
+    }
+
+    public <R extends Restriction<?>> List<R> getTypedRestrictions(Class<R> restrictionClass) {
+        return restrictions.values()
+                .stream()
+                .filter(restrictionClass::isInstance)
+                .map(restrictionClass::cast)
                 .collect(Collectors.toList());
     }
 

@@ -20,7 +20,7 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.KitchenTy
         return kitchens;
     }
 
-    public enum KitchenType implements EventType {
+    public enum KitchenType {
         ITALIAN, JAPANESE, RUSSIAN, ALL
     }
 }
