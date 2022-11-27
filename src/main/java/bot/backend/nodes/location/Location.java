@@ -1,6 +1,7 @@
 package bot.backend.nodes.location;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,16 +12,6 @@ import java.util.Set;
 @AllArgsConstructor
 @Getter
 public class Location {
-
-    @AllArgsConstructor
-    @Setter
-    public static class Time {
-
-        private Integer openTime;
-
-        private Integer closeTime;
-
-    }
 
     private String name;
 
@@ -40,7 +31,7 @@ public class Location {
 
     private String address;
 
-    private List<Time> times;
+    private List<Event.Time> times;
 
     private Integer rating;
 
