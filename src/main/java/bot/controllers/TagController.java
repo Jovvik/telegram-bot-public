@@ -2,6 +2,7 @@ package bot.controllers;
 
 import bot.backend.nodes.location.Location;
 import bot.entities.TagEntity;
+import bot.external.kudago.MainKudaGo;
 import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Controller;
@@ -29,6 +30,12 @@ public class TagController {
         for (String category : foodCategories) {
             TagEntity tagEntity = new TagEntity();
             tagEntity.name = category;
+            tags.add(tagEntity);
+        }
+
+        for (String tag : MainKudaGo.kudaGoCategories) {
+            TagEntity tagEntity = new TagEntity();
+            tagEntity.name = tag;
             tags.add(tagEntity);
         }
         tags.forEach(tagService::save);
