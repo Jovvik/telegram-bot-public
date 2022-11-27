@@ -3,6 +3,8 @@ package bot.backend.nodes.description;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.TimeRestriction;
+import bot.backend.services.realworld.TablePredicate;
 
 import java.lang.reflect.Field;
 import java.util.*;
@@ -29,6 +31,14 @@ public abstract class Description<E extends Event> {
         return Arrays.stream(eventClass.getFields())
                 .filter(f -> f.isAnnotationPresent(RequiredField.class))
                 .map(Field::getName)
+                .collect(Collectors.toList());
+    }
+
+    public <R extends Restriction<?>> List<R> getTypedRestrictions(Class<R> restrictionClass) {
+        return restrictions.values()
+                .stream()
+                .filter(restrictionClass::isInstance)
+                .map(restrictionClass::cast)
                 .collect(Collectors.toList());
     }
 

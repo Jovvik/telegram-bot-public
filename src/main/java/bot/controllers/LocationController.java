@@ -28,7 +28,7 @@ public class LocationController {
 
     @GetMapping("/getLocations")
     public void getTable() {
-        locationService.getLocations().forEach(
+        locationService.getAllLocations().forEach(
                 location -> {
                     System.out.println(location.address);
                 }
