@@ -2,28 +2,21 @@ package bot.external.kudago;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.Movie;
 import bot.backend.nodes.movie.MovieSession;
-import bot.entities.LocationEntity;
-import bot.external.maps.MapResponse;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.io.BufferedReader;
 import java.io.IOException;
-import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.*;
-import java.net.http.HttpClient;
-import java.net.http.HttpRequest;
-import java.net.http.HttpResponse;
 import java.nio.charset.StandardCharsets;
 import java.util.*;
 import java.util.stream.Collectors;
-
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 
 
@@ -124,7 +117,8 @@ public class KudaGoServer {
                 Movie movie = new Movie(
                         movieResponse.title,
                         movieResponse.runningTime,
-                        movieResponse.genres.stream().map(it->it.slug).collect(Collectors.toList()));
+                        // TODO:: ВОТ ТУТ МАПИМ НАЗВАНИЕ НАДО ПОМАТИТЬ С ENUM, ОБСУДИ С ЖЕНЕЙ
+                        movieResponse.genres.stream().map(it->it.slug).map(it-> MovieEvent.GenreType.map.get(it)).collect(Collectors.toList()));
                 MovieSession session = new MovieSession(movie,
                         new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),
                         new String(current.getJSONObject("place").getString("title").getBytes(), StandardCharsets.UTF_8));
