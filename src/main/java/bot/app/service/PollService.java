@@ -1,7 +1,7 @@
 package bot.app.service;
 
-import bot.app.utils.data.DataBlock;
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.BaseQuestion;
+import bot.app.utils.data.questions.QuestionResult;
 import lombok.Getter;
 
 import java.util.ArrayList;
@@ -10,8 +10,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 public class PollService {
-    private final Map<Long, List<DataBlock<?>>> userIdToInfos = new ConcurrentHashMap<>();
-    private final Map<Long, Question> currQuestionMap = new ConcurrentHashMap<>();
+    private final Map<Long, List<QuestionResult>> userIdToInfos = new ConcurrentHashMap<>();
+    private final Map<Long, BaseQuestion<?>> currQuestionMap = new ConcurrentHashMap<>();
     @Getter
     private final QuestionDataBase questionDataBase;
     private final EventBuilderService eventBuilderService;
@@ -26,7 +26,7 @@ public class PollService {
         this.eventBuilderService = eventBuilderService;
     }
 
-    public Question getQuestionForUser(Long userId) {
+    public BaseQuestion<?> getQuestionForUser(Long userId) {
         if (!userIdToInfos.containsKey(userId)) {
             userIdToInfos.put(userId, new ArrayList<>());
         }
@@ -34,17 +34,17 @@ public class PollService {
         if (qId < 0) {
             return null;
         }
-        Question question = questionDataBase.getQuestionById(qId);
+        BaseQuestion<?> question = questionDataBase.getQuestionById(qId);
         currQuestionMap.put(userId, question);
         return question;
     }
 
-    public void handleAnswer(Long userId, DataBlock<?> answer) {
+    public void handleAnswer(Long userId, QuestionResult answer) {
         userIdToInfos.get(userId).add(answer);
     }
 
     public void stopPoll(Long userId) {
-        List<DataBlock<?>> data = userIdToInfos.getOrDefault(userId, List.of());
+        List<QuestionResult> data = userIdToInfos.getOrDefault(userId, List.of());
         userIdToInfos.remove(userId);
         currQuestionMap.remove(userId);
         eventBuilderService.handleDataAndStartBuild(userId, data);
@@ -58,11 +58,11 @@ public class PollService {
         return false;
     }
 
-    public Question currQuestion(Long usedId) {
+    public BaseQuestion<?> currQuestion(Long usedId) {
         return currQuestionMap.get(usedId);
     }
 
-    public List<DataBlock<?>> getUserPollInfos(Long userId) {
+    public List<QuestionResult> getUserPollInfos(Long userId) {
         return userIdToInfos.getOrDefault(userId, List.of());
     }
 
@@ -70,12 +70,12 @@ public class PollService {
         return userIdToInfos.containsKey(userId);
     }
 
-    private int getQuestionIdByContext(List<DataBlock<?>> dataBlocks) {
+    private int getQuestionIdByContext(List<QuestionResult> dataBlocks) {
         if (dataBlocks.size() == 0) {
             return FIRST_QUESTION_ID;
         }
         var lastDataBlock = dataBlocks.get(dataBlocks.size() - 1);
-        return lastDataBlock.getAnswer().getNextQuestionId();
+        return lastDataBlock.getAnswers().get(0).getNextQuestionId();
     }
 
 }

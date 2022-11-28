@@ -2,10 +2,7 @@ package bot.external.graphviz;
 
 import bot.app.service.QuestionDataBase;
 import bot.app.utils.data.questions.Answer;
-import bot.app.utils.data.questions.Question;
 
-import java.util.HashSet;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 public class Vizualization {

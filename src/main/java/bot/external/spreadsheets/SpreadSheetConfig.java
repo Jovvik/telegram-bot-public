@@ -1,37 +1,19 @@
 package bot.external.spreadsheets;
 
-import bot.app.utils.data.DataBlock;
-import bot.app.utils.data.questions.Answer;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
-import java.util.function.BiFunction;
-
+@Getter
+@AllArgsConstructor
 public enum SpreadSheetConfig {
-    BaseQuestions("Основные", "A2:AB", DataBlock::new),
-    OneDayQuestions("Один день", "A:BP", DataBlock::new),
-    FoodQuestions("О еде", "A:R", DataBlock::new),
-    CultureQuestions("Культурные мероприятия", "A:R", DataBlock::new),
-    MainLocationQuestions("Основная локация", "A:P", DataBlock::new);
-    //TimeQuestions("Время", "A1:N2", SpreadSheetUtils.timeInterpreter);
+//    TestNewFunctionalityQuestion("Test1", "A2:M1000"),
+    BaseQuestions("Основные", "A2:AB"),
+    OneDayQuestions("Один день", "A:BP"),
+    FoodQuestions("О еде", "A:R"),
+    CultureQuestions("Культурные мероприятия", "A:R"),
+    MainLocationQuestions("Основная локация", "A:P");
+//    TimeQuestions("Время", "A1:N2", SpreadSheetUtils.timeInterpreter);
 
     private final String listWithData;
     private final String range;
-    private final BiFunction<String, Answer<String>, DataBlock<?>> interpreter;
-
-    SpreadSheetConfig(String listWithData, String range, BiFunction<String, Answer<String>, DataBlock<?>> interpreter) {
-        this.listWithData = listWithData;
-        this.range = range;
-        this.interpreter = interpreter;
-    }
-
-    public String getListWithData() {
-        return listWithData;
-    }
-
-    public BiFunction<String, Answer<String>, DataBlock<?>> getInterpreter() {
-        return interpreter;
-    }
-
-    public String getRange() {
-        return range;
-    }
 }

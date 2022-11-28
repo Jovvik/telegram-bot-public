@@ -2,7 +2,8 @@ package bot.app.abilities;
 
 import bot.app.TelegramBot;
 import bot.app.utils.data.questions.Answer;
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.BaseQuestion;
+import bot.app.utils.data.questions.QuestionResult;
 import org.telegram.abilitybots.api.bot.BaseAbilityBot;
 import org.telegram.abilitybots.api.objects.*;
 import org.telegram.telegrambots.meta.api.objects.Update;
@@ -41,7 +42,12 @@ public class PollAbility extends AbilityTemplate {
             var tgbot = (TelegramBot) bot;
             var userId = upd.getCallbackQuery().getFrom().getId();
             var chatId = getChatId(upd);
-            int aID = Integer.parseInt(upd.getCallbackQuery().getData().substring("btn".length()));
+
+            String[] buttonArgs = upd.getCallbackQuery().getData().split("-");
+
+            int qId = Integer.parseInt(buttonArgs[1]);
+            int aID = Integer.parseInt(buttonArgs[2]);
+
             var pollService = tgbot.getPollService();
 
             if (!pollService.existUserPollSession(userId)) {
@@ -49,14 +55,26 @@ public class PollAbility extends AbilityTemplate {
                 return;
             }
 
-            Question question = pollService.currQuestion(userId);
-            Answer<String> answer = question.getAnswers().get(aID);
-            pollService.handleAnswer(userId, question.convertAnswer(answer));
-            if (!pollService.hasNextQuestion(userId)) {
-                StopPollAbility.stopPoll(tgbot, userId, chatId, pollService);
+            BaseQuestion<?> question = pollService.currQuestion(userId);
+
+            if (qId != question.getId()) {
+                System.out.printf("User[%s] try to click on answered question", userId);
                 return;
             }
-            askQuestion(tgbot, chatId, userId);
+
+            QuestionResult questionResult = question.handlePressing(tgbot, chatId, aID);
+
+            if (questionResult != null) {
+
+                Answer<String> answer = question.getAnswers().get(aID);
+                pollService.handleAnswer(userId, questionResult);
+
+                if (!pollService.hasNextQuestion(userId)) {
+                    StopPollAbility.stopPoll(tgbot, userId, chatId, pollService);
+                    return;
+                }
+                askQuestion(tgbot, chatId, userId);
+            }
         };
 
         return Reply.of(
@@ -66,7 +84,7 @@ public class PollAbility extends AbilityTemplate {
     }
 
     private void askQuestion(TelegramBot bot, Long chatId, Long userId) {
-        Question newQuestion = bot.getPollService().getQuestionForUser(userId);
+        BaseQuestion<?> newQuestion = bot.getPollService().getQuestionForUser(userId);
         try {
             newQuestion.send(bot, chatId);
         } catch (TelegramApiException e) {

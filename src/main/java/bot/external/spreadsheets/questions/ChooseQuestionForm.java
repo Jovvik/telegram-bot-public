@@ -1,7 +1,10 @@
 package bot.external.spreadsheets.questions;
 
 import bot.app.utils.data.questions.Answer;
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.ChooseQuestion;
+import bot.app.utils.data.questions.QuestionResult;
+import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.restriction.Restriction;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -11,7 +14,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class ChooseQuestionForm extends BaseQuestionForm<Question, String> {
+public class ChooseQuestionForm extends BaseQuestionForm<ChooseQuestion, String> {
 
     public List<AnswerCell> answers;
 
@@ -20,19 +23,20 @@ public class ChooseQuestionForm extends BaseQuestionForm<Question, String> {
     }
 
     @Override
-    public Question getQuestion() {
-        return new Question(
+    public ChooseQuestion getQuestion() {
+        return new ChooseQuestion(
                 id,
                 question,
                 answers.stream()
                         .map(a -> new Answer<>(a.key, a.nextId, a.edgeType))
                         .collect(Collectors.toList()),
-                answer -> {
-                    if (answer.getEdgeType() == AnswerCell.EdgeType.Transition) {
-                        return null;
-                    } else {
-                        return applying.apply(parseFunction.apply(answer.getAnswer()));
-                    }
+                (question, answer) -> {
+                    Restriction<?> restriction = answer.getEdgeType() == AnswerCell.EdgeType.Transition
+                            ? null
+                            : applying.apply(parseFunction.apply(answer.getAnswer()));
+
+                    // TODO change to parse category
+                    return new QuestionResult(question, Category.DEFAULT, List.of(answer), restriction);
                 }
         );
     }
