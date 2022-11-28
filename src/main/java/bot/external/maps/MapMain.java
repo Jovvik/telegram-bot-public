@@ -9,6 +9,7 @@ import kotlin.Pair;
 
 import java.io.BufferedWriter;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
 import java.util.*;
 import java.util.function.Function;
 import java.util.stream.Collectors;
@@ -20,16 +21,10 @@ public class MapMain {
             "тайскаякухня", "китайскийресторан", "японскийресторан", "бар", "столовая"
     );
 
+    private static final List<String> gg = List.of("шины");
+
     public static void main(String[] args) throws JsonProcessingException {
-        MapRequest mapRequest = new MapRequest("кафе");
-        mapRequest.setResultsSize(20);
-
-        MapService service = new MapService(mapRequest);
-        MapResponse mapResponse = service.sendMapRequest();
-
-        ResponseConverter converter = new ResponseConverter(mapResponse, "кафе");
-
-        System.out.println(converter.toCsv());
+        collectDataCsv("фастфуд", new BufferedWriter(new OutputStreamWriter(System.out)));
     }
 
     public static List<LocationEntity> collectAllEntities(Category category, TagService tagService) {

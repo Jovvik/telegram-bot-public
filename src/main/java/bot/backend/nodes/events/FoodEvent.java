@@ -7,6 +7,10 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 @Getter
 @Setter
 public class FoodEvent extends Event {
@@ -53,16 +57,36 @@ public class FoodEvent extends Event {
     }
 
     @AllArgsConstructor
-    public enum Budget {
-        LOW(0, 1000),
-        MIDDLE(1000, 2000),
-        HIGH(2000, Integer.MAX_VALUE);
+    public enum FoodPlaceType {
+        RESTAURANT("Ресторан"),
+        BAR("Бар"),
+        JUNK_FOOD("Фастфуд"),
+        CAFE("Кафе");
 
-        public final int to;
-        public final int from;
+        public static Map<String, FoodPlaceType> map = new HashMap<>();
+
+        static {
+            Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
+        }
+
+        private final String realName;
     }
 
-    public enum FoodPlaceType {
-        RESTAURANT, BAR, CAFE;
+    @AllArgsConstructor
+    public enum FoodType {
+        SUSHI("Суши"),
+        BURGERS("Бургеры"),
+        PIZZA("Пицца"),
+        MEAT("Мясо"),
+        FISH("Рыба"),
+        COCKTAILS("Коктейли");
+
+        public static Map<String, FoodType> map = new HashMap<>();
+
+        static {
+            Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
+        }
+
+        private final String realName;
     }
 }

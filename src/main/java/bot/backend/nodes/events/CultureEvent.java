@@ -10,7 +10,7 @@ public class CultureEvent extends OutDoorEvent {
     }
 
     public enum CultureType {
-
+        THEATRE, MOVIE, MUSICAL, OPERA, GALLERY
     }
 
 }
