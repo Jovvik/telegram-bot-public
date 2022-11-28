@@ -2,6 +2,7 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.FoodEvent;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.awt.*;
 import java.util.Arrays;
@@ -26,17 +27,17 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.KitchenTy
     }
 
     @AllArgsConstructor
-    public enum KitchenType {
-        ITALIAN("Итальянская"),
-        JAPANESE("Японская"),
-        RUSSIAN("Русская"),
-        ASIAN("Азиатская"),
-        EUROPEAN("Европейская"),
-        CAUCASIAN("Кавказская"),
-        FRENCH("Французская"),
-        THAI("Тайская"),
-        CHINESE("Китайская"),
-        ALL("Не принципиально");
+    public enum KitchenType implements TypedEnum {
+        ITALIAN("Итальянская", "итальянскаийресторан"),
+        JAPANESE("Японская", "японскийресторан"),
+        RUSSIAN("Русская", "русскаякухня"),
+        ASIAN("Азиатская", "азиатскийресторан"),
+        EUROPEAN("Европейская", "европейскаякухня"),
+        CAUCASIAN("Кавказская", "кавказскийрестоан"),
+        FRENCH("Французская", "французскийресторан"),
+        THAI("Тайская", "тайскаякухня"),
+        CHINESE("Китайская", "китайскийресторан"),
+        ALL("Не принципиально", null);
 
         public final static List<KitchenType> european = List.of(ITALIAN, RUSSIAN, FRENCH);
         public final static List<KitchenType> asian = List.of(JAPANESE, THAI, CHINESE);
@@ -48,5 +49,8 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.KitchenTy
         }
 
         private final String realName;
+
+        @Getter
+        private final String tagName;
     }
 }

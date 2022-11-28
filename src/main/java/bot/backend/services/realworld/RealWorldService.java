@@ -6,15 +6,19 @@ import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.Restriction;
 import bot.backend.nodes.restriction.TimeRestriction;
+import bot.backend.nodes.restriction.TypedEnum;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
+import bot.entities.TagEntity;
 import bot.repositories.LocationRepository;
 import bot.services.LocationService;
 import bot.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @Component
@@ -38,6 +42,17 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
 
         List<Location> locations = rawLocationEntities.stream().map(converter::convertToLocation).collect(Collectors.toList());
         return handleRaw(locations);
+    }
+
+    protected Set<TagEntity> addTagsFromType(Restriction<?> res) {
+        Set<TagEntity> tags = new HashSet<>();
+
+        res.validValues().forEach(type -> {
+            TagEntity tag = tagService.findByName(((TypedEnum) type).getTagName()).orElse(null);
+            tags.add(tag);
+        });
+
+        return tags;
     }
 
     abstract public TablePredicate createPredicate(Description<E> description);
