@@ -1,6 +1,7 @@
 package bot.external.spreadsheets;
 
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.*;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.events.MovieEvent;
@@ -80,9 +81,8 @@ public class SpreadSheetUtils {
 
     public TimeRestriction applyTime(Object time) {
         return new TimeRestriction((Event.Time) time);
-    public TimeRestriction applyTime(Time time) {
-        return new TimeRestriction(time);
     }
+
 
     /**
      * DATE QUESTIONS
@@ -91,8 +91,8 @@ public class SpreadSheetUtils {
         return LocalDate.parse(date, DateTimeFormatter.ofPattern("dd.MM.yyyy"));
     }
 
-    public DateRestriction applyDate(LocalDate date) {
-        return new DateRestriction(date);
+    public DateRestriction applyDate(Object date) {
+        return new DateRestriction((LocalDate) date);
     }
 
     /**
@@ -109,8 +109,8 @@ public class SpreadSheetUtils {
         }
     }
 
-    public BudgetRestriction applyBudget(Budget budget) {
-        return new BudgetRestriction(budget);
+    public BudgetRestriction applyBudget(Object budget) {
+        return new BudgetRestriction((Budget) budget);
     }
 
     /**
@@ -137,31 +137,9 @@ public class SpreadSheetUtils {
                 ? new Event.Time(0, 10)
                 : new Event.Time(10, 0));
     }
-    /**
-     *    MOVIE QUESTIONS
-     **/
-
-    public MovieEvent.GenreType parseGenre(String sport) {
-        return MovieEvent.GenreType.map.get(sport);
-    }
-
-    public GenreRestriction applyGenre(MovieEvent.GenreType movieType) {
-        return new GenreRestriction(List.of(movieType));
-    }
-
-
-    /**
-     * COUNT PEOPLE
-     */
-    public Integer parseCount(String count) {
-        return Integer.parseInt(count);
-    }
 
     public List<Integer> parseIntegers(StringList values) {
         return values.stream().map(Integer::parseInt).collect(Collectors.toList());
-    }
-    public CountRestriction applyCount(Integer count) {
-        return new CountRestriction(count);
     }
 
     public KitchenRestriction applyIntegers(Object values) {
@@ -173,14 +151,37 @@ public class SpreadSheetUtils {
     }
 
     /**
+     *    MOVIE QUESTIONS
+     **/
+
+    public MovieEvent.GenreType parseGenre(String sport) {
+        return MovieEvent.GenreType.map.get(sport);
+    }
+
+    public GenreRestriction applyGenre(Object movieType) {
+        return new GenreRestriction(List.of((MovieEvent.GenreType) movieType));
+    }
+
+
+    /**
+     * COUNT PEOPLE
+     */
+    public Integer parseCount(String count) {
+        return Integer.parseInt(count);
+    }
+    public CountRestriction applyCount(Object count) {
+        return new CountRestriction((Integer) count);
+    }
+
+    /**
      * FOOD PLACE TYPE
      */
     public FoodEvent.FoodPlaceType parseFoodPlace(String place) {
         return FoodEvent.FoodPlaceType.map.get(place);
     }
 
-    public FoodPlaceTypeRestriction applyFoodPlace(FoodEvent.FoodPlaceType placeType) {
-        return new FoodPlaceTypeRestriction(List.of(placeType));
+    public FoodPlaceTypeRestriction applyFoodPlace(Object placeType) {
+        return new FoodPlaceTypeRestriction(List.of((FoodEvent.FoodPlaceType) placeType));
     }
 
     /**
@@ -190,8 +191,8 @@ public class SpreadSheetUtils {
         return KitchenRestriction.KitchenType.map.get(kitchen);
     }
 
-    public KitchenRestriction applyKitchen(KitchenRestriction.KitchenType placeType) {
-        return new KitchenRestriction(List.of(placeType));
+    public KitchenRestriction applyKitchen(Object placeType) {
+        return new KitchenRestriction(List.of((KitchenRestriction.KitchenType) placeType));
     }
 
     /**
@@ -211,8 +212,8 @@ public class SpreadSheetUtils {
         return new Duration(from, to);
     }
 
-    public DurationRestriction applyDuration(Duration duration) {
-        return new DurationRestriction(duration);
+    public DurationRestriction applyDuration(Object duration) {
+        return new DurationRestriction((Duration) duration);
     }
 
     /**
@@ -222,7 +223,7 @@ public class SpreadSheetUtils {
         return FoodEvent.FoodType.map.get(foodType);
     }
 
-    public FoodTypeRestriction applyFoodType(FoodEvent.FoodType foodType) {
-        return new FoodTypeRestriction(foodType);
+    public FoodTypeRestriction applyFoodType(Object foodType) {
+        return new FoodTypeRestriction((FoodEvent.FoodType) foodType);
     }
 }
