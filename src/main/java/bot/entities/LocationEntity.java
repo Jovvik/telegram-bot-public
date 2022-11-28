@@ -1,6 +1,7 @@
 package bot.entities;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 
 import javax.persistence.*;
@@ -78,20 +79,20 @@ public class LocationEntity {
         return longitude;
     }
 
-    public void setTime(List<Location.Time> times) {
-        this.timeMondayOpen = times.get(0).getOpenTime();
-        this.timeMondayClose = times.get(0).getCloseTime();
-        this.timeTuesdayOpen = times.get(1).getOpenTime();
-        this.timeTuesdayClose = times.get(1).getCloseTime();
-        this.timeWednesdayOpen = times.get(2).getOpenTime();
-        this.timeWednesdayClose = times.get(2).getCloseTime();
-        this.timeThursdayOpen = times.get(3).getOpenTime();
-        this.timeThursdayClose = times.get(3).getCloseTime();
-        this.timeFridayOpen = times.get(4).getOpenTime();
-        this.timeFridayClose = times.get(4).getCloseTime();
-        this.timeSaturdayOpen = times.get(5).getOpenTime();
-        this.timeSaturdayClose = times.get(5).getCloseTime();
-        this.timeSundayOpen = times.get(6).getOpenTime();
-        this.timeSundayClose = times.get(6).getCloseTime();
+    public void setTime(List<Event.Time> times) {
+        this.timeMondayOpen = times.get(0).getFrom();
+        this.timeMondayClose = times.get(0).getTo();
+        this.timeTuesdayOpen = times.get(1).getFrom();
+        this.timeTuesdayClose = times.get(1).getTo();
+        this.timeWednesdayOpen = times.get(2).getFrom();
+        this.timeWednesdayClose = times.get(2).getTo();
+        this.timeThursdayOpen = times.get(3).getFrom();
+        this.timeThursdayClose = times.get(3).getTo();
+        this.timeFridayOpen = times.get(4).getFrom();
+        this.timeFridayClose = times.get(4).getTo();
+        this.timeSaturdayOpen = times.get(5).getFrom();
+        this.timeSaturdayClose = times.get(5).getTo();
+        this.timeSundayOpen = times.get(6).getFrom();
+        this.timeSundayClose = times.get(6).getTo();
     }
 }

@@ -1,6 +1,7 @@
 package bot.external.maps;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
@@ -38,23 +39,23 @@ public class ResponseConverter {
         return Integer.parseInt(splitted[0]) * 60 + Integer.parseInt(splitted[1]);
     }
 
-    private Location.Time getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
+    private Event.Time getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
         if (intervals == null) {
-            return new Location.Time(0, 24 * 60);
+            return new Event.Time(0, 24 * 60);
         }
 
         Integer timeFrom = parseTime(intervals.get(0).from);
         Integer timeTo = parseTime(intervals.get(intervals.size() - 1).to);
 
-        return new Location.Time(timeFrom, timeTo);
+        return new Event.Time(timeFrom, timeTo);
     }
 
-    private List<Location.Time> createDaysAvailabilities
+    private List<Event.Time> createDaysAvailabilities
             (List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities) {
-        List<Location.Time> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new Location.Time(-1, -1)));
+        List<Event.Time> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new Event.Time(-1, -1)));
 
         availabilities.forEach(a -> {
-            Location.Time interval = getInterval(a.intervals);
+            Event.Time interval = getInterval(a.intervals);
 
             if (a.everyDay) {
                 for (int i = 0; i < 7; i++) {
@@ -76,10 +77,10 @@ public class ResponseConverter {
 
     private StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
                                            String joiner) {
-        List<Location.Time> daysAvailabilities = createDaysAvailabilities(availabilities);
+        List<Event.Time> daysAvailabilities = createDaysAvailabilities(availabilities);
         StringBuilder res = new StringBuilder();
-        daysAvailabilities.forEach(t -> res.append("[").append(t.getOpenTime()).append(" - ")
-                                            .append(t.getCloseTime()).append("]").append(joiner));
+        daysAvailabilities.forEach(t -> res.append("[").append(t.getFrom()).append(" - ")
+                                            .append(t.getTo()).append("]").append(joiner));
         res.delete(res.length() - 1, res.length());
         return res;
     }
@@ -162,7 +163,7 @@ public class ResponseConverter {
 
             entity.address = f.properties.companyMetaData.address;
 
-            List<Location.Time> times = new ArrayList<>(Collections.nCopies(7, new Location.Time(0, 24 * 60)));
+            List<Event.Time> times = new ArrayList<>(Collections.nCopies(7, new Event.Time(0, 24 * 60)));
             if (f.properties.companyMetaData.hours != null) {
                 times = createDaysAvailabilities(f.properties.companyMetaData.hours.availabilities);
             }
