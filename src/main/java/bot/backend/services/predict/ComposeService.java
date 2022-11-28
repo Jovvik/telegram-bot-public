@@ -1,12 +1,10 @@
-package bot.backend.services;
+package bot.backend.services.predict;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.Description;
 import bot.backend.nodes.events.Event;
-import bot.backend.nodes.results.MassEvent;
+import bot.backend.nodes.results.TimeTable;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
@@ -43,7 +41,7 @@ public class ComposeService {
 
     // The final step
     //
-    public MassEvent composeEvents(List<Event> events) {
+    public TimeTable composeEvents(List<Event> events) {
 //        events.sort(Comparator.comparing(Event::getTime));
         List<Event> resultedList = new ArrayList<>();
         for (int i = 0; i < events.size(); ++i) {
@@ -53,7 +51,7 @@ public class ComposeService {
                 addWaiting(currentEvent, events.get(i + 1));
             }
         }
-        return new MassEvent(resultedList);
+        return new TimeTable(resultedList);
     }
 
 }
