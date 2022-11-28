@@ -21,13 +21,13 @@ public class PredictService {
         this.composeService = composeService;
     }
 
-    private Map<Category, List<Event>> createDescriptions(List<QuestionResult> results) {
+    private Map<Category, List<Description<?>>> createDescriptions(List<QuestionResult> results) {
 
         return null;
     }
 
 
-    public TimeTable generateMassEvent(List<DataBlock<?>> dataBlocks) {
+    public TimeTable generateMassEvent(List<QuestionResult> dataBlocks) {
         Map<Category, List<Description<?>>> descriptions = createDescriptions(dataBlocks);
 
         List<Event> events = descriptions.values().stream()
