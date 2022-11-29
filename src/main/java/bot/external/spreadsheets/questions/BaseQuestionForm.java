@@ -1,6 +1,6 @@
 package bot.external.spreadsheets.questions;
 
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.BaseQuestion;
 import bot.backend.nodes.restriction.Restriction;
 import bot.external.spreadsheets.SpreadSheetUtils;
 
@@ -9,7 +9,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-public abstract class BaseQuestionForm<Q extends Question, T> {
+public abstract class BaseQuestionForm<Q extends BaseQuestion<?>, T> {
     public int id;
     public String question;
 
@@ -24,7 +24,7 @@ public abstract class BaseQuestionForm<Q extends Question, T> {
     public BaseQuestionForm(List<Object> row, Class<T> inputClass) throws NoSuchMethodException {
         List<String> strRow = row.stream().map(e -> (String)e).collect(Collectors.toList());
         this.id = Integer.parseInt(strRow.get(0));
-        this.question = strRow.get(1);
+        this.question = strRow.get(2);
         this.inputClass = inputClass;
 
         String   createPart   = strRow.get(3);

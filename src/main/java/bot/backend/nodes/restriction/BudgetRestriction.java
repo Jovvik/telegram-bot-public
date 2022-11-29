@@ -1,27 +1,25 @@
 package bot.backend.nodes.restriction;
 
-import bot.backend.nodes.events.FoodEvent.Budget;
+import bot.backend.nodes.events.Event.Budget;
 
 import java.util.List;
 
 public class BudgetRestriction extends Restriction<Budget> {
 
-    Budget lowest, highest;
+    Budget budget;
 
-    public BudgetRestriction(Budget lowest, Budget highest) {
-        this.lowest = lowest;
-        this.highest = highest;
+    public BudgetRestriction(Budget budget) {
+        this.budget = budget;
     }
-
 
     @Override
     public boolean validate(Budget object) {
-        return lowest.ordinal() <= object.ordinal() &&
-                object.ordinal() <= highest.ordinal();
+        return budget.to <= object.from &&
+                object.to <= budget.to;
     }
 
     @Override
     public List<Budget> validValues() {
-        return null;
+        return List.of(budget);
     }
 }

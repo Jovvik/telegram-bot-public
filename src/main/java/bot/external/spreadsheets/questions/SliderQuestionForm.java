@@ -1,6 +1,8 @@
 package bot.external.spreadsheets.questions;
 
+import bot.app.utils.data.questions.QuestionResult;
 import bot.app.utils.data.questions.SliderQuestion;
+import bot.backend.nodes.categories.Category;
 import bot.external.spreadsheets.SpreadSheetUtils;
 
 import java.lang.reflect.InvocationTargetException;
@@ -24,12 +26,19 @@ public class SliderQuestionForm extends BaseQuestionForm<SliderQuestion, String>
     @Override
     public SliderQuestion getQuestion() {
         return new SliderQuestion(
+                id,
                 question,
+                down,
                 defaultValue,
                 up,
-                down,
+                nextId,
                 changeFunction,
-                answer -> applying.apply(parseFunction.apply(answer.getAnswer()))
+                (question, answer) -> new QuestionResult(
+                        question,
+                        Category.DEFAULT,
+                        List.of(answer),
+                        applying.apply(parseFunction.apply(answer.getAnswer()))
+                )
         );
     }
 

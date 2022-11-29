@@ -1,9 +1,10 @@
 package bot.external.spreadsheets;
 
-import bot.app.utils.data.questions.Answer;
-import bot.app.utils.data.questions.Question;
+import bot.app.utils.data.questions.BaseQuestion;
 import bot.external.spreadsheets.questions.ChooseQuestionForm;
 import bot.external.spreadsheets.questions.QuestionType;
+import bot.external.spreadsheets.questions.SelectQuestionForm;
+import bot.external.spreadsheets.questions.SliderQuestionForm;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
 import com.google.api.client.extensions.jetty.auth.oauth2.LocalServerReceiver;
@@ -58,7 +59,7 @@ public class SheetsQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private static List<Question> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, Question> toQuestionFunction) throws GeneralSecurityException, IOException {
+    private static List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, BaseQuestion<?>> toQuestionFunction) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String range = spreadSheetConfig.getListWithData() + "!" + spreadSheetConfig.getRange();
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -68,13 +69,13 @@ public class SheetsQuickstart {
                 .get(SHEET_ID_STATIC, range)
                 .execute();
         List<List<Object>> values = response.getValues();
-        List<Question> result = new ArrayList<>();
+        List<BaseQuestion<?>> result = new ArrayList<>();
         if (values == null || values.isEmpty()) {
             System.out.println("No data found.");
             throw new NoSpreadSheetException();
         } else {
             for (List<Object> row : values) {
-                Question q = toQuestionFunction.apply(row, spreadSheetConfig);
+                BaseQuestion<?> q = toQuestionFunction.apply(row, spreadSheetConfig);
                 if (q == null) continue;
                 result.add(q);
             }
@@ -82,34 +83,15 @@ public class SheetsQuickstart {
         }
     }
 
-
-    public static List<Question> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
-        return getQuestions(spreadSheetConfig, (row, ssc) -> {
-            if (row.isEmpty()) return null;
-            int questionId = Integer.parseInt((String) row.get(0));
-            String questionText = (String) row.get(1);
-            List<Answer<String>> answers = new ArrayList<>();
-            var answersFromTableIterator = row.subList(2, row.size()).iterator();
-            while (answersFromTableIterator.hasNext()) {
-                answers.add(
-                        new Answer<>(
-                                (String) answersFromTableIterator.next(),
-                                Integer.parseInt((String) answersFromTableIterator.next())
-                        )
-                );
-            }
-            return new Question(questionId, questionText, answers, ssc.getInterpreter());
-        });
-    }
-
-    public static List<Question> getQuestions2(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+    public static List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
         return getQuestions(spreadSheetConfig, (row, ssc) -> {
             if (row.isEmpty()) return null;
             try {
-
                 QuestionType qt = QuestionType.valueOf((String) row.get(1));
                 switch (qt) {
                     case Choose: return new ChooseQuestionForm(row).getQuestion();
+                    case Slider: return new SliderQuestionForm(row).getQuestion();
+                    case Select: return new SelectQuestionForm(row).getQuestion();
                     default: return null;
                 }
             } catch (NoSuchMethodException e) {
@@ -118,6 +100,5 @@ public class SheetsQuickstart {
         });
     }
 
-
-    private static class NoSpreadSheetException extends RuntimeException { }
+    private static class NoSpreadSheetException extends RuntimeException {}
 }

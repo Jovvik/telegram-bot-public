@@ -1,102 +1,64 @@
 package bot.app.utils.data.questions;
 
 import bot.app.TelegramBot;
-import bot.app.utils.data.DataBlock;
-import bot.backend.nodes.restriction.Restriction;
+import bot.external.spreadsheets.questions.ChooseQuestionForm.AnswerCell.EdgeType;
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
-import org.telegram.telegrambots.meta.api.objects.Message;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
-import org.telegram.telegrambots.meta.api.objects.replykeyboard.buttons.InlineKeyboardButton;
-import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
-import java.util.function.Function;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
-public class SliderQuestion extends ChangeableQuestion {
-    private String upString;
-    private String downString;
-    private String currValue;
+public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
 
-    private BiFunction<String, String, String> changeFunction;
-
-    private Integer messageId;
+    private final BiFunction<String, String, String> changeFunction;
 
     public SliderQuestion(
+            int id,
             String question,
+            String down,
             String defaultValue,
-            String upString,
-            String downString,
+            String up,
+            int nextId,
             BiFunction<String, String, String> changeFunction,
-            BiFunction<String, Answer<String>, DataBlock<?>> interpreter) {
-        super(239, question, List.of(new Answer<>(defaultValue, -239)), interpreter);
-        this.currValue = defaultValue;
-        this.upString = upString;
-        this.downString = downString;
+            BiFunction<String, Answer<String>, QuestionResult> resultBiFunction) {
+        this(
+                id,
+                question,
+                Stream.of(down, defaultValue, up)
+                        .map(s -> new Answer<>(s, nextId, EdgeType.TransitionWithData))
+                        .collect(Collectors.toList()),
+                changeFunction,
+                resultBiFunction
+        );
+    }
+
+    private SliderQuestion(
+            int id,
+            String question,
+            List<Answer<String>> answers,
+            BiFunction<String, String, String> changeFunction,
+            BiFunction<String, Answer<String>, QuestionResult> resultBiFunction) {
+        super(
+                id,
+                question,
+                answers,
+                resultBiFunction
+        );
         this.changeFunction = changeFunction;
     }
 
-    public SliderQuestion(String question, String defaultValue, String upString,
-                          String downString, BiFunction<String, String, String> changeFunction) {
-        this(question, defaultValue, upString, downString, changeFunction, DataBlock::new);
-    }
-
-    public SliderQuestion(String question, String defaultValue, String upString,
-                          String downString, BiFunction<String, String, String> changeFunction,
-                          Function<Answer<String>, Restriction<?>> restrict) {
-        this(question, defaultValue, upString, downString, changeFunction, DataBlock::new);
-        this.restrict = restrict;
-    }
-
-
     @Override
-    public Message send(TelegramBot bot, Long chatId) throws TelegramApiException {
-        Message m = super.send(bot, chatId);
-        messageId = m.getMessageId();
-        return m;
-    }
+    public QuestionResult handlePressing(TelegramBot tgBot, Long chatId, int answerNumber) {
+        if (answerNumber == 1) {
+            return resultBiFunction.apply(question, answers.get(1));
+        }
 
-    @Override
-    public List<List<InlineKeyboardButton>> getButtons() {
-        List<List<InlineKeyboardButton>> buttons = new ArrayList<>();
-        List<InlineKeyboardButton> row = new ArrayList<>();
+        Answer<String> value = answers.get(1);
 
-        InlineKeyboardButton minusOne = new InlineKeyboardButton();
-        minusOne.setText(downString);
-        minusOne.setCallbackData("chbtn0");
+        value.setAnswer(changeFunction.apply(value.getAnswer(), answers.get(answerNumber).getAnswer()));
 
-        InlineKeyboardButton mid = new InlineKeyboardButton();
-        mid.setText(currValue);
-        mid.setCallbackData("chbtn1");
-
-        InlineKeyboardButton plusOne = new InlineKeyboardButton();
-        plusOne.setText(upString);
-        plusOne.setCallbackData("chbtn2");
-
-        row.add(minusOne);
-        row.add(mid);
-        row.add(plusOne);
-
-        buttons.add(row);
-
-        return buttons;
-    }
-
-    @Override
-    public List<Answer<String>> getAnswers() {
-        return super.getAnswers();
-    }
-
-    public String getAction(int action) {
-        if (action == 0) return downString;
-        return upString;
-    }
-
-    public String getResult() { return currValue;}
-
-    public void update(TelegramBot bot, Long chatId, int action) throws TelegramApiException {
-        currValue = changeFunction.apply(currValue, getAction(action));
         var changeMarkUp = new EditMessageReplyMarkup();
         changeMarkUp.setChatId(Long.toString(chatId));
         changeMarkUp.setMessageId(messageId);
@@ -107,17 +69,28 @@ public class SliderQuestion extends ChangeableQuestion {
         changeMarkUp.setReplyMarkup(iku);
         changeMarkUp.setChatId(Long.toString(chatId));
 
-        bot.execute(changeMarkUp);
+        try {
+            tgBot.execute(changeMarkUp);
+        } catch (Exception e) {
+            return null;
+        }
+
+        return null;
     }
 
-    public SliderQuestion copy() {
+    @Override
+    public String createButtonText(int answerNumber) {
+        return answers.get(answerNumber).getAnswer();
+    }
+
+    @Override
+    public BaseQuestion<Answer<String>> copy() {
         return new SliderQuestion(
+                id,
                 question,
-                currValue,
-                upString,
-                downString,
+                answers,
                 changeFunction,
-                interpreter
+                resultBiFunction
         );
     }
 }

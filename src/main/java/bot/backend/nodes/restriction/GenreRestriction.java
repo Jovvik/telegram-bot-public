@@ -6,17 +6,17 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class MovieRestriction extends Restriction<MovieEvent.MovieType> {
+public class GenreRestriction extends Restriction<MovieEvent.GenreType> {
 
-    List<MovieEvent.MovieType> movieTypes;
+    List<MovieEvent.GenreType> movieTypes;
 
     @Override
-    public boolean validate(MovieEvent.MovieType movieType) {
+    public boolean validate(MovieEvent.GenreType movieType) {
         return movieTypes.contains(movieType);
     }
 
     @Override
-    public List<MovieEvent.MovieType> validValues() {
+    public List<MovieEvent.GenreType> validValues() {
         return movieTypes;
     }
 

@@ -1,7 +1,7 @@
 package bot.app.service;
 
+import bot.app.utils.data.questions.BaseQuestion;
 import bot.app.utils.data.questions.ChangeableQuestion;
-import bot.app.utils.data.questions.Question;
 import bot.external.spreadsheets.SheetsQuickstart;
 import bot.external.spreadsheets.SpreadSheetConfig;
 import lombok.Getter;
@@ -12,12 +12,12 @@ import java.util.Map;
 
 public class QuestionDataBase {
     @Getter
-    private final Map<Integer, Question> questionMap;
+    private final Map<Integer, BaseQuestion<?>> questionMap;
 
-    public Question getQuestionById(int id) {
-        Question q = questionMap.get(id);
+    public BaseQuestion<?> getQuestionById(int id) {
+        BaseQuestion<?> q = questionMap.get(id);
         if (q == null) return null;
-        if (q instanceof ChangeableQuestion) return ((ChangeableQuestion) q).copy();
+        if (q instanceof ChangeableQuestion<?>) return ((ChangeableQuestion<?>) q).copy();
         return q;
     }
 
@@ -30,7 +30,7 @@ public class QuestionDataBase {
 
     private void setUpQuestions(SpreadSheetConfig config) {
         try {
-            List<Question> newQuestions = SheetsQuickstart.getQuestions(config);
+            List<BaseQuestion<?>> newQuestions = SheetsQuickstart.getQuestions(config);
             newQuestions.forEach(q -> {
                 questionMap.put(q.getId(), q);
             });

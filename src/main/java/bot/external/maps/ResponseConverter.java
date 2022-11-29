@@ -1,6 +1,8 @@
 package bot.external.maps;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.location.Location;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
 import bot.services.TagService;
@@ -32,26 +34,28 @@ public class ResponseConverter {
         this.tagService = tagService;
     }
 
-    private StringBuilder getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
-        if (intervals == null) {
-            return new StringBuilder("[00:00 - 00:00]");
-        }
-
-        StringBuilder dayAvailability = new StringBuilder("[");
-
-        intervals.forEach(i -> dayAvailability.append(i.from).append(" - ").append(i.to).append("; "));
-        dayAvailability.setCharAt(dayAvailability.length() - 2, ']');
-        dayAvailability.delete(dayAvailability.length() - 1, dayAvailability.length());
-
-        return dayAvailability;
+    private Integer parseTime(String time) {
+        String[] splitted = time.split(":");
+        return Integer.parseInt(splitted[0]) * 60 + Integer.parseInt(splitted[1]);
     }
 
-    private List<StringBuilder> createDaysAvailabilities
+    private Event.Time getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
+        if (intervals == null) {
+            return new Event.Time(0, 24 * 60);
+        }
+
+        Integer timeFrom = parseTime(intervals.get(0).from);
+        Integer timeTo = parseTime(intervals.get(intervals.size() - 1).to);
+
+        return new Event.Time(timeFrom, timeTo);
+    }
+
+    private List<Event.Time> createDaysAvailabilities
             (List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities) {
-        List<StringBuilder> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new StringBuilder("[ - ]")));
+        List<Event.Time> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new Event.Time(-1, -1)));
 
         availabilities.forEach(a -> {
-            StringBuilder interval = getInterval(a.intervals);
+            Event.Time interval = getInterval(a.intervals);
 
             if (a.everyDay) {
                 for (int i = 0; i < 7; i++) {
@@ -73,8 +77,12 @@ public class ResponseConverter {
 
     private StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
                                            String joiner) {
-        List<StringBuilder> daysAvailabilities = createDaysAvailabilities(availabilities);
-        return daysAvailabilities.stream().reduce(new StringBuilder(), (acc, now) -> acc.append(now).append(joiner));
+        List<Event.Time> daysAvailabilities = createDaysAvailabilities(availabilities);
+        StringBuilder res = new StringBuilder();
+        daysAvailabilities.forEach(t -> res.append("[").append(t.getFrom()).append(" - ")
+                                            .append(t.getTo()).append("]").append(joiner));
+        res.delete(res.length() - 1, res.length());
+        return res;
     }
 
     @Override
@@ -115,7 +123,6 @@ public class ResponseConverter {
             StringBuilder timeIntervals = new StringBuilder();
             if (f.properties.companyMetaData.hours != null) {
                 timeIntervals = getTimeIntervals(f.properties.companyMetaData.hours.availabilities, joiner);
-                timeIntervals.delete(timeIntervals.length() - 1, timeIntervals.length());
             }
 
             result.append("\"").append(f.properties.companyMetaData.address).append("\"").append(joiner)
@@ -156,18 +163,12 @@ public class ResponseConverter {
 
             entity.address = f.properties.companyMetaData.address;
 
-            List<StringBuilder> timeIntervals = new ArrayList<>(Collections.nCopies(7, new StringBuilder("[ - ]")));
+            List<Event.Time> times = new ArrayList<>(Collections.nCopies(7, new Event.Time(0, 24 * 60)));
             if (f.properties.companyMetaData.hours != null) {
-                timeIntervals = createDaysAvailabilities(f.properties.companyMetaData.hours.availabilities);
+                times = createDaysAvailabilities(f.properties.companyMetaData.hours.availabilities);
             }
 
-            entity.timeMonday = timeIntervals.get(0).toString();
-            entity.timeTuesday = timeIntervals.get(1).toString();
-            entity.timeWednesday = timeIntervals.get(2).toString();
-            entity.timeThursday = timeIntervals.get(3).toString();
-            entity.timeFriday = timeIntervals.get(4).toString();
-            entity.timeSaturday = timeIntervals.get(5).toString();
-            entity.timeSunday = timeIntervals.get(6).toString();
+            entity.setTime(times);
 
             locationEntities.add(entity);
         }

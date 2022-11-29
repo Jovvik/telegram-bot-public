@@ -12,6 +12,6 @@ public class Movie {
 
     Integer runningTime;
 
-    List<MovieEvent.MovieType> genres;
+    List<MovieEvent.GenreType> genres;
 
 }

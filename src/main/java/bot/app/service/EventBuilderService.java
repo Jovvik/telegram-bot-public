@@ -1,6 +1,6 @@
 package bot.app.service;
 
-import bot.app.utils.data.DataBlock;
+import bot.app.utils.data.questions.QuestionResult;
 
 import java.util.*;
 import java.util.concurrent.*;
@@ -47,7 +47,7 @@ public class EventBuilderService {
             }
         }
     }
-    public void handleDataAndStartBuild(Long userId, List<DataBlock<?>> answerData) {
+    public void handleDataAndStartBuild(Long userId, List<QuestionResult> answerData) {
         waitList.add(userId);
         Future<List<Event>> futureResult = executor.submit(() -> {
             System.out.printf("Event for User[%s] started building%n", userId);

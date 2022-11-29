@@ -32,18 +32,20 @@ public class MovieEvent extends Event {
     }
 
     @AllArgsConstructor
-    public enum MovieType {
+    public enum GenreType {
         ADVENTURE("Приключения"),
         COMEDY("Комедия"),
         CRIME("Боевик"),
         DOCUMENTARY("Документальный"),
         DRAMA("Драма"),
+        MELODRAMA("Мелодрама"),
         FANTASY("Фантастика"),
         HORROR("Хорор"),
         MUSICAL("Мюзикл"),
+        FAMILY("Семейное"),
         THRILLER("Триллер");
 
-        public static Map<String, MovieEvent.MovieType> map = new HashMap<>();
+        public static Map<String, MovieEvent.GenreType> map = new HashMap<>();
 
         static {
             Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
