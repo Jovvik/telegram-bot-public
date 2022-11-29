@@ -10,7 +10,6 @@ public class Movie {
 
     String title;
 
-
     Integer runningTime;
 
     List<MovieEvent.MovieType> genres;

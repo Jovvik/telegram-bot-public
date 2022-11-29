@@ -2,6 +2,7 @@ package bot.external.kudago;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.Movie;
 import bot.backend.nodes.movie.MovieSession;
@@ -124,7 +125,7 @@ public class KudaGoServer {
                 Movie movie = new Movie(
                         movieResponse.title,
                         movieResponse.runningTime,
-                        movieResponse.genres.stream().map(it->it.slug).collect(Collectors.toList()));
+                        movieResponse.genres.stream().map(it-> MovieEvent.GenreType.map.get(it.slug)).collect(Collectors.toList()));
                 MovieSession session = new MovieSession(movie,
                         new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),
                         new String(current.getJSONObject("place").getString("title").getBytes(), StandardCharsets.UTF_8));
