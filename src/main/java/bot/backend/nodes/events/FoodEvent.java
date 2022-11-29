@@ -16,13 +16,13 @@ import java.util.Map;
 public class FoodEvent extends Event {
 
     @RequiredField
-    public KitchenInfo kitchenInfo;
+    public KitchenInfo.Kitchen kitchen;
 
     @RequiredField
     public Budget budget;
 
     @RequiredField
-    public FoodPlaceType foodPlaceTypes;
+    public FoodPlaceType foodPlaceType;
 
     private FoodEvent(Location location, Category category, Time time) {
         super(location, category, time);
@@ -31,14 +31,14 @@ public class FoodEvent extends Event {
     public FoodEvent(Location location,
                      Category category,
                      Time time,
-                     KitchenInfo kitchenInfo,
+                     KitchenInfo.Kitchen kitchen,
                      Budget budget,
                      FoodPlaceType foodPlaceTypes
     ) {
         super(location, category, time);
-        this.kitchenInfo = kitchenInfo;
+        this.kitchen = kitchen;
         this.budget = budget;
-        this.foodPlaceTypes = foodPlaceTypes;
+        this.foodPlaceType = foodPlaceTypes;
     }
 
     @AllArgsConstructor

@@ -10,7 +10,7 @@ import java.util.List;
 public class FoodDescriptionService extends DescriptionService<FoodDescription> {
 
     public FoodDescriptionService() {
-        super(Category.FOOD);
+        super(FoodEvent.class);
     }
 
     @Override

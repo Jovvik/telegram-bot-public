@@ -9,7 +9,6 @@ import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.KitchenRestriction;
 import bot.backend.nodes.restriction.Restriction;
 import bot.entities.TagEntity;
-import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -35,7 +34,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
     }
 
     @Override
-    public TablePredicate createPredicate(Description<FoodEvent> description) {
+    public TablePredicate createPredicate(FoodDescription description) {
         Set<TagEntity> tags = new HashSet<>();
 
         List<Restriction<?>> restrictions = new ArrayList<>(description.restrictions.values());
@@ -55,7 +54,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
     }
 
     @Override
-    public FoodEvent generateEvent(Description<FoodEvent> description) {
+    public FoodEvent generateEvent(FoodDescription description) {
         TablePredicate predicate = this.createPredicate(description);
         this.setTimeInterval(predicate, description);
 

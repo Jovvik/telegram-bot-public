@@ -2,69 +2,15 @@ package bot.backend.nodes.results.schema;
 
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.events.*;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
 @NoArgsConstructor
 public abstract class TimeTableSchema {
-
-//    OneFoodEvent(
-//            List.of(
-//                    FoodEvent.class
-//            ),
-//            List.of(
-//                    List.of(1)
-//            )
-//    ),
-//
-//    FoodAndActiveEvent(
-//            List.of(
-//                    FoodEvent.class,
-//                    ActiveEvent.class
-//            ),
-//            List.of(
-//                    List.of(1, 2),
-//                    List.of(2, 1)
-//            )
-//    ),
-//
-//    FoodAndCultureEvent(
-//            List.of(
-//                    CultureEvent.class,
-//                    FoodEvent.class
-//            ),
-//            List.of(
-//                    List.of(1, 2)
-//            )
-//    ),
-//
-//    Romantic(
-//            List.of(
-//                    CultureEvent.class,
-//                    FoodEvent.class,
-//                    MovieEvent.class
-//            ),
-//            List.of(
-//                    List.of(1, 2, 3)
-//            )
-//    ),
-//
-//    MASS_EVENT(
-//            List.of(
-//                CrowdEvent.class,
-//                FoodEvent.class
-//            ),
-//            List.of(
-//                    List.of(1, 2)
-//            )
-//    );
-
-
 
     public abstract List<Class<? extends Event>> eventOrder();
 
@@ -88,6 +34,24 @@ public abstract class TimeTableSchema {
             }
         }
         return false;
+    }
+
+    public static List<QuestionResult> filterByEventType(
+            List<QuestionResult> questionResults,
+            Class<? extends Event> eventClass) {
+        return questionResults.stream()
+                .filter(qr -> eventClass.isAssignableFrom(qr.restriction.getEventType()))
+                .collect(Collectors.toList());
+    }
+
+    public static List<? extends TimeTableSchema> availableSchemas() {
+        return List.of(
+                new FoodAndActiveEvent(),
+                new FoodAndCultureEvent(),
+                new MassEventSchema(),
+                new OneFoodEvent(),
+                new RomanticSchema()
+        );
     }
 
 }

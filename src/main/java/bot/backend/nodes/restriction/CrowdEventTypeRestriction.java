@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class MassEventRestriction extends Restriction<CrowdEvent.CrowdEventType> {
+public class CrowdEventTypeRestriction extends Restriction<CrowdEvent.CrowdEventType> {
 
     List<CrowdEvent.CrowdEventType> massEventTypes;
 

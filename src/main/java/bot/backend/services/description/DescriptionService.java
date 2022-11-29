@@ -3,20 +3,24 @@ package bot.backend.services.description;
 import bot.app.utils.data.DataBlock;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.Description;
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.restriction.Restriction;
+import lombok.AllArgsConstructor;
 
 import java.util.List;
 import java.util.stream.Collectors;
 
-public abstract class DescriptionService<D extends Description> {
+@AllArgsConstructor
+public abstract class DescriptionService<D extends Description<? extends Event>> {
 
-    private final Category category;
-
-    public DescriptionService(Category category) {
-        this.category = category;
-    }
+    private final Class<? extends Event> eventClass;
 
     public List<D> generateDescriptions(List<DataBlock<?>> data) {
         D mostCommon = getMostCommonDescription(data);
+
+        if (mostCommon == null) {
+            return List.of();
+        }
 
         List<D> children = tryModify(mostCommon);
         if (children == null) {
@@ -48,7 +52,7 @@ public abstract class DescriptionService<D extends Description> {
 
     public List<DataBlock<?>> filterDescriptions(List<DataBlock<?>> allData) {
         return allData.stream()
-                .filter(d -> d.getCategory() == category)
+                .filter(d -> d.restriction.getEventType().isAssignableFrom(eventClass))
                 .collect(Collectors.toList());
     }
 

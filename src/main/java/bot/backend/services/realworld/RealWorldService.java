@@ -40,16 +40,16 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
         return handleRaw(locations);
     }
 
-    abstract public TablePredicate createPredicate(Description<E> description);
+    abstract public TablePredicate createPredicate(D description);
 
-    abstract public E generateEvent(Description<E> description);
+    abstract public E generateEvent(D description);
 
     protected List<Location> handleRaw(List<Location> locations) {
         // DEFAULT
         return locations;
     }
 
-    protected void setTimeInterval(TablePredicate predicate, Description<E> description) {
+    protected void setTimeInterval(TablePredicate predicate, D description) {
         List<TimeRestriction> timeRestrictions = description.getTypedRestrictions(TimeRestriction.class);
 
         predicate.setTimeFrom(timeRestrictions.get(0).validValues().get(0).getFrom());

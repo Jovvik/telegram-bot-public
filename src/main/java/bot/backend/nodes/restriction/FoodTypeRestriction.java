@@ -1,5 +1,7 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.events.FoodEvent.FoodType;
 
 import java.util.List;
@@ -19,5 +21,10 @@ public class FoodTypeRestriction extends Restriction<FoodType> {
     @Override
     public List<FoodType> validValues() {
         return List.of(type);
+    }
+
+    @Override
+    public Class<? extends Event> getEventType() {
+        return FoodEvent.class;
     }
 }
