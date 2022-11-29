@@ -3,6 +3,7 @@ package bot.backend.services.realworld;
 import bot.backend.nodes.description.Description;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
+import bot.backend.nodes.restriction.DateRestriction;
 import bot.backend.nodes.restriction.Restriction;
 import bot.backend.nodes.restriction.TimeRestriction;
 import bot.backend.nodes.restriction.TypedEnum;
