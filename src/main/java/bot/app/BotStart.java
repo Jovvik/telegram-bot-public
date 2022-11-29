@@ -4,6 +4,7 @@ import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
 import bot.external.graphviz.Vizualization;
+import bot.external.spreadsheets.SheetsService;
 import bot.external.spreadsheets.SpreadSheetConfig;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -37,8 +38,9 @@ public class BotStart implements CommandLineRunner {
         }
 
         @Bean
-        QuestionDataBase questionDataBase() {
+        QuestionDataBase questionDataBase(SheetsService sheetsService) {
             return new QuestionDataBase(
+                    sheetsService,
                     Arrays.asList(SpreadSheetConfig.values())
             );
         }
