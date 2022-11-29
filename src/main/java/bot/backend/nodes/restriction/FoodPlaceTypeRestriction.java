@@ -6,7 +6,7 @@ import lombok.AllArgsConstructor;
 import java.util.List;
 
 @AllArgsConstructor
-public class FoodPlaceTypeRestriction extends Restriction<FoodEvent.FoodPlaceType>{
+public class FoodPlaceTypeRestriction extends Restriction<FoodEvent.FoodPlaceType> {
 
     List<FoodEvent.FoodPlaceType> foodPlaceTypes;
 

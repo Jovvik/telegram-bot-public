@@ -2,7 +2,6 @@ package bot.controllers;
 
 import bot.backend.nodes.categories.Category;
 import bot.entities.LocationEntity;
-import bot.entities.TagEntity;
 import bot.external.maps.MapMain;
 import bot.services.LocationService;
 import bot.services.TagService;
@@ -10,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController

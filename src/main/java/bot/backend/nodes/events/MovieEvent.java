@@ -3,14 +3,11 @@ package bot.backend.nodes.events;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
-import bot.backend.nodes.movie.Movie;
 import bot.backend.nodes.movie.MovieSession;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class MovieEvent extends Event {
@@ -23,9 +20,9 @@ public class MovieEvent extends Event {
     }
 
     public MovieEvent(Location location,
-                     Category category,
-                     Time time,
-                     MovieSession session
+                      Category category,
+                      Time time,
+                      MovieSession session
     ) {
         super(location, category, time);
         this.movieSession = movieSession;
@@ -54,7 +51,6 @@ public class MovieEvent extends Event {
         private String realName;
 
     }
-
 
 
 }

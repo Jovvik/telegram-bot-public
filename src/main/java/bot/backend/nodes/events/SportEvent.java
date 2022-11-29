@@ -1,7 +1,6 @@
 package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.events.ActiveEvent;
 import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 

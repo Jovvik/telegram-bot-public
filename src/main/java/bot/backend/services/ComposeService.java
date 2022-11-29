@@ -1,12 +1,10 @@
 package bot.backend.services;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.Description;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.results.MassEvent;
 
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 

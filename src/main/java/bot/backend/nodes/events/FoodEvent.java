@@ -18,13 +18,11 @@ import java.util.Map;
 @Setter
 public class FoodEvent extends Event {
 
-    @RequiredField
     public List<KitchenRestriction.KitchenType> kitchenTypes;
 
     @RequiredField
     public Budget budget;
 
-    @RequiredField
     public List<FoodPlaceType> foodPlaceTypes;
 
     private FoodEvent(Location location, Category category, Time time) {

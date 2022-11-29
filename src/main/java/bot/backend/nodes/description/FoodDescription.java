@@ -1,6 +1,5 @@
 package bot.backend.nodes.description;
 
-import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.restriction.Restriction;
 

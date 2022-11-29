@@ -3,8 +3,6 @@ package bot.backend.nodes.description;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.restriction.Restriction;
-import bot.backend.nodes.restriction.TimeRestriction;
-import bot.backend.services.realworld.TablePredicate;
 
 import java.lang.reflect.Field;
 import java.util.*;
