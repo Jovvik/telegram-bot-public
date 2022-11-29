@@ -1,5 +1,8 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.Event;
+
 import java.util.List;
 
 public class CountRestriction extends Restriction<Integer> {
@@ -17,5 +20,9 @@ public class CountRestriction extends Restriction<Integer> {
     @Override
     public List<Integer> validValues() {
         return List.of(count);
+    }
+
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }

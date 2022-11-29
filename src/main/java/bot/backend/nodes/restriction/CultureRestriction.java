@@ -4,6 +4,9 @@ import lombok.AllArgsConstructor;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import bot.backend.nodes.events.CultureEvent;
+import bot.backend.nodes.events.Event;
+
 import java.util.List;
 import java.util.Map;
 
@@ -41,5 +44,9 @@ public class CultureRestriction extends Restriction<CultureRestriction.CultureTy
         }
 
         private final String realName;
+    }
+
+    public Class<? extends Event> getEventType() {
+        return CultureEvent.class;
     }
 }

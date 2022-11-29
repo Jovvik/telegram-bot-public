@@ -1,12 +1,14 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
 import bot.backend.nodes.events.CrowdEvent;
+import bot.backend.nodes.events.Event;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
 @AllArgsConstructor
-public class MassEventRestriction extends Restriction<CrowdEvent.CrowdEventType> {
+public class CrowdEventTypeRestriction extends Restriction<CrowdEvent.CrowdEventType> {
 
     List<CrowdEvent.CrowdEventType> massEventTypes;
 
@@ -20,5 +22,8 @@ public class MassEventRestriction extends Restriction<CrowdEvent.CrowdEventType>
         return massEventTypes;
     }
 
+    public Class<? extends Event> getEventType() {
+        return CrowdEvent.class;
+    }
 
 }

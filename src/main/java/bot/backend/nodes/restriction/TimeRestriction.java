@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Time;
 
 import java.util.List;
@@ -35,5 +36,10 @@ public class TimeRestriction extends Restriction<Time> {
                         )
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }

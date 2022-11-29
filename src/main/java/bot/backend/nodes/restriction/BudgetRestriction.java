@@ -1,5 +1,7 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Budget;
 
 import java.util.List;
@@ -21,5 +23,9 @@ public class BudgetRestriction extends Restriction<Budget> {
     @Override
     public List<Budget> validValues() {
         return List.of(budget);
+    }
+
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }

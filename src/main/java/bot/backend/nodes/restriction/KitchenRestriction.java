@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -52,5 +53,10 @@ public class KitchenRestriction extends Restriction<KitchenRestriction.KitchenTy
 
         @Getter
         private final String tagName;
+    }
+
+    @Override
+    public Class<? extends Event> getEventType() {
+        return FoodEvent.class;
     }
 }

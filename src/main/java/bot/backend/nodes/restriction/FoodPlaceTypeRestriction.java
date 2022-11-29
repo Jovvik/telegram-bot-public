@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import lombok.AllArgsConstructor;
 
@@ -18,5 +19,9 @@ public class FoodPlaceTypeRestriction extends Restriction<FoodEvent.FoodPlaceTyp
     @Override
     public List<FoodEvent.FoodPlaceType> validValues() {
         return foodPlaceTypes;
+    }
+
+    public Class<? extends Event> getEventType() {
+        return FoodEvent.class;
     }
 }

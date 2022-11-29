@@ -20,7 +20,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
     private final Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
 
     @Override
-    public TablePredicate createPredicate(Description<FoodEvent> description) {
+    public TablePredicate createPredicate(FoodDescription description) {
         Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?>> restrictions = new ArrayList<>(description.restrictions.values());
 
@@ -42,7 +42,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
     }
 
     @Override
-    public FoodEvent generateEvent(Description<FoodEvent> description) {
+    public FoodEvent generateEvent(FoodDescription description) {
         TablePredicate predicate = this.createPredicate(description);
         this.setTimeInterval(predicate, description);
 

@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.SportEvent;
 import lombok.AllArgsConstructor;
 
@@ -18,6 +19,11 @@ public class SportRestriction extends Restriction<SportEvent.SportType> {
     @Override
     public List<SportEvent.SportType> validValues() {
         return sportTypes;
+    }
+
+    @Override
+    public Class<? extends Event> getEventType() {
+        return SportEvent.class;
     }
 
 

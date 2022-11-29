@@ -17,7 +17,7 @@ public abstract class Description<E extends Event> {
         this.eventClass = eventClass;
         List<String> fields = new ArrayList<>(restrictions.keySet());
         List<String> allRequiredFields = new java.util.ArrayList<>(requiredFields());
-        System.out.println(allRequiredFields);
+//        System.out.println(allRequiredFields);
         if (!new HashSet<>(fields).containsAll(allRequiredFields)) {
             allRequiredFields.removeAll(fields);
             throw new IllegalArgumentException("not all required restrictions provided: " + allRequiredFields);

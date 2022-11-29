@@ -1,5 +1,8 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.Event;
+
 import java.util.List;
 
 public class ActiveRestriction extends Restriction<ActiveRestriction.SportType> {
@@ -19,4 +22,9 @@ public class ActiveRestriction extends Restriction<ActiveRestriction.SportType> 
     public enum SportType {
         BASKETBALL, FOOTBALL, TENNIS, SWIMMING, SKIING
     }
+
+    public Class<? extends Event> getEventType() {
+        return ActiveEvent.class;
+    }
+
 }
