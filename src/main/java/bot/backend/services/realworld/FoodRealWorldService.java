@@ -8,13 +8,24 @@ import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
+import bot.repositories.LocationRepository;
+import bot.services.LocationService;
+import bot.services.TagService;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 
     private final Set<KitchenRestriction.KitchenType> kitchenTypes = new HashSet<>();
     private final Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
+
+    public FoodRealWorldService(LocationService locationService, TagService tagService) {
+        super(locationService, tagService);
+    }
+
 
     @Override
     public TablePredicate createPredicate(FoodDescription description) {

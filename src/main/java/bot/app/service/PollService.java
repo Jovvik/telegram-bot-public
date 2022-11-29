@@ -16,7 +16,7 @@ public class PollService {
     private final QuestionDataBase questionDataBase;
     private final EventBuilderService eventBuilderService;
 
-    private static final int FIRST_QUESTION_ID = 2;
+    private static final int FIRST_QUESTION_ID = 5;
 
     public PollService(
             QuestionDataBase questionDataBase,

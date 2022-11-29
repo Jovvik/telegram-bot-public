@@ -3,14 +3,16 @@ package bot.backend.services.predict;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.results.TimeTable;
+import lombok.NoArgsConstructor;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 
+@Service
 public class ComposeService {
-
 
     private final Map<Category, Integer> waitingTime = Map.of(
             Category.FOOD, 100,

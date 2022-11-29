@@ -2,7 +2,6 @@ package bot.backend.services.realworld;
 
 import bot.backend.nodes.description.Description;
 import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.DateRestriction;
 import bot.backend.nodes.restriction.Restriction;
@@ -11,11 +10,8 @@ import bot.backend.nodes.restriction.TypedEnum;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
-import bot.repositories.LocationRepository;
 import bot.services.LocationService;
 import bot.services.TagService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.util.HashSet;
@@ -23,14 +19,16 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
 public abstract class RealWorldService<E extends Event, D extends Description<E>> {
 
-    @Autowired
     protected LocationService locationService;
 
-    @Autowired
     protected TagService tagService;
+
+    public RealWorldService(LocationService locationService, TagService tagService) {
+        this.locationService = locationService;
+        this.tagService = tagService;
+    }
 
     public List<Location> findLocations(TablePredicate predicate) {
         LocationConverter converter = new LocationConverter();

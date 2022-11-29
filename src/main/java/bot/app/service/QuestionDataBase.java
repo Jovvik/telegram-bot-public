@@ -2,9 +2,10 @@ package bot.app.service;
 
 import bot.app.utils.data.questions.BaseQuestion;
 import bot.app.utils.data.questions.ChangeableQuestion;
-import bot.external.spreadsheets.SheetsQuickstart;
+import bot.external.spreadsheets.SheetsService;
 import bot.external.spreadsheets.SpreadSheetConfig;
 import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import java.util.HashMap;
 import java.util.List;
@@ -14,6 +15,9 @@ public class QuestionDataBase {
     @Getter
     private final Map<Integer, BaseQuestion<?>> questionMap;
 
+    private SheetsService sheetsService;
+
+
     public BaseQuestion<?> getQuestionById(int id) {
         BaseQuestion<?> q = questionMap.get(id);
         if (q == null) return null;
@@ -21,7 +25,8 @@ public class QuestionDataBase {
         return q;
     }
 
-    public QuestionDataBase(List<SpreadSheetConfig> configs) {
+    public QuestionDataBase(SheetsService sheetsService, List<SpreadSheetConfig> configs) {
+        this.sheetsService = sheetsService;
         questionMap = new HashMap<>();
         for (var config : configs) {
             setUpQuestions(config);
@@ -30,7 +35,7 @@ public class QuestionDataBase {
 
     private void setUpQuestions(SpreadSheetConfig config) {
         try {
-            List<BaseQuestion<?>> newQuestions = SheetsQuickstart.getQuestions(config);
+            List<BaseQuestion<?>> newQuestions = sheetsService.getQuestions(config);
             newQuestions.forEach(q -> {
                 questionMap.put(q.getId(), q);
             });
