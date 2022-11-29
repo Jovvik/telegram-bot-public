@@ -13,6 +13,8 @@ import bot.backend.services.description.DescriptionService;
 import bot.backend.services.description.FoodDescriptionService;
 import bot.backend.services.realworld.FoodRealWorldService;
 import bot.backend.services.realworld.RealWorldService;
+import bot.repositories.LocationRepository;
+import bot.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -39,9 +41,9 @@ public class PredictService {
         @Bean
         public Map<Class<? extends Description<? extends Event>>,
                 RealWorldService<? extends Event, ? extends Description<? extends Event>>>
-                realWorldServices() {
+                realWorldServices(LocationRepository locationRepository, TagService tagService) {
             return Map.of(
-                    FoodDescription.class, new FoodRealWorldService()
+                    FoodDescription.class, new FoodRealWorldService(locationRepository, tagService)
             );
         }
     }
