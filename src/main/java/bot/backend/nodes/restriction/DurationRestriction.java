@@ -4,7 +4,7 @@ import bot.backend.nodes.events.Event.Duration;
 
 import java.util.List;
 
-public class DurationRestriction extends Restriction<Duration>{
+public class DurationRestriction extends Restriction<Duration> {
     Duration duration;
 
     public DurationRestriction(Duration duration) {

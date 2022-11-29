@@ -11,10 +11,8 @@ import bot.backend.nodes.restriction.FoodTypeRestriction;
 import bot.backend.nodes.restriction.KitchenRestriction;
 import bot.backend.nodes.restriction.Restriction;
 import bot.entities.TagEntity;
-import org.springframework.stereotype.Component;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 

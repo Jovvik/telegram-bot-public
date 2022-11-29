@@ -4,7 +4,6 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
@@ -34,6 +33,5 @@ public class Location {
     private List<Event.Time> times;
 
     private Integer rating;
-
 
 }
