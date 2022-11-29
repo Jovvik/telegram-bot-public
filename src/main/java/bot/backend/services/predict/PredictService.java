@@ -3,9 +3,16 @@ package bot.backend.services.predict;
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.Description;
-import bot.backend.nodes.events.Event;
+import bot.backend.nodes.description.FoodDescription;
+import bot.backend.nodes.events.*;
 import bot.backend.nodes.results.TimeTable;
+import bot.backend.nodes.results.schema.TimeTableSchema;
+import bot.backend.services.description.ActiveDescriptionService;
+import bot.backend.services.description.CultureDescriptionService;
 import bot.backend.services.description.DescriptionService;
+import bot.backend.services.description.FoodDescriptionService;
+import bot.backend.services.realworld.FoodRealWorldService;
+import bot.backend.services.realworld.RealWorldService;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -84,7 +91,6 @@ public class PredictService {
         // Нужно залезть в базенку и найти по данным restrictions подходящие локации
         // Время на данном этапе смотрим только глобальное, которое есть в TimeRestriction (время работы данного заведения)
 
-        return composeService.composeEvents(events);
     }
 
     /** Пробует составить расписание по переданной схеме и данным опроса

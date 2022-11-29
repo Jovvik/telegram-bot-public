@@ -1,10 +1,7 @@
 package bot.backend.nodes.results.schema;
 
 import bot.app.utils.data.questions.QuestionResult;
-import bot.backend.nodes.events.CultureEvent;
-import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.FoodEvent;
-import bot.backend.nodes.events.MovieEvent;
+import bot.backend.nodes.events.*;
 
 import java.util.List;
 
@@ -22,8 +19,10 @@ public class RomanticSchema extends TimeTableSchema {
         return List.of(List.of(1, 2, 3));
     }
 
-    // TODO
     public boolean canUse(List<QuestionResult> questionResults) {
-        return true;
+
+        return filterByEventType(questionResults, CultureEvent.class).size() != 0 &&
+                filterByEventType(questionResults, FoodEvent.class).size() != 0 &&
+                filterByEventType(questionResults, MovieEvent.class).size() != 0;
     }
 }

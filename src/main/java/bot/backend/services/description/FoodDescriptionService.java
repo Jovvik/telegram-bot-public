@@ -1,9 +1,8 @@
 package bot.backend.services.description;
 
-import bot.app.utils.data.DataBlock;
-import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.Description;
 import bot.backend.nodes.description.FoodDescription;
+import bot.app.utils.data.questions.QuestionResult;
+import bot.backend.nodes.events.FoodEvent;
 
 import java.util.List;
 
@@ -14,8 +13,12 @@ public class FoodDescriptionService extends DescriptionService<FoodDescription> 
     }
 
     @Override
-    FoodDescription getMostCommonDescription(List<DataBlock<?>> data) {
-        return null;
+    FoodDescription getMostCommonDescription(List<QuestionResult> data) {
+        try {
+            return new FoodDescription(getMapDescription(data));
+        } catch(Exception e) {
+            return null;
+        }
     }
 
     @Override

@@ -1,5 +1,9 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.CultureEvent;
+import bot.backend.nodes.events.Event;
+
 import java.util.List;
 
 public class CultureRestriction extends Restriction<CultureRestriction.CultureType> {
@@ -18,5 +22,9 @@ public class CultureRestriction extends Restriction<CultureRestriction.CultureTy
 
     public enum CultureType {
         MOVIE, THEATRE, MUSICAL
+    }
+
+    public Class<? extends Event> getEventType() {
+        return CultureEvent.class;
     }
 }

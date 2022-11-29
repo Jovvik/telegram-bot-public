@@ -9,7 +9,7 @@ import lombok.NonNull;
 
 @AllArgsConstructor
 @Builder
-public class DataBlock<T> {
+public class QuestionNode<T> {
 
     @NonNull
     @Getter
@@ -22,7 +22,7 @@ public class DataBlock<T> {
     @Getter
     private final Answer<T> answer;
 
-    public DataBlock(String question, Answer<T> answer) {
+    public QuestionNode(String question, Answer<T> answer) {
         this(Category.DEFAULT, question, answer);
     }
 }

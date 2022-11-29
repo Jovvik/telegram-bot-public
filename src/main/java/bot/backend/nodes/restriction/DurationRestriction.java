@@ -1,5 +1,7 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Duration;
 
 import java.util.List;
@@ -19,5 +21,9 @@ public class DurationRestriction extends Restriction<Duration>{
     @Override
     public List<Duration> validValues() {
         return List.of(duration);
+    }
+
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }
