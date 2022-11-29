@@ -45,7 +45,10 @@ public class EventBuilderService {
         Future<TimeTable> futureResult = executor.submit(() -> {
             System.out.printf("Event for User[%s] started building%n", userId);
             waitList.removeFirst();
-            return predictService.generateTimeTable(answerData);
+            var filteredAnswerData = answerData.stream()
+                    .filter(q -> q.restriction != null)
+                    .collect(Collectors.toList());
+            return predictService.generateTimeTable(filteredAnswerData);
 //            try {
 //                Thread.sleep(5000 + new Random().nextInt(10000));
 //                TimeTable events = new TimeTable(List.of());
