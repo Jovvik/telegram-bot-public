@@ -8,6 +8,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 
 @AllArgsConstructor
 public abstract class Event {
@@ -41,8 +42,8 @@ public abstract class Event {
         public String toString() {
             return String.format(
                     "[%s-%s]",
-                    java.time.Duration.ofMinutes(from).toString(),
-                    java.time.Duration.ofMinutes(to).toString());
+                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(from)).toString(),
+                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(to)).toString());
         }
     }
 
