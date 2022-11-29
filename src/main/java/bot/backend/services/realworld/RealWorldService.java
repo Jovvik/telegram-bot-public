@@ -21,7 +21,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.stream.Collectors;
 
-@Component
 public abstract class RealWorldService<E extends Event, D extends Description<E>> {
 
     @Autowired

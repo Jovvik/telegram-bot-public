@@ -29,10 +29,10 @@ public class CheckResultAbility extends AbilityTemplate {
                     System.out.printf("User[%s] check status of results%n", userId);
                     if (eventService.isEventDone(userId)) {
                         var plan = eventService.getResult(userId);
-                        String planStr = "";
-                        for (EventBuilderService.Event e : plan) {
-                            planStr += e.getName() + " from " + e.getStart() + " to " + e.getEnd() + "\n";
-                        }
+                        String planStr = plan == null
+                                ? "К сожалению, ничего не получилось("
+                                : plan.toString();
+
                         SendMessage sm = new SendMessage();
                         sm.setChatId(Long.toString(getChatId(messageContext.update())));
                         sm.setText(planStr);

@@ -6,6 +6,9 @@ import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+import java.time.Duration;
+import java.time.LocalDateTime;
+
 @AllArgsConstructor
 public abstract class Event {
 
@@ -33,6 +36,14 @@ public abstract class Event {
         public Time(Integer from, Integer to) {
             super(from, to);
         }
+
+        @Override
+        public String toString() {
+            return String.format(
+                    "[%s-%s]",
+                    java.time.Duration.ofMinutes(from).toString(),
+                    java.time.Duration.ofMinutes(to).toString());
+        }
     }
 
     // In rubles
@@ -49,4 +60,11 @@ public abstract class Event {
         }
     }
 
+    @Override
+    public String toString() {
+        return "Event{" +
+                "location=" + location +
+                ", time=" + time +
+                '}';
+    }
 }

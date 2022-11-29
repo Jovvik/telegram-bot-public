@@ -13,33 +13,57 @@ import bot.backend.services.description.DescriptionService;
 import bot.backend.services.description.FoodDescriptionService;
 import bot.backend.services.realworld.FoodRealWorldService;
 import bot.backend.services.realworld.RealWorldService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 import java.util.stream.Collectors;
 
+@Service
 public class PredictService {
 
-    private final ComposeService composeService;
-    
-    private final Map<Class<? extends Event>, DescriptionService<? extends Description<? extends Event>>> descriptionServices =
-            Map.of(
-                FoodEvent.class, new FoodDescriptionService(),
-                ActiveEvent.class, new ActiveDescriptionService(),
-                CultureEvent.class, new CultureDescriptionService()
+    @Configuration
+    public static class PredictServiceConfig {
+        @Bean
+        public Map<Class<? extends Event>, DescriptionService<? extends Description<? extends Event>>>
+            descriptionServices() {
+            return Map.of(
+                    FoodEvent.class, new FoodDescriptionService(),
+                    ActiveEvent.class, new ActiveDescriptionService(),
+                    CultureEvent.class, new CultureDescriptionService()
             );
+        }
 
-
-    private final Map<Class<? extends Description<? extends Event>>,
-            RealWorldService<? extends Event, ? extends Description<? extends Event>>>
-            realWorldServices =
-            Map.of(
+        @Bean
+        public Map<Class<? extends Description<? extends Event>>,
+                RealWorldService<? extends Event, ? extends Description<? extends Event>>>
+                realWorldServices() {
+            return Map.of(
                     FoodDescription.class, new FoodRealWorldService()
             );
+        }
+    }
 
+    @Autowired
+    private ComposeService composeService;
+    
+    @Autowired
+    private Map<Class<? extends Event>, DescriptionService<? extends Description<? extends Event>>>
+            descriptionServices;
+
+
+
+    @Autowired
+    private Map<Class<? extends Description<? extends Event>>,
+            RealWorldService<? extends Event, ? extends Description<? extends Event>>>
+            realWorldServices;
 
     public PredictService(ComposeService composeService) {
         this.composeService = composeService;
     }
+
 
     private Map<Category, List<Description<?>>> createDescriptions(List<QuestionResult> results) {
 
@@ -133,7 +157,5 @@ public class PredictService {
     public TimeTable getBestTimeTable(List<TimeTable> timeTables) {
         return timeTables.get(0);
     }
-
-
 
 }
