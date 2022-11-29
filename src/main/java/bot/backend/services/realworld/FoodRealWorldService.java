@@ -8,9 +8,12 @@ import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
+import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.util.*;
 
+@Service
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 
     private final Set<KitchenRestriction.KitchenType> kitchenTypes = new HashSet<>();

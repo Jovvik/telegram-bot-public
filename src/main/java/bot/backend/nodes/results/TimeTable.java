@@ -9,4 +9,11 @@ import java.util.List;
 @AllArgsConstructor
 public class TimeTable {
     public List<Event> events;
+
+    @Override
+    public String toString() {
+        return "TimeTable{" +
+                "events=" + events +
+                '}';
+    }
 }

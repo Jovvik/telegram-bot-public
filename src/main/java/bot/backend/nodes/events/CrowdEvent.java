@@ -18,10 +18,6 @@ public class CrowdEvent extends ActiveEvent {
         super(location, category, time);
     }
 
-    public enum MassEventType {
-        FOOTBALL, BASKETBALL, FESTIVAL, FAIR, HOCKEY, TENNIS, UNKNOWN
-    }
-
     @AllArgsConstructor
     public enum CrowdEventType {
         FOOTBALL("Футбол"),

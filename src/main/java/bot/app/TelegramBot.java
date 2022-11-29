@@ -5,6 +5,11 @@ import bot.app.service.EventBuilderService;
 import bot.app.service.PollService;
 import bot.app.service.QuestionDataBase;
 import bot.external.spreadsheets.SpreadSheetConfig;
+import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.stereotype.Component;
 import org.telegram.abilitybots.api.bot.AbilityBot;
 import org.telegram.telegrambots.meta.api.objects.Update;
 
@@ -16,15 +21,14 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class TelegramBot extends AbilityBot {
+
     private static final String abilitiesPath = "bot/app/abilities";
 
-    private final EventBuilderService eventBuilderService = new EventBuilderService();
-    private final PollService pollService = new PollService(
-            new QuestionDataBase(
-                    Arrays.asList(SpreadSheetConfig.values())
-            ),
-            eventBuilderService
-    );
+    @Setter
+    private EventBuilderService eventBuilderService;
+
+    @Setter
+    private PollService pollService;
 
     public TelegramBot(String botToken, String botUsername) {
         super(botToken, botUsername);

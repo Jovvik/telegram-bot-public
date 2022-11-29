@@ -9,6 +9,7 @@ public class ActiveEvent extends OutDoorEvent {
         super(location, category, time);
     }
 
+    // TODO wait returning
     public enum ActivityType {
         SPORT, ROPE_PARK, YOGA, SNOWBOARD, RAFTING, DANCING
     }

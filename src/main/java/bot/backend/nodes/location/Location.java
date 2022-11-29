@@ -34,4 +34,12 @@ public class Location {
 
     private Integer rating;
 
+    @Override
+    public String toString() {
+        return "Location{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }
