@@ -6,10 +6,7 @@ import bot.backend.nodes.description.FoodDescription;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
-import bot.backend.nodes.restriction.FoodPlaceTypeRestriction;
-import bot.backend.nodes.restriction.FoodTypeRestriction;
-import bot.backend.nodes.restriction.KitchenRestriction;
-import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 
 import java.util.*;
@@ -38,7 +35,8 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
             }
         });
 
-        return new TablePredicate(Category.FOOD, tags,0, 24 * 60);
+        return new TablePredicate(Category.FOOD, tags,0, 24 * 60,
+                this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
     }
 
     @Override

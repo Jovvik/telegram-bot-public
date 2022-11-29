@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.time.DayOfWeek;
 import java.util.Set;
 
 @Getter
@@ -21,4 +22,6 @@ public class TablePredicate {
 
     @Setter
     private Integer timeTo;
+
+    private DayOfWeek startDay;
 }
