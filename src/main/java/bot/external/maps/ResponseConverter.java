@@ -5,6 +5,7 @@ import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
+import bot.entities.TagEntity;
 import bot.services.TagService;
 import lombok.Getter;
 import lombok.Setter;
@@ -132,6 +133,22 @@ public class ResponseConverter {
         return result.toString();
     }
 
+    private Set<String> collectTags(String text) {
+        Set<String> res = new HashSet<>();
+        res.add(text);
+
+        if (text.contains("ресторан") || text.contains("кухня")) {
+            res.add("ресторан");
+            res.add("кафе");
+        }
+
+        if (text.equals("попитькоктейли")) {
+            res.add("бар");
+        }
+
+        return res;
+    }
+
     public List<LocationEntity> toLocationEntity(Category category, String text) {
         if (mapResponse == null) {
             return null;
@@ -148,7 +165,7 @@ public class ResponseConverter {
             LocationConverter converter = new LocationConverter();
 
             entity.locationName = f.properties.name;
-            entity.tags = converter.stringToTags(Set.of(text), tagService);
+            entity.tags = converter.stringToTags(collectTags(text), tagService);
             entity.category = category;
             entity.latitude = f.geometry.getCoordinates().get(0);
             entity.longitude = f.geometry.getCoordinates().get(1);
