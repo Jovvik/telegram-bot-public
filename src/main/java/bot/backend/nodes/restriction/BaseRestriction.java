@@ -1,20 +1,14 @@
 package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
-import lombok.Getter;
 
 import java.util.List;
 
-/**
- * Класс описывающий ограничение какого-то поля эвента
- *
- * @param <T> - класс поля эвента, который мы ограничиваем
- */
-public abstract class Restriction<T> extends DiscreteRestriction<T> {
+public abstract class BaseRestriction<T, C> {
 
     public abstract boolean validate(T object);
 
-    public abstract List<T> validValues();
+    public abstract C validValues();
 
     public abstract Class<? extends Event> getEventType();
 
