@@ -1,11 +1,9 @@
 package bot.controllers;
 
-import bot.backend.nodes.location.Location;
 import bot.entities.TagEntity;
 import bot.external.kudago.MainKudaGo;
 import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 

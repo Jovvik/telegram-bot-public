@@ -1,6 +1,5 @@
 package bot.backend.nodes.restriction;
 
-import bot.backend.nodes.events.ActiveEvent;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Duration;
 

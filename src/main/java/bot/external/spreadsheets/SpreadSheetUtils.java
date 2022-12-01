@@ -3,6 +3,8 @@ package bot.external.spreadsheets;
 
 import bot.backend.nodes.events.*;
 import bot.backend.nodes.events.Event.*;
+import bot.backend.nodes.events.CultureEvent.CultureType;
+import bot.backend.nodes.events.FoodEvent.KitchenType;
 import bot.backend.nodes.restriction.*;
 import bot.backend.nodes.restriction.GenreRestriction;
 import bot.backend.nodes.restriction.KitchenRestriction;
@@ -163,7 +165,7 @@ public class SpreadSheetUtils {
     public KitchenRestriction applyIntegers(Object values) {
         List<Integer> ints = (List<Integer>) values;
         return new KitchenRestriction(ints.stream()
-                .map(i -> KitchenRestriction.KitchenType.values()[i - 1])
+                .map(i -> KitchenType.values()[i - 1])
                 .collect(Collectors.toList())
         );
     }
@@ -206,12 +208,12 @@ public class SpreadSheetUtils {
     /**
      * KITCHEN TYPE
      */
-    public KitchenRestriction.KitchenType parseKitchen(String kitchen) {
-        return KitchenRestriction.KitchenType.map.get(kitchen);
+    public KitchenType parseKitchen(String kitchen) {
+        return KitchenType.map.get(kitchen);
     }
 
     public KitchenRestriction applyKitchen(Object placeType) {
-        return new KitchenRestriction(List.of((KitchenRestriction.KitchenType) placeType));
+        return new KitchenRestriction(List.of((KitchenType) placeType));
     }
 
     /**
@@ -249,11 +251,11 @@ public class SpreadSheetUtils {
     /**
      * Culture type
      */
-    public CultureRestriction.CultureType parseCulture(String culture) {
-        return CultureRestriction.CultureType.map.get(culture);
+    public CultureType parseCulture(String culture) {
+        return CultureType.map.get(culture);
     }
 
     public CultureRestriction applyCultureType(Object cultureType) {
-        return new CultureRestriction(List.of((CultureRestriction.CultureType) cultureType));
+        return new CultureRestriction(List.of((CultureType) cultureType));
     }
 }

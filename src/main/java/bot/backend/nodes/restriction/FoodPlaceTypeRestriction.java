@@ -2,6 +2,7 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
+import bot.backend.nodes.events.FoodEvent.FoodPlaceType;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
@@ -17,7 +18,7 @@ public class FoodPlaceTypeRestriction extends Restriction<FoodEvent.FoodPlaceTyp
     }
 
     @Override
-    public List<FoodEvent.FoodPlaceType> validValues() {
+    public List<FoodPlaceType> validValues() {
         return foodPlaceTypes;
     }
 

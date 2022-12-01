@@ -1,25 +1,23 @@
 package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.Description;
 import bot.backend.nodes.description.FoodDescription;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
-import bot.repositories.LocationRepository;
 import bot.services.LocationService;
 import bot.services.TagService;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
+import bot.backend.nodes.events.FoodEvent.KitchenType;
 
 import java.util.*;
 
 @Service
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 
-    private final Set<KitchenRestriction.KitchenType> kitchenTypes = new HashSet<>();
+    private final Set<KitchenType> kitchenTypes = new HashSet<>();
     private final Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
 
     public FoodRealWorldService(LocationService locationService, TagService tagService) {
@@ -36,7 +34,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
             if (res instanceof KitchenRestriction) {
                 tags.addAll(addTagsFromType(res));
                 res.validValues().forEach(
-                        type -> kitchenTypes.add((KitchenRestriction.KitchenType) type));
+                        type -> kitchenTypes.add((KitchenType) type));
             } else if (res instanceof FoodPlaceTypeRestriction) {
                 tags.addAll(addTagsFromType(res));
                 res.validValues().forEach(
