@@ -3,7 +3,6 @@ package bot.backend.nodes.events;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
-import bot.backend.nodes.restriction.KitchenRestriction;
 import bot.backend.nodes.restriction.TypedEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -18,7 +17,7 @@ import java.util.Map;
 @Setter
 public class FoodEvent extends Event {
 
-    public List<KitchenRestriction.KitchenType> kitchenTypes;
+    public List<KitchenType> kitchenTypes;
 
     @RequiredField
     public Budget budget;
@@ -32,7 +31,7 @@ public class FoodEvent extends Event {
     public FoodEvent(Location location,
                      Category category,
                      Time time,
-                     List<KitchenRestriction.KitchenType> kitchenTypes,
+                     List<KitchenType> kitchenTypes,
                      Budget budget,
                      List<FoodPlaceType> foodPlaceTypes
     ) {
@@ -72,6 +71,34 @@ public class FoodEvent extends Event {
         COCKTAILS("Коктейли", "попитькоктейли");
 
         public static Map<String, FoodType> map = new HashMap<>();
+
+        static {
+            Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
+        }
+
+        private final String realName;
+
+        @Getter
+        private final String tagName;
+    }
+
+    @AllArgsConstructor
+    public enum KitchenType implements TypedEnum {
+        ITALIAN("Итальянская", "итальянскаийресторан"),
+        JAPANESE("Японская", "японскийресторан"),
+        RUSSIAN("Русская", "русскаякухня"),
+        ASIAN("Азиатская", "азиатскийресторан"),
+        EUROPEAN("Европейская", "европейскаякухня"),
+        CAUCASIAN("Кавказская", "кавказскийрестоан"),
+        FRENCH("Французская", "французскийресторан"),
+        THAI("Тайская", "тайскаякухня"),
+        CHINESE("Китайская", "китайскийресторан"),
+        ALL("Не принципиально", null);
+
+        public final static List<KitchenType> european = List.of(ITALIAN, RUSSIAN, FRENCH);
+        public final static List<KitchenType> asian = List.of(JAPANESE, THAI, CHINESE);
+
+        public static Map<String, KitchenType> map = new HashMap<>();
 
         static {
             Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
