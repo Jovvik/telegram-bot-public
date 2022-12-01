@@ -34,8 +34,9 @@ public abstract class Event {
 
     // In minutes
     public static class Time extends Limited {
+
         public Time(Integer from, Integer to) {
-            super(from, to);
+            super(from, to < from ? to + 24 * 60 : to);
         }
 
         @Override
@@ -43,7 +44,7 @@ public abstract class Event {
             return String.format(
                     "[%s-%s]",
                     LocalTime.MIN.plus(java.time.Duration.ofMinutes(from)).toString(),
-                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(to)).toString());
+                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(to > 24 * 60 ? to - 24 * 60 : to)).toString());
         }
     }
 
