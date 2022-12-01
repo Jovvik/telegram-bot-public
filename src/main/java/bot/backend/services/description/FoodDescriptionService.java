@@ -1,6 +1,7 @@
 package bot.backend.services.description;
 
 import bot.app.utils.data.questions.Answer;
+import bot.app.utils.data.questions.GeneratedQuestionResult;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.FoodDescription;
 import bot.app.utils.data.questions.QuestionResult;
@@ -53,18 +54,7 @@ public class FoodDescriptionService extends DescriptionService<FoodDescription> 
         data = data.stream()
                 .filter(qr -> !(qr.restriction instanceof TimeRestriction) || !times.contains(qr.restriction))
                 .collect(Collectors.toList());
-        data.add(new QuestionResult(
-                "time",
-                Category.DEFAULT,
-                List.of(
-                        new Answer<>(
-                                "-",
-                                -1
-                        )
-                ),
-                time
-        ));
-
+        data.add(new GeneratedQuestionResult(time));
         return data;
     }
 

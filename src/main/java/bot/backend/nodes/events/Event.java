@@ -1,25 +1,26 @@
 package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.utils.EventField;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.Setter;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 
 @AllArgsConstructor
+@Getter
+@Setter
 public abstract class Event {
 
-    @Getter
     public Location location;
 
-    @Getter
     public Category category;
 
-    @Getter
     @RequiredField
     public Time time;
 
@@ -69,4 +70,6 @@ public abstract class Event {
                 ", time=" + time +
                 '}';
     }
+
+    public static EventField<Time> TIME = new EventField<>(Event::getTime, Event::setTime);
 }
