@@ -12,8 +12,6 @@ public class TimeTable {
 
     @Override
     public String toString() {
-        return "TimeTable{" +
-                "events=" + events +
-                '}';
+        return "**Расписание вашего мероприятия:**" + events;
     }
 }

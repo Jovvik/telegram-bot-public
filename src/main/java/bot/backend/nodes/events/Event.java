@@ -40,12 +40,18 @@ public abstract class Event {
             super(from, to < from ? to + 24 * 60 : to);
         }
 
+        private String intToTime(int time) {
+            return (time < 10 ? "0" : "") + time;
+        }
+
+        private String intToTimeString(int time) {
+            time = (time < 24 * 60 ? time : time - 24 * 60);
+            return "**" + intToTime(time / 60) + ":" + intToTime(time % 60) + "**";
+        }
+
         @Override
         public String toString() {
-            return String.format(
-                    "[%s-%s]",
-                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(from)).toString(),
-                    LocalTime.MIN.plus(java.time.Duration.ofMinutes(to > 24 * 60 ? to - 24 * 60 : to)).toString());
+            return "c " + intToTimeString(from) + " до " + intToTimeString(to);
         }
     }
 
@@ -63,12 +69,17 @@ public abstract class Event {
         }
     }
 
+    private String prettyUrl(String url) {
+        return url.split("\\?")[0];
+    }
+
     @Override
     public String toString() {
-        return "Event{" +
-                "location=" + location +
-                ", time=" + time +
-                '}';
+        return "\n" +
+                "**" + location.getName() + "**" +
+                " | " + time + "\n" +
+                prettyUrl(location.getUrl()) + "\n" +
+                "__" + location.getAddress() + "__";
     }
 
     public static EventField<Time> TIME = new EventField<>(Event::getTime, Event::setTime);
