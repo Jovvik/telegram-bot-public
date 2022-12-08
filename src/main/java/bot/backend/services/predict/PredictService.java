@@ -2,6 +2,7 @@ package bot.backend.services.predict;
 
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.description.CultureDescription;
 import bot.backend.nodes.description.Description;
 import bot.backend.nodes.description.FoodDescription;
 import bot.backend.nodes.events.*;
@@ -11,6 +12,7 @@ import bot.backend.services.description.ActiveDescriptionService;
 import bot.backend.services.description.CultureDescriptionService;
 import bot.backend.services.description.DescriptionService;
 import bot.backend.services.description.FoodDescriptionService;
+import bot.backend.services.realworld.CultureRealWordService;
 import bot.backend.services.realworld.FoodRealWorldService;
 import bot.backend.services.realworld.RealWorldService;
 import bot.repositories.LocationRepository;
@@ -44,7 +46,8 @@ public class PredictService {
                 RealWorldService<? extends Event, ? extends Description<? extends Event>>>
                 realWorldServices(LocationService locationService, TagService tagService) {
             return Map.of(
-                    FoodDescription.class, new FoodRealWorldService(locationService, tagService)
+                    FoodDescription.class, new FoodRealWorldService(locationService, tagService),
+                    CultureDescription.class, new CultureRealWordService(locationService, tagService)
             );
         }
     }

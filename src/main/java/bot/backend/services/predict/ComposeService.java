@@ -15,11 +15,11 @@ import java.util.Map;
 public class ComposeService {
 
     private final Map<Category, Integer> waitingTime = Map.of(
-            Category.FOOD, 100,
-            Category.ACTIVE, 100,
+            Category.FOOD, 20,
+            Category.ACTIVE, 20,
             Category.SETTINGS, 0,
-            Category.CULTURE, 10,
-            Category.DEFAULT, 50
+            Category.CULTURE, 20,
+            Category.DEFAULT, 20
     );
 
     private void addWaiting(Event currentEvent, Event nextEvent) {

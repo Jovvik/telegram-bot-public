@@ -29,12 +29,6 @@ public class MainKudaGo {
     private static final KudaGoServer server = new KudaGoServer();
 
     public static void main(String[] args) throws IOException {
-
-//        List<Location> locations = server.getPlaceByCategory("theatre", Category.CULTURE);
-//        List<Location> locations = server.getPlaceByCategory("attractions", Category.CULTURE);
-//        List<Location> locations = server.getPlaceByCategory("museums", Category.CULTURE);
-
-
 //        System.out.println(locations.get(0).getName());
     }
 

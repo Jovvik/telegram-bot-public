@@ -4,6 +4,7 @@ import bot.backend.nodes.events.utils.ClassField;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
+import bot.backend.nodes.restriction.utils.TypedEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -24,11 +25,11 @@ public class SportEvent extends ActiveEvent {
     }
 
     @AllArgsConstructor
-    public enum SportType {
-        FOOTBALL("Футбол"),
-        BASKETBALL("Баскетбол"),
-        HOCKEY("Хоккей"),
-        TENNIS("Теннис");
+    public enum SportType implements TypedEnum {
+        FOOTBALL("Футбол", "футбольноеполе"),
+        BASKETBALL("Баскетбол", "баскетбольнаяплощадка"),
+        HOCKEY("Хоккей", "каток"),
+        TENNIS("Теннис", "теннисныйкорт");
 
         public static Map<String, SportType> map = new HashMap<>();
 
@@ -37,6 +38,9 @@ public class SportEvent extends ActiveEvent {
         }
 
         private String realName;
+
+        @Getter
+        private final String tagName;
 
     }
 

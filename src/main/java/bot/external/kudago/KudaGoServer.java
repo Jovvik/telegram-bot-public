@@ -121,7 +121,6 @@ public class KudaGoServer {
         assert jsonObject != null;
         JSONArray myResponse = jsonObject.getJSONArray("results");
         List<MovieSession> responses = new ArrayList<>();
-        //TODO get all times ...
         for (int i = 0; i < myResponse.length(); ++i) {
             JSONObject current = myResponse.getJSONObject(i);
             try {
