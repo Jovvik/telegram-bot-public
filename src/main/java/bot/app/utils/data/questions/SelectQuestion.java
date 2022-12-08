@@ -90,6 +90,11 @@ public class SelectQuestion extends ChangeableQuestion<List<Answer<String>>> {
     }
 
     @Override
+    protected AnswerOrder answerOrder() {
+        return AnswerOrder.TIGHT;
+    }
+
+    @Override
     public BaseQuestion<List<Answer<String>>> copy() {
         return new SelectQuestion(
                 id,
