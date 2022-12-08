@@ -6,7 +6,7 @@ import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.DateRestriction;
 import bot.backend.nodes.restriction.Restriction;
 import bot.backend.nodes.restriction.TimeRestriction;
-import bot.backend.nodes.restriction.TypedEnum;
+import bot.backend.nodes.restriction.utils.TypedEnum;
 import bot.converters.LocationConverter;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
@@ -45,7 +45,7 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
         return handleRaw(locations);
     }
 
-    protected Set<TagEntity> addTagsFromType(Restriction<?> res) {
+    protected Set<TagEntity> addTagsFromType(Restriction<?, ?> res) {
         Set<TagEntity> tags = new HashSet<>();
 
         res.validValues().forEach(type -> {

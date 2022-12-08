@@ -2,28 +2,31 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Time;
+import bot.backend.nodes.events.utils.ClassField;
 import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-public class TimeRestriction extends Restriction<Time> {
+public class TimeRestriction extends Restriction<Event, Time> {
 
-    @Getter
-    private final Time time;
+    public TimeRestriction(List<Time> values) {
+        super(Event.TIME, values);
+    }
 
-    public TimeRestriction(Time time) {
-        this.time = time;
+    public TimeRestriction(Time value) {
+        super(Event.TIME, value);
     }
 
     @Override
     public boolean validate(Time object) {
-        return time.from <= object.from && object.to <= time.to;
+        return getValue().from <= object.from && object.to <= getValue().to;
     }
 
     @Override
     public List<Time> validValues() {
+        Time time = getValue();
         int fullDiff = time.to - time.from;
         if (fullDiff <= 30) {
             return List.of(time);
@@ -40,7 +43,7 @@ public class TimeRestriction extends Restriction<Time> {
     }
 
     @Override
-    public Class<? extends Event> getEventType() {
+    public Class<Event> getEventType() {
         return Event.class;
     }
 }

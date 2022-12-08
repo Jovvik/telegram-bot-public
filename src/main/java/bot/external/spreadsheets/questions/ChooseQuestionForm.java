@@ -31,7 +31,7 @@ public class ChooseQuestionForm extends BaseQuestionForm<ChooseQuestion, String>
                         .map(a -> new Answer<>(a.key, a.nextId, a.edgeType))
                         .collect(Collectors.toList()),
                 (question, answer) -> {
-                    Restriction<?> restriction = answer.getEdgeType() == AnswerCell.EdgeType.Transition
+                    Restriction<?, ?> restriction = answer.getEdgeType() == AnswerCell.EdgeType.Transition
                             ? null
                             : applying.apply(parseFunction.apply(answer.getAnswer()));
 

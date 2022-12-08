@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class CultureDescription extends Description<CultureEvent> {
 
-    public CultureDescription(Map<String, Restriction<?>> restrictions) {
+    public CultureDescription(Map<String, Restriction<?, ?>> restrictions) {
         super(CultureEvent.class, restrictions);
     }
 

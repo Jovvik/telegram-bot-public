@@ -13,7 +13,7 @@ public abstract class BaseQuestionForm<Q extends BaseQuestion<?>, T> {
     public int id;
     public String question;
 
-    public Function<Object, Restriction<?>> applying;
+    public Function<Object, Restriction<?, ?>> applying;
     public Function<T, Object> parseFunction;
 
     public Class<T> inputClass;
@@ -34,7 +34,7 @@ public abstract class BaseQuestionForm<Q extends BaseQuestion<?>, T> {
             createMethod = SpreadSheetUtils.class.getMethod(createPart, Object.class);
             this.applying = obj -> {
                 try {
-                    return (Restriction<?>) createMethod.invoke(null, obj);
+                    return (Restriction<?, ?>) createMethod.invoke(null, obj);
                 } catch (Exception e) {
                     return null;
                 }

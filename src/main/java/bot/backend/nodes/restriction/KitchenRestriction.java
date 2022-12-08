@@ -3,28 +3,27 @@ package bot.backend.nodes.restriction;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.events.FoodEvent.KitchenType;
+import bot.backend.nodes.events.utils.ClassField;
 import lombok.AllArgsConstructor;
 
+import java.util.HashSet;
 import java.util.List;
 
-@AllArgsConstructor
-public class KitchenRestriction extends Restriction<KitchenType> {
+public class KitchenRestriction extends Restriction<FoodEvent, List<KitchenType>> {
 
-    List<KitchenType> kitchens;
+    public KitchenRestriction(List<KitchenType> value) {
+        super(FoodEvent.KITCHEN_TYPES, value);
+    }
+
 
     @Override
-    public boolean validate(KitchenType kitchen) {
-        if (kitchens.contains(KitchenType.ALL)) return true;
-        return kitchens.contains(kitchen);
+    public boolean validate(List<KitchenType> candidate) {
+        if (getValue().contains(KitchenType.ALL)) return true;
+        return new HashSet<>(candidate).containsAll(getValue());
     }
 
     @Override
-    public List<KitchenType> validValues() {
-        return kitchens;
-    }
-
-    @Override
-    public Class<? extends Event> getEventType() {
+    public Class<FoodEvent> getEventType() {
         return FoodEvent.class;
     }
 }

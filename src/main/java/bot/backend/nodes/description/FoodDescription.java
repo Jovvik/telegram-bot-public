@@ -8,7 +8,7 @@ import java.util.Map;
 
 public class FoodDescription extends Description<FoodEvent> {
 
-    public FoodDescription(Map<String, Restriction<?>> restrictions) {
+    public FoodDescription(Map<String, Restriction<?, ?>> restrictions) {
         super(FoodEvent.class, restrictions);
     }
 

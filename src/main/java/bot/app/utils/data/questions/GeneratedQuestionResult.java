@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Random;
 
 public class GeneratedQuestionResult extends QuestionResult{
-    public GeneratedQuestionResult(Category category, Restriction<?> restriction) {
+    public GeneratedQuestionResult(Category category, Restriction<?, ?> restriction) {
         super(
                 "GENERATED-QR:" + new Random().nextInt(Integer.MAX_VALUE),
                 category,
@@ -16,7 +16,7 @@ public class GeneratedQuestionResult extends QuestionResult{
         );
     }
 
-    public GeneratedQuestionResult(Restriction<?> restriction) {
+    public GeneratedQuestionResult(Restriction<?, ?> restriction) {
         this(Category.DEFAULT, restriction);
     }
 }

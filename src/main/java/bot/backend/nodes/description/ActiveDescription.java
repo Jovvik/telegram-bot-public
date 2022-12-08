@@ -6,7 +6,7 @@ import bot.backend.nodes.restriction.Restriction;
 import java.util.Map;
 
 public class ActiveDescription extends Description<ActiveEvent> {
-    public ActiveDescription(Map<String, Restriction<?>> restrictions) {
+    public ActiveDescription(Map<String, Restriction<?, ?>> restrictions) {
         super(ActiveEvent.class, restrictions);
     }
 

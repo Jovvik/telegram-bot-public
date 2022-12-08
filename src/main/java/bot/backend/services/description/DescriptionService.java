@@ -32,8 +32,8 @@ public abstract class DescriptionService<D extends Description<? extends Event>>
         return children;
     }
 
-    protected Map<String, Restriction<?>> getMapDescription(List<QuestionResult> data) {
-        List<Restriction<?>> allRestrictions = filterDescriptions(data)
+    protected Map<String, Restriction<?, ?>> getMapDescription(List<QuestionResult> data) {
+        List<Restriction<?, ?>> allRestrictions = filterDescriptions(data)
                 .stream()
                 .map(QuestionResult::getRestriction)
                 .collect(Collectors.toList());
@@ -71,8 +71,8 @@ public abstract class DescriptionService<D extends Description<? extends Event>>
                 .collect(Collectors.toList());
     }
 
-    public <R extends Restriction<?>> List<R> getTypedRestrictions(
-            List<Restriction<?>> restrictions,
+    public <R extends Restriction<?, ?>> List<R> getTypedRestrictions(
+            List<Restriction<?, ?>> restrictions,
             Class<R> restrictionClass) {
         return restrictions.stream()
                 .filter(restrictionClass::isInstance)

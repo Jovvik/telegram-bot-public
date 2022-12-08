@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class OutDoorDescription extends Description<OutDoorEvent> {
 
-    public OutDoorDescription(Map<String, Restriction<?>> restrictions) {
+    public OutDoorDescription(Map<String, Restriction<?, ?>> restrictions) {
         super(OutDoorEvent.class, restrictions);
     }
 

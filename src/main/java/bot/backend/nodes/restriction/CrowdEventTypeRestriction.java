@@ -2,27 +2,29 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.CrowdEvent;
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.utils.ClassField;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
-public class CrowdEventTypeRestriction extends Restriction<CrowdEvent.CrowdEventType> {
+public class CrowdEventTypeRestriction extends Restriction<CrowdEvent, CrowdEvent.CrowdEventType> {
 
-    List<CrowdEvent.CrowdEventType> massEventTypes;
 
-    @Override
-    public boolean validate(CrowdEvent.CrowdEventType massEvent) {
-        return massEventTypes.contains(massEvent);
+    public CrowdEventTypeRestriction(List<CrowdEvent.CrowdEventType> values) {
+        super(CrowdEvent.TYPE, values);
+    }
+
+    public CrowdEventTypeRestriction(CrowdEvent.CrowdEventType value) {
+        super(CrowdEvent.TYPE, value);
     }
 
     @Override
-    public List<CrowdEvent.CrowdEventType> validValues() {
-        return massEventTypes;
+    public boolean validate(CrowdEvent.CrowdEventType candidate) {
+        return validValues().contains(candidate);
     }
 
-    public Class<? extends Event> getEventType() {
+    @Override
+    public Class<CrowdEvent> getEventType() {
         return CrowdEvent.class;
     }
-
 }

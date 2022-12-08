@@ -2,27 +2,26 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Duration;
+import bot.backend.nodes.events.utils.ClassField;
 
 import java.util.List;
 
-public class DurationRestriction extends Restriction<Duration> {
-    Duration duration;
+public class DurationRestriction extends Restriction<Event, Duration> {
 
-    public DurationRestriction(Duration duration) {
-        this.duration = duration;
+    public DurationRestriction(List<Duration> values) {
+        super(null, values);
+    }
+
+    public DurationRestriction(Duration value) {
+        super(null, value);
     }
 
     @Override
     public boolean validate(Duration object) {
-        return duration.from <= object.from && object.to <= duration.to;
+        return getValue().from <= object.from && object.to <= getValue().to;
     }
 
-    @Override
-    public List<Duration> validValues() {
-        return List.of(duration);
-    }
-
-    public Class<? extends Event> getEventType() {
+    public Class<Event> getEventType() {
         return Event.class;
     }
 }

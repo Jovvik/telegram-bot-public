@@ -15,5 +15,5 @@ public class QuestionResult {
     public String question;
     public Category category;
     public List<Answer<String>> answers; // if answer one == List.of(answer)
-    public Restriction<?> restriction;
+    public Restriction<?, ?> restriction;
 }
