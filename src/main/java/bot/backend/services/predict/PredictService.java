@@ -141,11 +141,13 @@ public class PredictService {
 
             Class<? extends Description> descriptionClass = descriptions.get(0).getClass();
 
-            RealWorldService realWorldService =
-                    realWorldServices.get(descriptionClass);
+            RealWorldService realWorldService = realWorldServices.get(descriptionClass);
+
+            if (realWorldService == null) return null;
 
             List<? extends Event> events = descriptions.stream()
                     .map(d -> realWorldService.generateEvent(d))
+                    .filter(Objects::nonNull)
                     .collect(Collectors.toList());
 
             if (events.isEmpty()) {

@@ -24,6 +24,8 @@ public abstract class Event {
     @RequiredField
     public Time time;
 
+    public Budget budget;
+
     @AllArgsConstructor
     private static class Limited {
         @Getter
@@ -81,6 +83,4 @@ public abstract class Event {
                 prettyUrl(location.getUrl()) + "\n" +
                 "__" + location.getAddress() + "__";
     }
-
-    public static EventField<Time> TIME = new EventField<>(Event::getTime, Event::setTime);
 }
