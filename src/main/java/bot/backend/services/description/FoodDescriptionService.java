@@ -41,12 +41,12 @@ public class FoodDescriptionService extends DescriptionService<FoodDescription> 
 
         // TODO fix
         int minFrom = times.stream()
-                .map(TimeRestriction::getTime)
+                .map(TimeRestriction::getValue)
                 .mapToInt(Event.Time::getFrom)
                 .max().orElse(0);
 
         int maxTo = times.stream()
-                .map(TimeRestriction::getTime)
+                .map(TimeRestriction::getValue)
                 .mapToInt(Event.Time::getTo)
                 .min().orElse(24 * 60 - 1);
 

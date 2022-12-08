@@ -7,9 +7,11 @@ import java.util.function.BiFunction;
 import java.util.function.Function;
 
 @AllArgsConstructor
-public abstract class ClassField<C, F> {
+public class ClassField<C, F> {
     private Function<C, F> getter;
     private BiConsumer<C, F> setter;
+
+    private String fieldName;
 
     public F get(C obj) {
         return getter.apply(obj);
@@ -18,4 +20,6 @@ public abstract class ClassField<C, F> {
     public void set(C obj, F value) {
         setter.accept(obj, value);
     }
+
+    public String name() { return fieldName; }
 }

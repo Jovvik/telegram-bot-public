@@ -245,7 +245,7 @@ public class SpreadSheetUtils {
     }
 
     public FoodTypeRestriction applyFoodType(Object foodType) {
-        return new FoodTypeRestriction((FoodEvent.FoodType) foodType);
+        return new FoodTypeRestriction(List.of((FoodEvent.FoodType) foodType));
     }
 
     /**

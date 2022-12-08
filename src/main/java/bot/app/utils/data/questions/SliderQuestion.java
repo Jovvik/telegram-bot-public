@@ -84,6 +84,11 @@ public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
     }
 
     @Override
+    protected AnswerOrder answerOrder() {
+        return AnswerOrder.ONE_ROW;
+    }
+
+    @Override
     public BaseQuestion<Answer<String>> copy() {
         return new SliderQuestion(
                 id,

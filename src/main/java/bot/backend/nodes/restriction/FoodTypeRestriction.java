@@ -3,28 +3,24 @@ package bot.backend.nodes.restriction;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.events.FoodEvent.FoodType;
+import bot.backend.nodes.events.utils.ClassField;
 
+import java.util.HashSet;
 import java.util.List;
 
-public class FoodTypeRestriction extends Restriction<FoodType> {
-    FoodType type;
+public class FoodTypeRestriction extends Restriction<FoodEvent, List<FoodType>> {
 
-    public FoodTypeRestriction(FoodType type) {
-        this.type = type;
+    public FoodTypeRestriction(List<FoodType> value) {
+        super(FoodEvent.FOOD_TYPES, value);
     }
 
     @Override
-    public boolean validate(FoodType object) {
-        return object.equals(type);
+    public boolean validate(List<FoodType> candidate) {
+        return new HashSet<>(getValue()).containsAll(candidate);
     }
 
     @Override
-    public List<FoodType> validValues() {
-        return List.of(type);
-    }
-
-    @Override
-    public Class<? extends Event> getEventType() {
+    public Class<FoodEvent> getEventType() {
         return FoodEvent.class;
     }
 }

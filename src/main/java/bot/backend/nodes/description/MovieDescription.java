@@ -7,7 +7,7 @@ import java.util.Map;
 
 public class MovieDescription extends Description<MovieEvent> {
 
-    public MovieDescription(Map<String, Restriction<?>> restrictions) {
+    public MovieDescription(Map<String, Restriction<?, ?>> restrictions) {
         super(MovieEvent.class, restrictions);
     }
 

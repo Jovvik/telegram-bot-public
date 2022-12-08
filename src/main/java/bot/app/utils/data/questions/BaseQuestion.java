@@ -31,13 +31,16 @@ public abstract class BaseQuestion<T> {
     public abstract QuestionResult handlePressing(TelegramBot tgBot, Long chatId, int answerNumber);
     public abstract String createButtonText(int answerNumber);
 
+    protected abstract AnswerOrder answerOrder();
+
     public List<List<InlineKeyboardButton>> getButtons() {
         List<List<InlineKeyboardButton>> btns = new ArrayList<>();
 
-        List<List<Integer>> bestFit = AnswerOrder.ONE_ROW.fit(
+        List<List<Integer>> bestFit = answerOrder().fit(
                 answers.stream()
                         .map(Answer::getAnswer)
-                        .collect(Collectors.toList())
+                        .collect(Collectors.toList()),
+                question
         );
         int btnRow = 0;
         for (List<Integer> row : bestFit) {

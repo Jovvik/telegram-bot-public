@@ -28,7 +28,7 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
     @Override
     public TablePredicate createPredicate(FoodDescription description) {
         Set<TagEntity> tags = new HashSet<>();
-        List<Restriction<?>> restrictions = new ArrayList<>(description.restrictions.values());
+        List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
 
         restrictions.forEach(res -> {
             if (res instanceof KitchenRestriction) {

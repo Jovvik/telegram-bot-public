@@ -1,7 +1,7 @@
 package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
-import lombok.Getter;
+import bot.backend.nodes.events.utils.ClassField;
 
 import java.util.List;
 
@@ -10,17 +10,13 @@ import java.util.List;
  *
  * @param <T> - класс поля эвента, который мы ограничиваем
  */
-public abstract class Restriction<T> extends DiscreteRestriction<T> {
+public abstract class Restriction<E extends Event, T> extends DiscreteRestriction<E, T> {
 
-    public abstract boolean validate(T object);
+    public Restriction(ClassField<E, T> field, List<T> values) {
+        super(field, values);
+    }
 
-    public abstract List<T> validValues();
-
-    public abstract Class<? extends Event> getEventType();
-
-    public String getFieldName() {
-        String fullName = this.getClass().getSimpleName();
-        String prefix = fullName.substring(0, fullName.length() - "Restriction".length());
-        return Character.toLowerCase(prefix.charAt(0)) + prefix.substring(1);
+    public Restriction(ClassField<E, T> field, T value) {
+        super(field, value);
     }
 }

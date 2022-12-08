@@ -2,27 +2,28 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.SportEvent;
+import bot.backend.nodes.events.utils.ClassField;
 import lombok.AllArgsConstructor;
 
 import java.util.List;
 
-@AllArgsConstructor
-public class SportRestriction extends Restriction<SportEvent.SportType> {
+public class SportRestriction extends Restriction<SportEvent, SportEvent.SportType> {
 
-    List<SportEvent.SportType> sportTypes;
+    public SportRestriction(List<SportEvent.SportType> values) {
+        super(SportEvent.SPORT_TYPE, values);
+    }
+
+    public SportRestriction(SportEvent.SportType value) {
+        super(SportEvent.SPORT_TYPE, value);
+    }
 
     @Override
     public boolean validate(SportEvent.SportType sportType) {
-        return sportTypes.contains(sportType);
+        return values.contains(sportType);
     }
 
     @Override
-    public List<SportEvent.SportType> validValues() {
-        return sportTypes;
-    }
-
-    @Override
-    public Class<? extends Event> getEventType() {
+    public Class<SportEvent> getEventType() {
         return SportEvent.class;
     }
 

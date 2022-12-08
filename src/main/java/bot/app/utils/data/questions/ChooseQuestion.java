@@ -23,4 +23,9 @@ public class ChooseQuestion extends BaseQuestion<Answer<String>> {
     public String createButtonText(int answerNumber) {
         return answers.get(answerNumber).getAnswer();
     }
+
+    @Override
+    protected AnswerOrder answerOrder() {
+        return AnswerOrder.TIGHT;
+    }
 }

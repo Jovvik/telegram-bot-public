@@ -1,20 +1,42 @@
 package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.utils.ClassField;
+import lombok.AllArgsConstructor;
 
-import java.util.List;
+/**
+ *
+ * @param <E> event type
+ * @param <T> field type
+ * @param <C> collection of values type
+ */
+@AllArgsConstructor
+public abstract class BaseRestriction<E extends Event, T, C> {
+    protected ClassField<E, T> field;
+    protected C values;
 
-public abstract class BaseRestriction<T, C> {
+    public BaseRestriction(T value, ClassField<E, T> field) {
+        this.field = field;
+        this.values = valuesFromOne(value);
+    }
 
-    public abstract boolean validate(T object);
+    public abstract boolean validate(T candidate);
+    public abstract Class<E> getEventType();
+    public abstract C valuesFromOne(T value);
+    public abstract T getValue();
 
-    public abstract C validValues();
+    public void setValue(E event) {
+        if (field == null) throw new UnsupportedOperationException("no field to set");
+        field.set(event, getValue());
+    }
 
-    public abstract Class<? extends Event> getEventType();
+    public C validValues() {
+        return values;
+    }
 
     public String getFieldName() {
-        String fullName = this.getClass().getSimpleName();
-        String prefix = fullName.substring(0, fullName.length() - "Restriction".length());
-        return Character.toLowerCase(prefix.charAt(0)) + prefix.substring(1);
+        if (field == null) return null;
+        return field.name();
     }
+
 }
