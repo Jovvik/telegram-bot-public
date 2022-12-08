@@ -11,6 +11,6 @@ public class MovieSession {
 
     Event.Time time;
 
-    // TODO location
+    // NOTE: This location doesn't have times and rating please understand this
     String location;
 }

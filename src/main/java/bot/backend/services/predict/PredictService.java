@@ -22,10 +22,8 @@ public class PredictService {
     }
 
     private Map<Category, List<Description<?>>> createDescriptions(List<QuestionResult> results) {
-
         return null;
     }
-
 
     public TimeTable generateMassEvent(List<QuestionResult> dataBlocks) {
         Map<Category, List<Description<?>>> descriptions = createDescriptions(dataBlocks);
