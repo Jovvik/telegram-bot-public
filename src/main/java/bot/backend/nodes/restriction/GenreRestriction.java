@@ -1,17 +1,16 @@
 package bot.backend.nodes.restriction;
 
-import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.events.utils.ClassField;
-import lombok.AllArgsConstructor;
 
 import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 
-public class GenreRestriction extends Restriction<MovieEvent, List<MovieEvent.GenreType>> {
+public class GenreRestriction extends Restriction<MovieEvent, Set<MovieEvent.GenreType>> {
 
-    public GenreRestriction(List<MovieEvent.GenreType> value) {
+    public GenreRestriction(Set<MovieEvent.GenreType> value) {
         super(new ClassField<>(
                 movieEvent -> movieEvent.movieSession.getMovie().getGenres(),
                 (movieEvent, genreTypes) -> movieEvent.movieSession.getMovie().setGenres(genreTypes),
@@ -20,7 +19,7 @@ public class GenreRestriction extends Restriction<MovieEvent, List<MovieEvent.Ge
     }
 
     @Override
-    public boolean validate(List<MovieEvent.GenreType> movieType) {
+    public boolean validate(Set<MovieEvent.GenreType> movieType) {
         return new HashSet<>(getValue()).containsAll(movieType);
     }
 

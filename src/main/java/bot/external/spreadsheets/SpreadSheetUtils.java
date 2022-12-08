@@ -19,6 +19,7 @@ import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.util.Date;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @UtilityClass
@@ -179,7 +180,7 @@ public class SpreadSheetUtils {
     }
 
     public GenreRestriction applyGenre(Object movieType) {
-        return new GenreRestriction(List.of((MovieEvent.GenreType) movieType));
+        return new GenreRestriction(Set.of((MovieEvent.GenreType) movieType));
     }
 
 

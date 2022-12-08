@@ -5,7 +5,7 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.MovieSession;
-import bot.backend.nodes.restriction.TypedEnum;
+import bot.backend.nodes.restriction.utils.TypedEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -56,6 +56,12 @@ public class MovieEvent extends Event {
 
         private String realName;
 
+        private String tagName;
+
+        @Override
+        public String getTagName() {
+            return tagName;
+        }
     }
 
 
