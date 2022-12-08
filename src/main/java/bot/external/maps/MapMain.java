@@ -1,6 +1,7 @@
 package bot.external.maps;
 
 import bot.backend.nodes.categories.Category;
+import bot.controllers.LocationController;
 import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
 import bot.services.TagService;
@@ -15,21 +16,28 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 public class MapMain {
-    private static final List<String> foodCategories = List.of(
+    public static final List<String> foodCategories = List.of(
             "фастфуд", "японскийресторан", "азиатскийресторан", "кавказскийрестоан", "европейскаякухня", "суши", "пицца", "бургеры",
             "шашлыки", "рыбныйрестроан", "попитькоктейли", "шаверма", "французскийресторан", "итальянскаийресторан", "русскаякухня",
             "тайскаякухня", "китайскийресторан", "японскийресторан", "бар", "ресторан", "кафе"
     );
 
+    public static final List<String> sportCategories = List.of(
+        "футбольноеполе", "баскетбольнаяплощадка", "каток", "теннисныйкорт"
+    );
+
+    public static final List<String> cultureCategories = List.of(
+            "театр", "опера", "выставка", "мюзикл"
+    );
+
     private static final List<String> gg = List.of("шины");
 
     public static void main(String[] args) throws JsonProcessingException {
-        collectDataCsv("фастфуд", new BufferedWriter(new OutputStreamWriter(System.out)));
     }
 
-    public static List<LocationEntity> collectAllEntities(Category category, TagService tagService) {
+    public static List<LocationEntity> collectAllEntities(List<String> categoriesList, Category category, TagService tagService) {
         List<LocationEntity> locationEntities = new ArrayList<>();
-        MapMain.foodCategories.forEach(place -> locationEntities.addAll(collectData(category, place, tagService)));
+        categoriesList.forEach(place -> locationEntities.addAll(collectData(category, place, tagService)));
 
         Map<Pair<Double, Double>, Set<TagEntity>> locationTags = new HashMap<>();
         Map<Pair<Double, Double>, LocationEntity> locations = new HashMap<>();
@@ -70,7 +78,7 @@ public class MapMain {
 
     public static List<LocationEntity> collectData(Category category, String word, TagService tagService) {
         MapRequest mapRequest = new MapRequest(word);
-        mapRequest.setResultsSize(30);
+        mapRequest.setResultsSize(20);
 
         MapService service = new MapService(mapRequest);
         MapResponse mapResponse = service.sendMapRequest();

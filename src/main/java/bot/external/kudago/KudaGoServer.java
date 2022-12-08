@@ -6,6 +6,7 @@ import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.Movie;
 import bot.backend.nodes.movie.MovieSession;
+import bot.entities.MovieEntity;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -71,9 +72,8 @@ public class KudaGoServer {
         return locations;
     }
 
-
-    public List<MovieSession> getMoviesByGenres(Set<String> genres) throws IOException {
-        final String API_URL = "https://kudago.com/public-api/v1.4/movies/?location=spb&fields=id,title,genres,running_time&page_size=100";
+    public List<MovieResponse> getAllFilms() throws IOException {
+        final String API_URL = "https://kudago.com/public-api/v1.4/movies/?location=spb&fields=id,title,genres,running_time&page_size=100&actual_since=1655924400";
         JSONObject jsonObject = new JSONObject(getRequest(API_URL));
         JSONArray myResponse = jsonObject.getJSONArray("results");
         List<MovieResponse> responses = new ArrayList<>();
@@ -91,16 +91,27 @@ public class KudaGoServer {
                 System.out.println(e.getMessage());
             }
         }
-
-        List<MovieResponse> movieResponses =  responses.stream().filter(movieResponse ->
-                movieResponse.genres.stream().anyMatch(it -> genres.contains(it.name))).collect(Collectors.toList());
-
-        return movieResponses.stream().map(this::createMovieSession).collect(Collectors.toList());
-
+        return responses;
     }
 
-    private MovieSession createMovieSession(MovieResponse movieResponse) {
-        final String API_URL = "https://kudago.com/public-api/v1.4/movies/" + movieResponse.id + "/showings/?expand=movie,place";
+
+    public List<MovieSession> getMoviesByGenres(List<MovieResponse> responses, Set<String> genres) throws IOException {
+        List<MovieResponse> movieResponses =  responses.stream().filter(movieResponse ->
+                movieResponse.genres.stream().anyMatch(it -> genres.contains(it.slug)))
+                .peek(it -> it.genres = it.genres.stream().filter(genre -> MainKudaGo.genres.contains(genre.slug)).collect(Collectors.toSet())).collect(Collectors.collectingAndThen(
+                        Collectors.toCollection(() -> new TreeSet<MovieResponse>(Comparator.comparing(MovieResponse::getTitle))),
+                        ArrayList::new));
+
+        List<List<MovieSession>> sessions = movieResponses.stream().map(this::createMovieSession).collect(Collectors.toList());
+        List<MovieSession> sessionList = new ArrayList<>();
+        for (List<MovieSession> session : sessions) {
+            sessionList.addAll(session);
+        }
+        return sessionList;
+    }
+
+    private List<MovieSession> createMovieSession(MovieResponse movieResponse) {
+        final String API_URL = "https://kudago.com/public-api/v1.4/movies/" + movieResponse.id + "/showings/?expand=movie,place&page_size=50&actual_since=1655924400&location=spb";
         JSONObject jsonObject = null;
         try {
             jsonObject = new JSONObject(getRequest(API_URL));
@@ -118,17 +129,17 @@ public class KudaGoServer {
                         movieResponse.title,
                         movieResponse.runningTime,
                         // TODO:: ВОТ ТУТ МАПИМ НАЗВАНИЕ НАДО ПОМАТИТЬ С ENUM, ОБСУДИ С ЖЕНЕЙ
-                        movieResponse.genres.stream().map(it-> MovieEvent.GenreType.map.get(it.slug)).collect(Collectors.toList()));
+                        movieResponse.genres.stream().map(it-> MovieEvent.GenreType.map.get(it.slug)).collect(Collectors.toSet()));
                 JSONObject place = current.getJSONObject("place");
                 MovieSession session = new MovieSession(movie,
                         new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),
                         new String(place.getString("title").getBytes(), StandardCharsets.UTF_8));
-                return session;
+                responses.add(session);
             } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
-        return null;
+        return responses;
     }
 
 

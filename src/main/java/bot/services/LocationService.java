@@ -26,6 +26,11 @@ public class LocationService {
         return locationRepository.save(location);
     }
 
+    public void deleteById(long id) {
+        locationRepository.deleteById(id);
+    }
+
+
     public List<LocationEntity> getAllLocations() {
         return locationRepository.findAll();
     }
@@ -40,19 +45,20 @@ public class LocationService {
         validLocations = validLocations.stream()
                 .filter(loc -> {
                     switch (startDay) {
-                        case MONDAY -> {
+                        case MONDAY: {
                             return checkTimeAvailability(loc.timeMondayOpen, loc.timeMondayClose, timeFrom, timeTo);
-                        } case TUESDAY -> {
+                        }
+                        case TUESDAY: {
                             return checkTimeAvailability(loc.timeTuesdayOpen, loc.timeTuesdayClose, timeFrom, timeTo);
-                        } case WEDNESDAY -> {
+                        } case WEDNESDAY: {
                             return checkTimeAvailability(loc.timeWednesdayOpen, loc.timeWednesdayClose, timeFrom, timeTo);
-                        } case THURSDAY -> {
+                        } case THURSDAY: {
                             return checkTimeAvailability(loc.timeThursdayOpen, loc.timeThursdayClose, timeFrom, timeTo);
-                        } case FRIDAY -> {
+                        } case FRIDAY: {
                             return checkTimeAvailability(loc.timeFridayOpen, loc.timeFridayClose, timeFrom, timeTo);
-                        } case SATURDAY -> {
+                        } case SATURDAY: {
                             return checkTimeAvailability(loc.timeSaturdayOpen, loc.timeSaturdayClose, timeFrom, timeTo);
-                        } case SUNDAY -> {
+                        } case SUNDAY: {
                             return checkTimeAvailability(loc.timeSundayOpen, loc.timeSaturdayClose, timeFrom, timeTo);
                         }
                     }

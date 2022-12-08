@@ -11,10 +11,6 @@ import java.util.stream.Collectors;
 
 public class KudaGoConverter {
 
-    List<String> genres =  List.of(
-        "drama", "comedy", "musical", "adventure", "thriller", "horror", "crime", "fantasy", "documentary"
-    );
-
     public Location convertToLocation(JSONObject location, Category category, Integer rating) {
         JSONObject coords = location.getJSONObject("coords");
         return new Location(

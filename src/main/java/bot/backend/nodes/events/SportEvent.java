@@ -23,9 +23,7 @@ public class SportEvent extends ActiveEvent {
         FOOTBALL("Футбол"),
         BASKETBALL("Баскетбол"),
         HOCKEY("Хоккей"),
-        TENNIS("Теннис"),
-        FESTIVAL("Фестиваль"),
-        FAIRS("Ярмарки");
+        TENNIS("Теннис");
 
         public static Map<String, SportType> map = new HashMap<>();
 
@@ -34,6 +32,7 @@ public class SportEvent extends ActiveEvent {
         }
 
         private String realName;
+
     }
 
 }

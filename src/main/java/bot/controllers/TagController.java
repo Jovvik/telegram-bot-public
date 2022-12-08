@@ -2,6 +2,7 @@ package bot.controllers;
 
 import bot.entities.TagEntity;
 import bot.external.kudago.MainKudaGo;
+import bot.external.maps.MapMain;
 import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,29 +15,45 @@ import java.util.List;
 @RequiredArgsConstructor
 public class TagController {
 
-    private static final List<String> foodCategories = List.of(
-            "фастфуд", "японскийресторан", "азиатскийресторан", "кавказскийрестоан", "европейскаякухня", "суши", "пицца", "бургеры",
-            "шашлыки", "рыбныйрестроан", "попитькоктейли", "шаверма", "французскийресторан", "итальянскаийресторан", "русскаякухня",
-            "тайскаякухня", "китайскийресторан", "японскийресторан", "бар", "ресторан", "кафе"
-    );
-
     private final TagService tagService;
+
+
+    @GetMapping("/addTagsSport")
+    public void fillTableSport() {
+        List<TagEntity> tags = new ArrayList<>();
+        for (String category : MapMain.sportCategories) {
+            TagEntity tagEntity = new TagEntity();
+            tagEntity.name = category;
+            tags.add(tagEntity);
+        }
+        tags.forEach(tagService::save);
+    }
+
+    @GetMapping("/addTagsCulture")
+    public void fillTableCulture() {
+        List<TagEntity> tags = new ArrayList<>();
+        for (String category : MapMain.cultureCategories) {
+            TagEntity tagEntity = new TagEntity();
+            tagEntity.name = category;
+            tags.add(tagEntity);
+        }
+    }
 
     @GetMapping("/addTags")
     public void fillTable() {
         List<TagEntity> tags = new ArrayList<>();
-        for (String category : foodCategories) {
+        for (String category : MapMain.foodCategories) {
             TagEntity tagEntity = new TagEntity();
             tagEntity.name = category;
             tags.add(tagEntity);
         }
 
-        for (String tag : MainKudaGo.kudaGoCategories) {
-            TagEntity tagEntity = new TagEntity();
-            tagEntity.name = tag;
-            tags.add(tagEntity);
-        }
-        tags.forEach(tagService::save);
+//        for (String tag : MainKudaGo.kudaGoCategories) {
+//            TagEntity tagEntity = new TagEntity();
+//            tagEntity.name = tag;
+//            tags.add(tagEntity);
+//        }
+//        tags.forEach(tagService::save);
     }
 
 }

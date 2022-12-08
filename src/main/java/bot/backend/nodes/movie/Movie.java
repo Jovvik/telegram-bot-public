@@ -3,15 +3,16 @@ package bot.backend.nodes.movie;
 import bot.backend.nodes.events.MovieEvent;
 import lombok.AllArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
+
 
 @AllArgsConstructor
 public class Movie {
 
-    String title;
+    public String title;
 
-    Integer runningTime;
+    public Integer runningTime;
 
-    List<MovieEvent.GenreType> genres;
+    public Set<MovieEvent.GenreType> genres;
 
 }

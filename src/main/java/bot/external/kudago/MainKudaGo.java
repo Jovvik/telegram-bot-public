@@ -1,18 +1,21 @@
 package bot.external.kudago;
 
-import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.MovieSession;
-import com.fasterxml.jackson.core.JsonProcessingException;
+import bot.converters.MovieConverter;
+import bot.entities.MovieEntity;
+import bot.services.GenreService;
 
-import java.beans.Encoder;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.Arrays;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 public class MainKudaGo {
+
+    public static Set<String> genres =  Set.of(
+            "drama", "comedy", "musical", "adventure", "thriller", "horror", "crime", "fantasy", "documentary"
+    );
 
     public static final List<String> kudaGoCategories =  List.of(
             "theatre", // театры
@@ -31,7 +34,24 @@ public class MainKudaGo {
 //        List<Location> locations = server.getPlaceByCategory("attractions", Category.CULTURE);
 //        List<Location> locations = server.getPlaceByCategory("museums", Category.CULTURE);
 
-        List<MovieSession> movieSessions = server.getMoviesByGenres(Set.of("драма"));
+
 //        System.out.println(locations.get(0).getName());
+    }
+
+    public static List<MovieEntity> fillMovies(Set<String> names, GenreService genreService)  {
+        try {
+            List<MovieResponse> responses = server.getAllFilms();
+            List<MovieEntity> entities = new ArrayList<>();
+            for (String name : names) {
+                System.out.println("fill genre:" + name);
+                entities.addAll(server.getMoviesByGenres(responses, Set.of(name)).stream()
+                        .map(it -> MovieConverter.convertToMovieEntity(it, genreService))
+                        .collect(Collectors.toList()));
+            }
+            return entities;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 }

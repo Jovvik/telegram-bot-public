@@ -4,7 +4,9 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.movie.MovieSession;
+import bot.backend.nodes.restriction.TypedEnum;
 import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.util.Arrays;
 import java.util.HashMap;
@@ -29,26 +31,29 @@ public class MovieEvent extends Event {
     }
 
     @AllArgsConstructor
-    public enum GenreType {
-        ADVENTURE("Приключения"),
-        COMEDY("Комедия"),
-        CRIME("Боевик"),
-        DOCUMENTARY("Документальный"),
-        DRAMA("Драма"),
-        MELODRAMA("Мелодрама"),
-        FANTASY("Фантастика"),
-        HORROR("Хорор"),
-        MUSICAL("Мюзикл"),
-        FAMILY("Семейное"),
-        THRILLER("Триллер");
+    public enum GenreType implements TypedEnum {
+        ADVENTURE("Приключения", "adventure"),
+        COMEDY("Комедия", "comedy"),
+        CRIME("Боевик", "crime"),
+        DOCUMENTARY("Документальный", "documentary"),
+        DRAMA("Драма", "drama"),
+//        MELODRAMA("Мелодрама", ),
+        FANTASY("Фантастика", "fantasy"),
+        HORROR("Хорор", "horror"),
+        MUSICAL("Мюзикл", "musical"),
+//        FAMILY("Семейное"),
+        THRILLER("Триллер", "thriller");
 
         public static Map<String, MovieEvent.GenreType> map = new HashMap<>();
 
         static {
-            Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
+            Arrays.stream(values()).forEach(it -> map.put(it.tagName, it));
         }
 
         private String realName;
+
+        @Getter
+        private final String tagName;
 
     }
 

@@ -6,10 +6,10 @@ import lombok.AllArgsConstructor;
 @AllArgsConstructor
 public class MovieSession {
 
-    Movie movie;
+    public Movie movie;
 
-    Event.Time time;
+    public Event.Time time;
 
     // NOTE: This location doesn't have times and rating please understand this
-    String location;
+    public String location;
 }

@@ -13,5 +13,7 @@ import java.util.Set;
 @Repository
 public interface LocationRepository extends JpaRepository<LocationEntity, Long> {
 
-    public List<LocationEntity> findByCategory(Category category);
+    List<LocationEntity> findByCategory(Category category);
+
+    void deleteAllByCategory(Category category);
 }

@@ -1,9 +1,11 @@
 package bot.external.kudago;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import lombok.Getter;
 import lombok.ToString;
 
 import java.util.List;
+import java.util.Set;
 
 public class MovieResponse {
 
@@ -11,13 +13,14 @@ public class MovieResponse {
     Integer id;
 
     @JsonProperty("title")
+    @Getter
     String title;
 
     @JsonProperty("running_time")
     Integer runningTime;
 
     @JsonProperty("genres")
-    List<Genre> genres;
+    Set<Genre> genres;
 
     public static class Genre {
 
