@@ -20,8 +20,6 @@ public class OneFoodEvent extends TimeTableSchema {
     }
 
     public boolean canUse(List<QuestionResult> questionResults) {
-        return questionResults.stream().anyMatch(
-                questionResult -> questionResult.restriction instanceof FoodTypeRestriction
-        );
+        return filterByEventType(questionResults, FoodEvent.class).size() != 0;
     }
 }

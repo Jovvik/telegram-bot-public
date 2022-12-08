@@ -1,11 +1,10 @@
 package bot.external.spreadsheets;
 
 
-import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.*;
 import bot.backend.nodes.events.Event.*;
-import bot.backend.nodes.events.FoodEvent;
-import bot.backend.nodes.events.MovieEvent;
-import bot.backend.nodes.events.SportEvent;
+import bot.backend.nodes.events.CultureEvent.CultureType;
+import bot.backend.nodes.events.FoodEvent.KitchenType;
 import bot.backend.nodes.restriction.*;
 import bot.backend.nodes.restriction.GenreRestriction;
 import bot.backend.nodes.restriction.KitchenRestriction;
@@ -79,6 +78,27 @@ public class SpreadSheetUtils {
         return null;
     }
 
+    public String plusMinusDay(String value, String change) {
+        try {
+            var format = DateTimeFormatter.ofPattern("dd.MM.yyyy");
+            LocalDate date = parseDate(value);
+            if (change.equals("-1d")) {
+                if (LocalDate.now().isEqual(date)) {
+                    return LocalDate.now().format(format);
+                }
+                return date.minusDays(1).format(format);
+            } else {
+                if (LocalDate.now().plusDays(29).isBefore(date)) {
+                    return date.format(format);
+                }
+                return date.plusDays(1).format(format);
+            }
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return null;
+    }
+
     public TimeRestriction applyTime(Object time) {
         return new TimeRestriction((Event.Time) time);
     }
@@ -125,7 +145,7 @@ public class SpreadSheetUtils {
     }
 
     /**
-     *      CHOOSE TEST
+     * CHOOSE TEST
      */
 
     public Boolean parseChoose(String value) {
@@ -145,13 +165,13 @@ public class SpreadSheetUtils {
     public KitchenRestriction applyIntegers(Object values) {
         List<Integer> ints = (List<Integer>) values;
         return new KitchenRestriction(ints.stream()
-                .map(i -> KitchenRestriction.KitchenType.values()[i - 1])
+                .map(i -> KitchenType.values()[i - 1])
                 .collect(Collectors.toList())
         );
     }
 
     /**
-     *    MOVIE QUESTIONS
+     * MOVIE QUESTIONS
      **/
 
     public MovieEvent.GenreType parseGenre(String sport) {
@@ -169,6 +189,7 @@ public class SpreadSheetUtils {
     public Integer parseCount(String count) {
         return Integer.parseInt(count);
     }
+
     public CountRestriction applyCount(Object count) {
         return new CountRestriction((Integer) count);
     }
@@ -187,12 +208,12 @@ public class SpreadSheetUtils {
     /**
      * KITCHEN TYPE
      */
-    public KitchenRestriction.KitchenType parseKitchen(String kitchen) {
-        return KitchenRestriction.KitchenType.map.get(kitchen);
+    public KitchenType parseKitchen(String kitchen) {
+        return KitchenType.map.get(kitchen);
     }
 
     public KitchenRestriction applyKitchen(Object placeType) {
-        return new KitchenRestriction(List.of((KitchenRestriction.KitchenType) placeType));
+        return new KitchenRestriction(List.of((KitchenType) placeType));
     }
 
     /**
@@ -225,5 +246,16 @@ public class SpreadSheetUtils {
 
     public FoodTypeRestriction applyFoodType(Object foodType) {
         return new FoodTypeRestriction((FoodEvent.FoodType) foodType);
+    }
+
+    /**
+     * Culture type
+     */
+    public CultureType parseCulture(String culture) {
+        return CultureType.map.get(culture);
+    }
+
+    public CultureRestriction applyCultureType(Object cultureType) {
+        return new CultureRestriction(List.of((CultureType) cultureType));
     }
 }

@@ -20,6 +20,7 @@ public class MassEventSchema extends TimeTableSchema {
 
     // TODO
     public boolean canUse(List<QuestionResult> questionResults) {
-        return true;
+        return filterByEventType(questionResults, CrowdEvent.class).size() != 0 &&
+                filterByEventType(questionResults, FoodEvent.class).size() != 0;
     }
 }

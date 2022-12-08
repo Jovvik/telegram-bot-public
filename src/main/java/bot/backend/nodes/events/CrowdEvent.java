@@ -1,6 +1,7 @@
 package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 
@@ -10,12 +11,11 @@ import java.util.Map;
 
 public class CrowdEvent extends ActiveEvent {
 
+    @RequiredField
+    public CrowdEventType type;
+
     public CrowdEvent(Location location, Category category, Time time) {
         super(location, category, time);
-    }
-
-    public enum MassEventType {
-        FOOTBALL, BASKETBALL, FESTIVAL, FAIR, HOCKEY, TENNIS, UNKNOWN
     }
 
     @AllArgsConstructor

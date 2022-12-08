@@ -3,26 +3,26 @@ package bot.backend.nodes.events;
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
+import bot.backend.nodes.restriction.TypedEnum;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Getter
 @Setter
 public class FoodEvent extends Event {
 
-    @RequiredField
-    public KitchenInfo kitchenInfo;
+    public List<KitchenType> kitchenTypes;
 
     @RequiredField
     public Budget budget;
 
-    @RequiredField
-    public FoodPlaceType foodPlaceTypes;
+    public List<FoodPlaceType> foodPlaceTypes;
 
     private FoodEvent(Location location, Category category, Time time) {
         super(location, category, time);
@@ -31,37 +31,22 @@ public class FoodEvent extends Event {
     public FoodEvent(Location location,
                      Category category,
                      Time time,
-                     KitchenInfo kitchenInfo,
+                     List<KitchenType> kitchenTypes,
                      Budget budget,
-                     FoodPlaceType foodPlaceTypes
+                     List<FoodPlaceType> foodPlaceTypes
     ) {
         super(location, category, time);
-        this.kitchenInfo = kitchenInfo;
+        this.kitchenTypes = kitchenTypes;
         this.budget = budget;
         this.foodPlaceTypes = foodPlaceTypes;
     }
 
     @AllArgsConstructor
-    @Getter
-    public static class KitchenInfo {
-        public Kitchen kitchen;
-        public SubKitchen subKitchen;
-
-        public enum Kitchen {
-            EUROPEAN, RUSSIAN, ASIAN, CAUCASIAN, ALL,
-        }
-
-        public enum SubKitchen {
-            SUSHI, PIZZA, BURGERS, MEAT, FISH, COCKTAIL
-        }
-    }
-
-    @AllArgsConstructor
-    public enum FoodPlaceType {
-        RESTAURANT("Ресторан"),
-        BAR("Бар"),
-        JUNK_FOOD("Фастфуд"),
-        CAFE("Кафе");
+    public enum FoodPlaceType implements TypedEnum {
+        RESTAURANT("Ресторан", "ресторан"),
+        BAR("Бар", "бар"),
+        JUNK_FOOD("Фастфуд", "фастфуд"),
+        CAFE("Кафе", "кафе");
 
         public static Map<String, FoodPlaceType> map = new HashMap<>();
 
@@ -70,16 +55,20 @@ public class FoodEvent extends Event {
         }
 
         private final String realName;
+
+        @Getter
+        private final String tagName;
     }
 
     @AllArgsConstructor
-    public enum FoodType {
-        SUSHI("Суши"),
-        BURGERS("Бургеры"),
-        PIZZA("Пицца"),
-        MEAT("Мясо"),
-        FISH("Рыба"),
-        COCKTAILS("Коктейли");
+    public enum FoodType implements TypedEnum {
+        SUSHI("Суши", "cуши"),
+        BURGERS("Бургеры", "бургеры"),
+        PIZZA("Пицца", "пицца"),
+        MEAT("Мясо", "шашлыки"),
+        FISH("Рыба", "рыбныйрестроан"),
+        SHAVERMA("Шаверма", "шаверма"),
+        COCKTAILS("Коктейли", "попитькоктейли");
 
         public static Map<String, FoodType> map = new HashMap<>();
 
@@ -88,5 +77,36 @@ public class FoodEvent extends Event {
         }
 
         private final String realName;
+
+        @Getter
+        private final String tagName;
+    }
+
+    @AllArgsConstructor
+    public enum KitchenType implements TypedEnum {
+        ITALIAN("Итальянская", "итальянскаийресторан"),
+        JAPANESE("Японская", "японскийресторан"),
+        RUSSIAN("Русская", "русскаякухня"),
+        ASIAN("Азиатская", "азиатскийресторан"),
+        EUROPEAN("Европейская", "европейскаякухня"),
+        CAUCASIAN("Кавказская", "кавказскийрестоан"),
+        FRENCH("Французская", "французскийресторан"),
+        THAI("Тайская", "тайскаякухня"),
+        CHINESE("Китайская", "китайскийресторан"),
+        ALL("Не принципиально", null);
+
+        public final static List<KitchenType> european = List.of(ITALIAN, RUSSIAN, FRENCH);
+        public final static List<KitchenType> asian = List.of(JAPANESE, THAI, CHINESE);
+
+        public static Map<String, KitchenType> map = new HashMap<>();
+
+        static {
+            Arrays.stream(values()).forEach(it -> map.put(it.realName, it));
+        }
+
+        private final String realName;
+
+        @Getter
+        private final String tagName;
     }
 }

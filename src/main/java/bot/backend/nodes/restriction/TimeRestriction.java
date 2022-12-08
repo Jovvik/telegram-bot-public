@@ -1,14 +1,16 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.Event.Time;
+import lombok.Getter;
 
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
 
-
 public class TimeRestriction extends Restriction<Time> {
 
+    @Getter
     private final Time time;
 
     public TimeRestriction(Time time) {
@@ -35,5 +37,10 @@ public class TimeRestriction extends Restriction<Time> {
                         )
                 )
                 .collect(Collectors.toList());
+    }
+
+    @Override
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }

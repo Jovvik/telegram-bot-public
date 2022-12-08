@@ -1,5 +1,7 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
+
 import java.time.LocalDate;
 import java.util.List;
 
@@ -19,5 +21,9 @@ public class DateRestriction extends Restriction<LocalDate> {
     @Override
     public List<LocalDate> validValues() {
         return List.of(date);
+    }
+
+    public Class<? extends Event> getEventType() {
+        return Event.class;
     }
 }

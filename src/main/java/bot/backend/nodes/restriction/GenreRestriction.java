@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.MovieEvent;
 import lombok.AllArgsConstructor;
 
@@ -20,5 +21,8 @@ public class GenreRestriction extends Restriction<MovieEvent.GenreType> {
         return movieTypes;
     }
 
-
+    @Override
+    public Class<? extends Event> getEventType() {
+        return MovieEvent.class;
+    }
 }

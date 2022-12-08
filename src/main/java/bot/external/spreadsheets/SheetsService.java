@@ -20,6 +20,7 @@ import com.google.api.services.sheets.v4.SheetsScopes;
 import com.google.api.services.sheets.v4.model.ValueRange;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.stereotype.Service;
 
 import java.io.*;
 import java.security.GeneralSecurityException;
@@ -28,8 +29,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.function.BiFunction;
 
-@Component
-public class SheetsQuickstart {
+@Service
+public class SheetsService {
     private static final String APPLICATION_NAME = "bed-project";
     private static final JsonFactory JSON_FACTORY = GsonFactory.getDefaultInstance();
     private static final String TOKENS_DIRECTORY_PATH = "src/main/resources/google/tokens";
@@ -37,14 +38,11 @@ public class SheetsQuickstart {
     private static final List<String> SCOPES = Collections.singletonList(SheetsScopes.SPREADSHEETS_READONLY);
     private static final String CREDENTIALS_FILE_PATH = "src/main/resources/google/credentials.json";
 
-    private static String SHEET_ID_STATIC;
-
     @Value("${sheetId}")
-    public void setNameStatic(String name) {
-        SheetsQuickstart.SHEET_ID_STATIC = name;
-    }
+    private String SHEET_ID_STATIC;
 
-    private static Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
+
+    private Credential getCredentials(final NetHttpTransport HTTP_TRANSPORT) throws IOException {
         // Load client secrets.
         InputStream in = new FileInputStream(CREDENTIALS_FILE_PATH);
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(JSON_FACTORY, new InputStreamReader(in));
@@ -59,7 +57,7 @@ public class SheetsQuickstart {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private static List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, BaseQuestion<?>> toQuestionFunction) throws GeneralSecurityException, IOException {
+    private List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, BaseQuestion<?>> toQuestionFunction) throws GeneralSecurityException, IOException {
         final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
         final String range = spreadSheetConfig.getListWithData() + "!" + spreadSheetConfig.getRange();
         Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
@@ -83,7 +81,7 @@ public class SheetsQuickstart {
         }
     }
 
-    public static List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+    public List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
         return getQuestions(spreadSheetConfig, (row, ssc) -> {
             if (row.isEmpty()) return null;
             try {

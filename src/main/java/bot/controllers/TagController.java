@@ -1,11 +1,9 @@
 package bot.controllers;
 
-import bot.backend.nodes.location.Location;
 import bot.entities.TagEntity;
 import bot.external.kudago.MainKudaGo;
 import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -19,7 +17,7 @@ public class TagController {
     private static final List<String> foodCategories = List.of(
             "фастфуд", "японскийресторан", "азиатскийресторан", "кавказскийрестоан", "европейскаякухня", "суши", "пицца", "бургеры",
             "шашлыки", "рыбныйрестроан", "попитькоктейли", "шаверма", "французскийресторан", "итальянскаийресторан", "русскаякухня",
-            "тайскаякухня", "китайскийресторан", "японскийресторан", "бар", "столовая"
+            "тайскаякухня", "китайскийресторан", "японскийресторан", "бар", "ресторан", "кафе"
     );
 
     private final TagService tagService;

@@ -4,7 +4,6 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 import java.util.List;
 import java.util.Set;
@@ -35,5 +34,12 @@ public class Location {
 
     private Integer rating;
 
-
+    @Override
+    public String toString() {
+        return "Location{" +
+                "name='" + name + '\'' +
+                ", url='" + url + '\'' +
+                ", address='" + address + '\'' +
+                '}';
+    }
 }

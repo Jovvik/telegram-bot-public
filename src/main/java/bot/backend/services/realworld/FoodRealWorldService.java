@@ -1,75 +1,67 @@
 package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.Description;
 import bot.backend.nodes.description.FoodDescription;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
-import bot.backend.nodes.restriction.KitchenRestriction;
-import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
-import org.springframework.stereotype.Component;
+import bot.services.LocationService;
+import bot.services.TagService;
+import org.springframework.stereotype.Service;
+import bot.backend.nodes.events.FoodEvent.KitchenType;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
+@Service
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 
-    // TODO change KitchenType to KitchenTypeInfo (maybe change values in KitchenTypeInfo)
-    private String kitchenToString(KitchenRestriction.KitchenType kitchen) {
-        switch (kitchen) {
-            case JAPANESE:
-                return "японскийресторан";
-            case ITALIAN:
-                return "итальянскийресторан";
-            case RUSSIAN:
-                return "русскаякухня";
-            case ALL:
-                return "столовая";
-        }
+    private final Set<KitchenType> kitchenTypes = new HashSet<>();
+    private final Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
 
-        return "столовая";
+    public FoodRealWorldService(LocationService locationService, TagService tagService) {
+        super(locationService, tagService);
     }
 
-    @Override
-    public TablePredicate createPredicate(Description<FoodEvent> description) {
-        Set<TagEntity> tags = new HashSet<>();
 
+    @Override
+    public TablePredicate createPredicate(FoodDescription description) {
+        Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?>> restrictions = new ArrayList<>(description.restrictions.values());
 
         restrictions.forEach(res -> {
             if (res instanceof KitchenRestriction) {
-                res.validValues().forEach(type -> {
-                    TagEntity tag = tagService.findByName(
-                            kitchenToString((KitchenRestriction.KitchenType) type)
-                    ).orElse(null);
-                    tags.add(tag);
-                });
+                tags.addAll(addTagsFromType(res));
+                res.validValues().forEach(
+                        type -> kitchenTypes.add((KitchenType) type));
+            } else if (res instanceof FoodPlaceTypeRestriction) {
+                tags.addAll(addTagsFromType(res));
+                res.validValues().forEach(
+                        type -> foodPlaceTypes.add((FoodEvent.FoodPlaceType) type));
+            } else if (res instanceof FoodTypeRestriction) {
+                tags.addAll(addTagsFromType(res));
             }
         });
 
-        return new TablePredicate(Category.FOOD, tags,0, 24 * 60);
+        return new TablePredicate(Category.FOOD, tags,0, 24 * 60,
+                this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
     }
 
     @Override
-    public FoodEvent generateEvent(Description<FoodEvent> description) {
+    public FoodEvent generateEvent(FoodDescription description) {
         TablePredicate predicate = this.createPredicate(description);
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
 
-        // TODO change to new constructor
-
         return new FoodEvent(
                         matchedLocations.get(0),
                         Category.FOOD,
                         new Event.Time(predicate.getTimeFrom(), predicate.getTimeTo()),
+                        new ArrayList<>(kitchenTypes),
                         null,
-                        null,
-                        null
+                        new ArrayList<>(foodPlaceTypes)
                 );
     }
 

@@ -1,7 +1,7 @@
 package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.utils.RequiredField;
 import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 
@@ -10,6 +10,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SportEvent extends ActiveEvent {
+
+    @RequiredField
+    public SportEvent sportEvent;
+
     public SportEvent(Location location, Category category, Time time) {
         super(location, category, time);
     }

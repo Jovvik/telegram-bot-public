@@ -2,7 +2,6 @@ package bot.backend.nodes.events;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.location.Location;
-import lombok.experimental.SuperBuilder;
 
 
 public class ActiveEvent extends OutDoorEvent {
@@ -10,6 +9,7 @@ public class ActiveEvent extends OutDoorEvent {
         super(location, category, time);
     }
 
+    // TODO wait returning
     public enum ActivityType {
         SPORT, ROPE_PARK, YOGA, SNOWBOARD, RAFTING, DANCING
     }
