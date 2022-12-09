@@ -13,7 +13,7 @@ import java.util.Set;
 
 public class LocationConverter {
 
-    public Set<TagEntity> stringToTags(Set<String> stringTags, TagService tagService) {
+    public static Set<TagEntity> stringToTags(Set<String> stringTags, TagService tagService) {
         Set<TagEntity> tags = new HashSet<>();
 
         stringTags.forEach(str -> {
@@ -25,13 +25,13 @@ public class LocationConverter {
         return tags;
     }
 
-    private Set<String> tagsToString(Set<TagEntity> entityTags) {
+    private static Set<String> tagsToString(Set<TagEntity> entityTags) {
         Set<String> res = new HashSet<>();
         entityTags.forEach(t -> res.add(t.name));
         return res;
     }
 
-    private List<Event.Time> stringToTime(Integer timeMondayOpen, Integer timeMondayClose,
+    private static List<Event.Time> stringToTime(Integer timeMondayOpen, Integer timeMondayClose,
                                              Integer timeTuesdayOpen, Integer timeTuesdayClose,
                                              Integer timeWednesdayOpen, Integer timeWednesdayClose,
                                              Integer timeThursdayOpen, Integer timeThursdayClose,
@@ -52,7 +52,7 @@ public class LocationConverter {
         return times;
     }
 
-    public LocationEntity convertToEntity(Location location, TagService tagService) {
+    public static LocationEntity convertToEntity(Location location, TagService tagService) {
         LocationEntity entity = new LocationEntity();
         List<Event.Time> times = location.getTimes();
 
@@ -72,7 +72,7 @@ public class LocationConverter {
         return entity;
     }
 
-    public Location convertToLocation(LocationEntity entity) {
+    public static Location convertToLocation(LocationEntity entity) {
         return new Location(
                 entity.locationName,
                 tagsToString(entity.tags),

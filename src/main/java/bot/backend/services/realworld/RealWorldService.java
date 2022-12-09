@@ -31,7 +31,6 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
     }
 
     public List<Location> findLocations(TablePredicate predicate) {
-        LocationConverter converter = new LocationConverter();
 
         List<LocationEntity> rawLocationEntities =
                 locationService.getLocations(
@@ -41,7 +40,7 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
                         predicate.getTimeTo(),
                         predicate.getStartDay());
 
-        List<Location> locations = rawLocationEntities.stream().map(converter::convertToLocation).collect(Collectors.toList());
+        List<Location> locations = rawLocationEntities.stream().map(LocationConverter::convertToLocation).collect(Collectors.toList());
         return handleRaw(locations);
     }
 
