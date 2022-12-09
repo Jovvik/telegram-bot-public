@@ -108,9 +108,12 @@ public class TimeTable {
 
     @Override
     public String toString() {
-        return "**Расписание вашего мероприятия:**"
-                + events
-                + createRoute()
-                + createMap();
+        StringBuilder eventsOut = new StringBuilder();
+        events.forEach(event -> eventsOut.append(event.toString()));
+
+        return "**Расписание вашего мероприятия:**" +
+                eventsOut +
+                createRoute() +
+                createMap();
     }
 }
