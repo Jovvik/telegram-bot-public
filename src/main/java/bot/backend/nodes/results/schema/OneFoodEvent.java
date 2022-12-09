@@ -4,6 +4,7 @@ import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.restriction.FoodTypeRestriction;
+import bot.backend.nodes.results.TimeTable;
 
 import java.util.List;
 
@@ -22,4 +23,18 @@ public class OneFoodEvent extends TimeTableSchema {
     public boolean canUse(List<QuestionResult> questionResults) {
         return filterByEventType(questionResults, FoodEvent.class).size() != 0;
     }
+
+    @Override
+    public ComposeResult compose(TimeTable timeTable, Event.Time globalTime) {
+        int duration = globalTime.to - globalTime.from;
+
+        timeTable.events.get(0).time.to = Math.max(
+                timeTable.events.get(0).time.to,
+                timeTable.events.get(0).time.from + MIN_DURATION_IN_MIN
+        );
+
+        return new ComposeResult(timeTable);
+    }
+
+    private static final int MIN_DURATION_IN_MIN = 90;
 }

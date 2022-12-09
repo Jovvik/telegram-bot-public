@@ -11,12 +11,14 @@ import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class CultureRealWordService extends RealWorldService<CultureEvent, CultureDescription> {
 
     public final Set<CultureEvent.CultureType> cultureTypes = new HashSet<>();
@@ -32,9 +34,9 @@ public class CultureRealWordService extends RealWorldService<CultureEvent, Cultu
 
         restrictions.forEach(res -> {
             if (res instanceof CultureRestriction) {
-                tags.addAll(addTagsFromType(res));
-                res.validValues().forEach(
-                        type -> cultureTypes.add((CultureEvent.CultureType) type));
+                var actualRes = (CultureRestriction) res;
+                tags.addAll(addTagsFromType(actualRes.getValue()));
+                cultureTypes.addAll(actualRes.getValue());
             }
         });
 

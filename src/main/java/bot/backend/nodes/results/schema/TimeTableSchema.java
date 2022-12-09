@@ -2,6 +2,8 @@ package bot.backend.nodes.results.schema;
 
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.events.*;
+import bot.backend.nodes.results.TimeTable;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.ArrayList;
@@ -18,6 +20,8 @@ public abstract class TimeTableSchema {
     public abstract List<List<Integer>> possiblePermutations();
 
     public abstract boolean canUse(List<QuestionResult> questionResults);
+
+    public abstract ComposeResult compose(TimeTable timeTable, Event.Time globalTime);
 
 
     public boolean isSuitable(List<Event> events) {
@@ -48,10 +52,38 @@ public abstract class TimeTableSchema {
         return List.of(
                 new FoodAndActiveEvent(),
                 new FoodAndCultureEvent(),
-                new MassEventSchema(),
-                new OneFoodEvent(),
-                new RomanticSchema()
+//                new MassEventSchema(),
+                new OneFoodEvent()
+//                new RomanticSchema()
         );
+    }
+
+    @Getter
+    @NoArgsConstructor
+    public static class ComposeResult {
+        boolean isSuccess = false;
+        TimeTable timeTable = null;
+
+        public ComposeResult(TimeTable timeTable) {
+            this.isSuccess = true;
+            this.timeTable = timeTable;
+        }
+
+    }
+
+    protected <T> List<T> permute(List<Event> events, List<T> values) {
+        for (List<Integer> permutation : possiblePermutations()) {
+            if (IntStream.range(0, permutation.size()).allMatch(
+                    i -> eventOrder()
+                            .get(permutation.get(i) - 1)
+                            .isInstance(events.get(i))
+            )) {
+                return permutation.stream()
+                        .map(i -> values.get(i - 1))
+                        .collect(Collectors.toList());
+            }
+        }
+        return null;
     }
 
 }

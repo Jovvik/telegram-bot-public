@@ -32,15 +32,18 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
 
         restrictions.forEach(res -> {
             if (res instanceof KitchenRestriction) {
-                tags.addAll(addTagsFromType(res));
-                res.validValues().forEach(
-                        type -> kitchenTypes.add((KitchenType) type));
+                var actualRes = (KitchenRestriction) res;
+                tags.addAll(addTagsFromType(actualRes.getValue()));
+                actualRes.validValues().forEach(
+                        type -> kitchenTypes.addAll(type));
             } else if (res instanceof FoodPlaceTypeRestriction) {
-                tags.addAll(addTagsFromType(res));
-                res.validValues().forEach(
-                        type -> foodPlaceTypes.add((FoodEvent.FoodPlaceType) type));
+                var actualRes = (FoodPlaceTypeRestriction) res;
+                tags.addAll(addTagsFromType(actualRes.getValue()));
+                actualRes.validValues().forEach(
+                        type -> foodPlaceTypes.addAll(type));
             } else if (res instanceof FoodTypeRestriction) {
-                tags.addAll(addTagsFromType(res));
+                var actualRes = (FoodTypeRestriction) res;
+                tags.addAll(addTagsFromType(actualRes.getValue()));
             }
         });
 
