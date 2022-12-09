@@ -35,7 +35,8 @@ public class ActiveEvent extends OutDoorEvent {
             FOOTBALL("Футбол", "футбольноеполе"),
             BASKETBALL("Баскетбол", "баскетбольнаяплощадка"),
             HOCKEY("Хоккей", "каток"),
-            TENNIS("Теннис", "теннисныйкорт");
+            TENNIS("Теннис", "теннисныйкорт"),
+            TABLE_TENNIS("Настольный теннис", "настольныйтеннис");
 
             public static Map<String, ActiveType> map = new HashMap<>();
 

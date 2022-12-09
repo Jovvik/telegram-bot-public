@@ -25,5 +25,6 @@ public class MovieEntity {
     @ManyToOne
     public LocationEntity location;
 
+    public String linkToPhoto;
 
 }

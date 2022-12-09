@@ -16,12 +16,11 @@ import java.util.Map;
 
 @Getter
 @Setter
-public class MovieEvent extends Event {
+public class MovieEvent extends CultureEvent {
 
-    @RequiredField
     public MovieSession movieSession;
 
-    private MovieEvent(Location location, Category category, Time time) {
+    public MovieEvent(Location location, Category category, Time time) {
         super(location, category, time);
     }
 

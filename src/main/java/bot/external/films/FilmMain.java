@@ -100,7 +100,8 @@ public class FilmMain {
                         new Movie(
                                 film.getString("title"),
                                 film.getInt("duration"),
-                                genres
+                                genres,
+                                film.getString("poster")
                         )
                 );
             }

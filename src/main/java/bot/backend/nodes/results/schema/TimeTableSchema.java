@@ -50,10 +50,11 @@ public abstract class TimeTableSchema {
 
     public static List<? extends TimeTableSchema> availableSchemas() {
         return List.of(
+                new MovieEventScheme(),
                 new FoodAndActiveEvent(),
-                new FoodAndCultureEvent(),
+                new FoodAndCultureEvent()
 //                new MassEventSchema(),
-                new OneFoodEvent()
+//                new OneFoodEvent()
 //                new RomanticSchema()
         );
     }

@@ -41,12 +41,13 @@ public class TagController {
 
     @GetMapping("/addTags")
     public void fillTable() {
-        List<TagEntity> tags = new ArrayList<>();
-        for (String category : MapMain.foodCategories) {
-            TagEntity tagEntity = new TagEntity();
-            tagEntity.name = category;
-            tags.add(tagEntity);
-        }
+//        List<TagEntity> tags = new ArrayList<>();
+//        for (String category : MapMain.foodCategories) {
+        TagEntity tagEntity = new TagEntity();
+        tagEntity.name = "настольныйтеннис";
+        tagService.save(tagEntity);
+//            tags.add(tagEntity);
+//        }
 
 //        for (String tag : MainKudaGo.kudaGoCategories) {
 //            TagEntity tagEntity = new TagEntity();

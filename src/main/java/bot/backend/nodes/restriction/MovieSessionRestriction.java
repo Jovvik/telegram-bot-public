@@ -1,5 +1,6 @@
 package bot.backend.nodes.restriction;
 
+import bot.backend.nodes.events.CultureEvent;
 import bot.backend.nodes.events.MovieEvent;
 import bot.backend.nodes.events.utils.ClassField;
 
@@ -8,9 +9,9 @@ import java.util.List;
 import java.util.Set;
 
 
-public class GenreRestriction extends Restriction<MovieEvent, Set<MovieEvent.GenreType>> {
+public class MovieSessionRestriction extends Restriction<MovieEvent, Set<MovieEvent.GenreType>> {
 
-    public GenreRestriction(Set<MovieEvent.GenreType> value) {
+    public MovieSessionRestriction(Set<MovieEvent.GenreType> value) {
         super(new ClassField<>(
                 movieEvent -> movieEvent.movieSession.getMovie().getGenres(),
                 (movieEvent, genreTypes) -> movieEvent.movieSession.getMovie().setGenres(genreTypes),

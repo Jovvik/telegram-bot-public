@@ -19,7 +19,8 @@ public class MovieConverter {
              new Movie(
                     entity.title,
                     entity.runningTime,
-                     entity.genres.stream().map(it -> MovieEvent.GenreType.englishMap.get(it.name)).collect(Collectors.toSet())
+                     entity.genres.stream().map(it -> MovieEvent.GenreType.englishMap.get(it.name)).collect(Collectors.toSet()),
+                     entity.linkToPhoto
              ),
              new Event.Time(entity.startTime, entity.startTime + entity.runningTime),
                 locationConverter.convertToLocation(entity.location)
@@ -31,8 +32,10 @@ public class MovieConverter {
         entity.title = session.movie.title;
         entity.runningTime = session.movie.runningTime;
         entity.location = locationConverter.convertToEntity(session.location, tagService);
+        entity.location.id = 1293L;
         entity.genres = session.movie.genres.stream().map(it -> service.findByName(it.getTagName()).get()).collect(Collectors.toSet());
         entity.startTime = session.time.from;
+        entity.linkToPhoto = session.movie.linkToPhoto;
         return entity;
     }
 

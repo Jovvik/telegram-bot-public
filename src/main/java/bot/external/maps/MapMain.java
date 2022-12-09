@@ -23,7 +23,7 @@ public class MapMain {
     );
 
     public static final List<String> sportCategories = List.of(
-        "футбольноеполе", "баскетбольнаяплощадка", "каток", "теннисныйкорт"
+        "футбольноеполе", "баскетбольнаяплощадка", "каток", "теннисныйкорт", "настольныйтеннис"
     );
 
     public static final List<String> cultureCategories = List.of(

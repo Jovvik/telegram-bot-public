@@ -29,8 +29,8 @@ public class LocationController {
         locationEntities.forEach(locationService::save);
     }
 
-    @GetMapping("/addCustomLocation")
-    public void fillCustom() {
+    @GetMapping("/addAvrora")
+    public void fillAvrora() {
         locationService.save(LocationConverter.convertToEntity(new Location(
                 "кинотеатр Аврора",
                 Set.of("кино"),
@@ -45,16 +45,32 @@ public class LocationController {
         ), tagService));
     }
 
+    @GetMapping("/addCustomLocation")
+    public void fillCustom() {
+        locationService.save(LocationConverter.convertToEntity(new Location(
+                "Аэротруба FLYARENA",
+                Set.of(""),
+                Category.CULTURE,
+                59.933938,
+                30.339296,
+                "+7 (921) 942 - 80 - 20",
+                "https://avrora.spb.ru/seances",
+                "Россия, Санкт-Петербург, Невский проспект 60",
+                Collections.nCopies(7, new Event.Time(0, 1440)),
+                1
+        ), tagService));
+    }
+
     @GetMapping("/delete")
     public void deleteByCategory() {
-        for (int i = 388; i <= 411; ++i) {
-            locationService.deleteById(i);
-        }
+        locationService.deleteById(1296);
+        locationService.deleteById(1298);
+        locationService.deleteById(1302);
     }
 
     @GetMapping("/addLocationsSport")
     public void fillTableActive() {
-        List<LocationEntity> locationEntities = MapMain.collectAllEntities(MapMain.sportCategories, Category.ACTIVE, tagService);
+        List<LocationEntity> locationEntities = MapMain.collectAllEntities(List.of("настольныйтеннис"), Category.ACTIVE, tagService);
         locationEntities.forEach(locationService::save);
         System.out.println("complete sports");
     }

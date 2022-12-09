@@ -127,7 +127,8 @@ public class KudaGoServer {
                         movieResponse.title,
                         movieResponse.runningTime,
                         // TODO:: ВОТ ТУТ МАПИМ НАЗВАНИЕ НАДО ПОМАТИТЬ С ENUM, ОБСУДИ С ЖЕНЕЙ
-                        movieResponse.genres.stream().map(it-> MovieEvent.GenreType.englishMap.get(it.slug)).collect(Collectors.toSet()));
+                        movieResponse.genres.stream().map(it-> MovieEvent.GenreType.englishMap.get(it.slug)).collect(Collectors.toSet()),
+                        null);
                 JSONObject place = current.getJSONObject("place");
                 MovieSession session = new MovieSession(movie,
                         new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),

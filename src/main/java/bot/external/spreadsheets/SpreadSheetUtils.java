@@ -6,7 +6,7 @@ import bot.backend.nodes.events.Event.*;
 import bot.backend.nodes.events.CultureEvent.CultureType;
 import bot.backend.nodes.events.FoodEvent.KitchenType;
 import bot.backend.nodes.restriction.*;
-import bot.backend.nodes.restriction.GenreRestriction;
+import bot.backend.nodes.restriction.MovieSessionRestriction;
 import bot.backend.nodes.restriction.KitchenRestriction;
 import bot.backend.nodes.restriction.TimeRestriction;
 import bot.external.spreadsheets.utils.StringList;
@@ -16,7 +16,6 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -183,8 +182,8 @@ public class SpreadSheetUtils {
         return MovieEvent.GenreType.englishMap.get(sport);
     }
 
-    public GenreRestriction applyGenre(Object movieType) {
-        return new GenreRestriction(Set.of((MovieEvent.GenreType) movieType));
+    public MovieSessionRestriction applyGenre(Object movieType) {
+        return new MovieSessionRestriction(Set.of((MovieEvent.GenreType) movieType));
     }
 
 

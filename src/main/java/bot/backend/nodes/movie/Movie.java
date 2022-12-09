@@ -19,4 +19,6 @@ public class Movie {
 
     public Set<MovieEvent.GenreType> genres;
 
+    public String linkToPhoto;
+
 }

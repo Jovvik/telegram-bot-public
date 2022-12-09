@@ -3,25 +3,18 @@ package bot.backend.services.predict;
 import bot.app.utils.data.questions.GeneratedQuestionResult;
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.ActiveDescription;
-import bot.backend.nodes.description.CultureDescription;
-import bot.backend.nodes.description.Description;
-import bot.backend.nodes.description.FoodDescription;
+import bot.backend.nodes.description.*;
 import bot.backend.nodes.events.*;
 import bot.backend.nodes.restriction.Restriction;
 import bot.backend.nodes.restriction.TimeRestriction;
 import bot.backend.nodes.results.TimeTable;
 import bot.backend.nodes.results.schema.TimeTableSchema;
-import bot.backend.services.description.ActiveDescriptionService;
-import bot.backend.services.description.CultureDescriptionService;
-import bot.backend.services.description.DescriptionService;
-import bot.backend.services.description.FoodDescriptionService;
-import bot.backend.services.realworld.ActiveRealWordService;
-import bot.backend.services.realworld.CultureRealWordService;
-import bot.backend.services.realworld.FoodRealWorldService;
-import bot.backend.services.realworld.RealWorldService;
+import bot.backend.services.description.*;
+import bot.backend.services.realworld.*;
 import bot.repositories.LocationRepository;
+import bot.services.GenreService;
 import bot.services.LocationService;
+import bot.services.MovieService;
 import bot.services.TagService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
@@ -42,18 +35,20 @@ public class PredictService {
             return Map.of(
                     FoodEvent.class, new FoodDescriptionService(),
                     ActiveEvent.class, new ActiveDescriptionService(),
-                    CultureEvent.class, new CultureDescriptionService()
+                    CultureEvent.class, new CultureDescriptionService(),
+                    MovieEvent.class, new MovieDescriptionService()
             );
         }
 
         @Bean
         public Map<Class<? extends Description<? extends Event>>,
                 RealWorldService<? extends Event, ? extends Description<? extends Event>>>
-                realWorldServices(LocationService locationService, TagService tagService) {
+                realWorldServices(LocationService locationService, TagService tagService, MovieService movieService, GenreService genreService) {
             return Map.of(
                     FoodDescription.class, new FoodRealWorldService(locationService, tagService),
                     CultureDescription.class, new CultureRealWordService(locationService, tagService),
-                    ActiveDescription.class, new ActiveRealWordService(locationService, tagService)
+                    ActiveDescription.class, new ActiveRealWordService(locationService, tagService),
+                    MovieDescription.class, new MovieRealWordService(locationService, tagService, movieService, genreService)
             );
         }
     }

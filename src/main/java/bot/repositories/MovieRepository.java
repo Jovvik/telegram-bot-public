@@ -14,4 +14,6 @@ public interface MovieRepository extends JpaRepository<MovieEntity, Long> {
 
     List<MovieEntity> findByGenresIn(Set<GenreEntity> genreEntities);
 
+    List<MovieEntity> findByStartTimeGreaterThanEqual(Integer startTime);
+
 }
