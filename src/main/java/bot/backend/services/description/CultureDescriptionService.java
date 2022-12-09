@@ -3,6 +3,7 @@ package bot.backend.services.description;
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.description.CultureDescription;
 import bot.backend.nodes.events.ActiveEvent;
+import bot.backend.nodes.events.CultureEvent;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -11,7 +12,7 @@ import java.util.List;
 public class CultureDescriptionService extends DescriptionService<CultureDescription> {
 
     public CultureDescriptionService() {
-        super(ActiveEvent.class);
+        super(CultureEvent.class);
     }
 
     @Override

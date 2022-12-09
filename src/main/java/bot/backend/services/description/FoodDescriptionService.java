@@ -22,40 +22,11 @@ public class FoodDescriptionService extends DescriptionService<FoodDescription> 
 
     @Override
     FoodDescription getMostCommonDescription(List<QuestionResult> data) {
-        data = mergeTime(data);
         try {
             return new FoodDescription(getMapDescription(data));
         } catch(Exception e) {
             return null;
         }
-    }
-
-    private List<QuestionResult> mergeTime(List<QuestionResult> data) {
-        List<TimeRestriction> times = getTypedRestrictions(
-                data.stream().map(QuestionResult::getRestriction).collect(Collectors.toList()),
-                TimeRestriction.class
-        );
-        if (times.size() < 2) {
-            return data;
-        }
-
-        // TODO fix
-        int minFrom = times.stream()
-                .map(TimeRestriction::getValue)
-                .mapToInt(Event.Time::getFrom)
-                .max().orElse(0);
-
-        int maxTo = times.stream()
-                .map(TimeRestriction::getValue)
-                .mapToInt(Event.Time::getTo)
-                .min().orElse(24 * 60 - 1);
-
-        TimeRestriction time = new TimeRestriction(new Event.Time(minFrom, maxTo));
-        data = data.stream()
-                .filter(qr -> !(qr.restriction instanceof TimeRestriction) || !times.contains(qr.restriction))
-                .collect(Collectors.toList());
-        data.add(new GeneratedQuestionResult(time));
-        return data;
     }
 
     @Override

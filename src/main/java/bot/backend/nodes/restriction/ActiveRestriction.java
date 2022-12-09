@@ -9,7 +9,7 @@ import java.util.List;
 public class ActiveRestriction extends Restriction<ActiveEvent, List<ActiveEvent.ActiveType>> {
 
     public ActiveRestriction(List<ActiveEvent.ActiveType> values) {
-        super(ActiveEvent.ACTIVE_TYPE, values);
+        super(ActiveEvent.ACTIVE_TYPES, values);
     }
 
     @Override

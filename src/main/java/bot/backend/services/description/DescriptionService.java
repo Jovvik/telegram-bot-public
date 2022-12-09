@@ -71,7 +71,7 @@ public abstract class DescriptionService<D extends Description<? extends Event>>
                 .collect(Collectors.toList());
     }
 
-    public <R extends Restriction<?, ?>> List<R> getTypedRestrictions(
+    public static <R extends Restriction<?, ?>> List<R> getTypedRestrictions(
             List<Restriction<?, ?>> restrictions,
             Class<R> restrictionClass) {
         return restrictions.stream()

@@ -2,8 +2,6 @@ package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.CultureEvent;
 import bot.backend.nodes.events.CultureEvent.CultureType;
-import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.utils.ClassField;
 
 import java.util.HashSet;
 import java.util.List;
@@ -13,7 +11,7 @@ public class CultureRestriction extends Restriction<CultureEvent, Set<CultureTyp
 
 
     public CultureRestriction(Set<CultureType> values) {
-        super(CultureEvent.TYPE, values);
+        super(CultureEvent.CULTURE_TYPES, values);
     }
 
     @Override

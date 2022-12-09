@@ -2,6 +2,7 @@ package bot.backend.nodes.results.schema;
 
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.events.*;
+import bot.backend.nodes.results.TimeTable;
 
 import java.util.List;
 
@@ -24,5 +25,10 @@ public class RomanticSchema extends TimeTableSchema {
         return filterByEventType(questionResults, CultureEvent.class).size() != 0 &&
                 filterByEventType(questionResults, FoodEvent.class).size() != 0 &&
                 filterByEventType(questionResults, MovieEvent.class).size() != 0;
+    }
+
+    @Override
+    public ComposeResult compose(TimeTable timeTable, Event.Time globalTime) {
+        return null;
     }
 }

@@ -9,12 +9,14 @@ import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+@Service
 public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveDescription> {
 
     private final List<ActiveEvent.ActiveType> activeTypes = new ArrayList<>();
@@ -31,9 +33,9 @@ public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveD
 
         restrictions.forEach(res -> {
             if (res instanceof ActiveRestriction) {
-                tags.addAll(addTagsFromType(res));
-                res.validValues().forEach(
-                        type -> activeTypes.add((ActiveEvent.ActiveType) type));
+                var actualRes = (ActiveRestriction) res;
+                tags.addAll(addTagsFromType(actualRes.getValue()));
+                activeTypes.addAll(actualRes.getValue());
             }
         });
 

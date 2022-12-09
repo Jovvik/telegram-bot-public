@@ -14,6 +14,7 @@ import bot.services.LocationService;
 import bot.services.TagService;
 
 import java.time.DayOfWeek;
+import java.util.Collection;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -44,12 +45,12 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
         return handleRaw(locations);
     }
 
-    protected Set<TagEntity> addTagsFromType(Restriction<?, ?> res) {
+    protected Set<TagEntity> addTagsFromType(Collection<? extends TypedEnum> res) {
         Set<TagEntity> tags = new HashSet<>();
 
-        res.validValues().forEach(type -> {
-            TagEntity tag = tagService.findByName(((TypedEnum) type).getTagName()).orElse(null);
-            tags.add(tag);
+
+        res.forEach(type -> {
+            tags.add(tagService.findByName(type.getTagName()).orElse(null));
         });
 
         return tags;
