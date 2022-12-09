@@ -83,8 +83,8 @@ public class TimeTable {
         List<Point> points = getPoints();
         for (int i = 0; i < points.size(); i++) {
             Point p = points.get(i);
-            res.append(p.latitude).append(",")
-                .append(p.longitude).append(",")
+            res.append(p.longitude).append(",")
+                .append(p.latitude).append(",")
                 .append("pm2").append(getColor(i)).append("l")
                 .append(i + 1).append("~");
         }
