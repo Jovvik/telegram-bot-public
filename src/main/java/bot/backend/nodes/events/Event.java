@@ -84,10 +84,11 @@ public abstract class Event {
 
     @Override
     public String toString() {
+        String url = location.getUrl();
         return "\n" +
                 "**" + location.getName() + "**" +
                 " | " + time + "\n" +
-                prettyUrl(location.getUrl()) + "\n" +
+                (!url.equals("") ? prettyUrl(location.getUrl()) + "\n" : "") +
                 "__" + location.getAddress() + "__";
     }
 
