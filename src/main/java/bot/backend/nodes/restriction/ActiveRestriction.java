@@ -1,21 +1,20 @@
 package bot.backend.nodes.restriction;
 
 import bot.backend.nodes.events.ActiveEvent;
-import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.SportEvent;
-import bot.backend.nodes.events.utils.ClassField;
+import bot.backend.nodes.events.FoodEvent;
 
+import java.util.HashSet;
 import java.util.List;
 
-public class ActiveRestriction extends Restriction<ActiveEvent, ActiveEvent.ActivityType> {
+public class ActiveRestriction extends Restriction<ActiveEvent, List<ActiveEvent.ActiveType>> {
 
-    public ActiveRestriction(ActiveEvent.ActivityType value) {
-        super(ActiveEvent.ACTIVITY_TYPE, value);
+    public ActiveRestriction(List<ActiveEvent.ActiveType> values) {
+        super(ActiveEvent.ACTIVE_TYPE, values);
     }
 
     @Override
-    public boolean validate(ActiveEvent.ActivityType sportType) {
-        return validValues().contains(sportType);
+    public boolean validate(List<ActiveEvent.ActiveType> candidate) {
+        return new HashSet<>(getValue()).containsAll(candidate);
     }
 
     public Class<ActiveEvent> getEventType() {

@@ -8,7 +8,6 @@ import bot.backend.nodes.events.FoodEvent.KitchenType;
 import bot.backend.nodes.restriction.*;
 import bot.backend.nodes.restriction.GenreRestriction;
 import bot.backend.nodes.restriction.KitchenRestriction;
-import bot.backend.nodes.restriction.SportRestriction;
 import bot.backend.nodes.restriction.TimeRestriction;
 import bot.external.spreadsheets.utils.StringList;
 import lombok.experimental.UtilityClass;
@@ -17,6 +16,7 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
@@ -137,12 +137,16 @@ public class SpreadSheetUtils {
     /**
      * SPORT QUESTIONS
      **/
-    public SportEvent.SportType parseSport(String sport) {
-        return SportEvent.SportType.map.get(sport);
+    public ActiveEvent.ActiveType parseSport(String sport) {
+        return ActiveEvent.ActiveType.map.get(sport);
     }
 
-    public SportRestriction applySport(Object sportType) {
-        return new SportRestriction(List.of((SportEvent.SportType) sportType));
+    public ActiveRestriction applySport(Object sportType) {
+        List<Integer> ints = (List<Integer>) sportType;
+        return new ActiveRestriction(ints.stream()
+                .map(i -> ActiveEvent.ActiveType.values()[i - 1])
+                .collect(Collectors.toList())
+        );
     }
 
     /**
@@ -257,6 +261,6 @@ public class SpreadSheetUtils {
     }
 
     public CultureRestriction applyCultureType(Object cultureType) {
-        return new CultureRestriction(List.of((CultureType) cultureType));
+        return new CultureRestriction(Set.of((CultureType) cultureType));
     }
 }

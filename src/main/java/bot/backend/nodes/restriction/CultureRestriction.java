@@ -5,22 +5,20 @@ import bot.backend.nodes.events.CultureEvent.CultureType;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.utils.ClassField;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
-public class CultureRestriction extends Restriction<CultureEvent, CultureType> {
+public class CultureRestriction extends Restriction<CultureEvent, Set<CultureType>> {
 
 
-    public CultureRestriction(List<CultureType> values) {
+    public CultureRestriction(Set<CultureType> values) {
         super(CultureEvent.TYPE, values);
     }
 
-    public CultureRestriction(CultureType value) {
-        super(CultureEvent.TYPE, value);
-    }
-
     @Override
-    public boolean validate(CultureType kitchen) {
-        return validValues().contains(kitchen);
+    public boolean validate(Set<CultureType> candidate) {
+        return new HashSet<>(getValue()).containsAll(candidate);
     }
 
     public Class<CultureEvent> getEventType() {

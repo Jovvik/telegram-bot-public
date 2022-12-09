@@ -1,11 +1,9 @@
 package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.CultureDescription;
-import bot.backend.nodes.description.FoodDescription;
-import bot.backend.nodes.events.CultureEvent;
+import bot.backend.nodes.description.ActiveDescription;
+import bot.backend.nodes.events.ActiveEvent;
 import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
 import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
@@ -17,43 +15,45 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-public class CultureRealWordService extends RealWorldService<CultureEvent, CultureDescription> {
+public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveDescription> {
 
-    public final Set<CultureEvent.CultureType> cultureTypes = new HashSet<>();
+    private final List<ActiveEvent.ActiveType> activeTypes = new ArrayList<>();
 
-    public CultureRealWordService(LocationService locationService, TagService tagService) {
+    public ActiveRealWordService(LocationService locationService, TagService tagService) {
         super(locationService, tagService);
     }
 
+
     @Override
-    public TablePredicate createPredicate(CultureDescription description) {
+    public TablePredicate createPredicate(ActiveDescription description) {
         Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
 
         restrictions.forEach(res -> {
-            if (res instanceof CultureRestriction) {
+            if (res instanceof ActiveRestriction) {
                 tags.addAll(addTagsFromType(res));
                 res.validValues().forEach(
-                        type -> cultureTypes.add((CultureEvent.CultureType) type));
+                        type -> activeTypes.add((ActiveEvent.ActiveType) type));
             }
         });
 
-        return new TablePredicate(Category.CULTURE, tags,0, 24 * 60,
+        return new TablePredicate(Category.ACTIVE, tags,0, 24 * 60,
                 this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
     }
 
     @Override
-    public CultureEvent generateEvent(CultureDescription description)
-    {
+    public ActiveEvent generateEvent(ActiveDescription description) {
         TablePredicate predicate = this.createPredicate(description);
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
-        return new CultureEvent(
+
+        return new ActiveEvent(
                 matchedLocations.get(0),
-                Category.CULTURE,
+                Category.ACTIVE,
                 new Event.Time(predicate.getTimeFrom(), predicate.getTimeTo()),
-                cultureTypes
+                activeTypes
         );
     }
+
 }
