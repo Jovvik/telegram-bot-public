@@ -27,7 +27,7 @@ public class TestApplication {
 
     private final PredictService predictService;
 
-    @GetMapping("/")
+    @GetMapping("/testFoodAndCulture")
     public void testPredict() {
         var result = predictService.generateTimeTable(List.of(
                 new GeneratedQuestionResult(new TimeRestriction(new Event.Time(16 * 60, Integer.MAX_VALUE))),
@@ -41,5 +41,20 @@ public class TestApplication {
         ));
         System.out.println(result);
     }
+
+    @GetMapping("/testOut")
+    public void testOut() {
+        var result = predictService.generateTimeTable(List.of(
+                new GeneratedQuestionResult(new TimeRestriction(new Event.Time(16 * 60, Integer.MAX_VALUE))),
+                new GeneratedQuestionResult(new TimeRestriction(new Event.Time(Integer.MIN_VALUE, 20 * 60))),
+                new GeneratedQuestionResult(new CountRestriction(3)),
+                new GeneratedQuestionResult(new FoodPlaceTypeRestriction(List.of(FoodEvent.FoodPlaceType.RESTAURANT))),
+                new GeneratedQuestionResult(new KitchenRestriction(List.of(FoodEvent.KitchenType.JAPANESE))),
+                new GeneratedQuestionResult(new BudgetRestriction(new Event.Budget(100, 1000))),
+                new GeneratedQuestionResult(new DateRestriction(LocalDate.now()))
+        ));
+        System.out.println(result);
+    }
+
 
 }
