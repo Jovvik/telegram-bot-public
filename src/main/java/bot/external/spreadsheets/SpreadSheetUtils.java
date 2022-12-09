@@ -260,7 +260,7 @@ public class SpreadSheetUtils {
         return CultureType.map.get(culture);
     }
 
-    public CultureRestriction applyCultureType(Object cultureType) {
+    public CultureRestriction applyCulture(Object cultureType) {
         return new CultureRestriction(Set.of((CultureType) cultureType));
     }
 }

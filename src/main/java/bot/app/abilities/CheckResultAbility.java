@@ -36,6 +36,7 @@ public class CheckResultAbility extends AbilityTemplate {
                         SendMessage sm = new SendMessage();
                         sm.setChatId(Long.toString(getChatId(messageContext.update())));
                         sm.setText(planStr);
+                        sm.setParseMode("Markdown");
                         try {
                             bot.execute(sm);
                         } catch (TelegramApiException e) {

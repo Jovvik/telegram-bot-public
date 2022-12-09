@@ -96,7 +96,7 @@ public class TimeTable {
     private String createRoute() {
         StringBuilder res = new StringBuilder();
 
-        res.append("\nhttps://yandex.ru/maps/2/saint-petersburg/?mode=routesrtt=pd&ruri=~")
+        res.append("https://yandex.ru/maps/2/saint-petersburg/?mode=routesrtt=pd&ruri=~")
                 .append("&z=").append(13.64) // TODO вести в константу
                 .append(getLL(false))
                 .append("&rtext=");
@@ -105,7 +105,7 @@ public class TimeTable {
         points.forEach(p -> res.append(p.latitude).append(",").append(p.longitude).append("~"));
         res.delete(res.length() - 1, res.length());
 
-        return res.append("\n").toString();
+        return res.toString();
     }
 
     @Override
@@ -113,10 +113,10 @@ public class TimeTable {
         StringBuilder eventsOut = new StringBuilder();
         events.forEach(event -> eventsOut.append(event.toString()));
 
-        return "**Расписание вашего мероприятия:**" +
-                eventsOut +
-                createRoute() +
-                createMap();
+        return "*Расписание вашего мероприятия:*" +
+                eventsOut + "\n\n" +
+                String.format("[Маршрут](%s)", createRoute()) + "\n" +
+                String.format("[Карта](%s)", createMap());
     }
 
     public void getPhotoOfMap() {

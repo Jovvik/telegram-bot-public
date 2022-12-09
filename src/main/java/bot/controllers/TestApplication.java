@@ -1,5 +1,6 @@
 package bot.controllers;
 
+import bot.app.TelegramBot;
 import bot.app.utils.data.questions.GeneratedQuestionResult;
 import bot.backend.nodes.events.CultureEvent;
 import bot.backend.nodes.events.Event;
@@ -12,10 +13,13 @@ import bot.external.kudago.MainKudaGo;
 import bot.services.GenreService;
 import bot.services.MovieService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.SpringApplication;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.telegram.telegrambots.meta.api.methods.send.SendMessage;
+import org.telegram.telegrambots.meta.exceptions.TelegramApiException;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -26,6 +30,9 @@ import java.util.Set;
 public class TestApplication {
 
     private final PredictService predictService;
+
+//    @Autowired
+//    private final TelegramBot telegramBot;
 
     @GetMapping("/testFoodAndCulture")
     public void testPredict() {
@@ -53,7 +60,16 @@ public class TestApplication {
                 new GeneratedQuestionResult(new BudgetRestriction(new Event.Budget(100, 1000))),
                 new GeneratedQuestionResult(new DateRestriction(LocalDate.now()))
         ));
-        System.out.println(result);
+
+//        try {
+//            telegramBot.execute(SendMessage.builder()
+//                    .chatId(Long.toString(420953808L))
+//                    .text(result.toString())
+//                    .build()
+//            );
+//        } catch (TelegramApiException e) {
+//            System.out.println(e.getMessage());
+//        }
     }
 
 
