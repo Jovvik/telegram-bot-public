@@ -97,7 +97,9 @@ public class TimeTable {
         StringBuilder res = new StringBuilder();
 
         res.append("\nhttps://yandex.ru/maps/2/saint-petersburg/?mode=routesrtt=pd&ruri=~")
-            .append(getLL(false)).append("&rtext=");
+                .append("&z=").append(13.64) // TODO вести в константу
+                .append(getLL(false))
+                .append("&rtext=");
 
         List<Point> points = getPoints();
         points.forEach(p -> res.append(p.latitude).append(",").append(p.longitude).append("~"));
@@ -115,5 +117,10 @@ public class TimeTable {
                 eventsOut +
                 createRoute() +
                 createMap();
+    }
+
+    public void getPhotoOfMap() {
+        String mapReq = createMap();
+
     }
 }
