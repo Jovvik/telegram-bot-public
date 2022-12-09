@@ -48,15 +48,15 @@ public class LocationController {
     @GetMapping("/addCustomLocation")
     public void fillCustom() {
         locationService.save(LocationConverter.convertToEntity(new Location(
-                "Аэротруба FLYARENA",
-                Set.of(""),
-                Category.CULTURE,
-                59.933938,
-                30.339296,
-                "+7 (921) 942 - 80 - 20",
-                "https://avrora.spb.ru/seances",
-                "Россия, Санкт-Петербург, Невский проспект 60",
-                Collections.nCopies(7, new Event.Time(0, 1440)),
+                "Веревочный парк FunГрад",
+                Set.of("веревочныйпарк"),
+                Category.ACTIVE,
+        59.86656003420463,
+                30.35018768556594,
+                "89657856160",
+                "http://fungrad.ru/",
+                "Россия, Санкт-Петербург, пр. Космонавтов, 14",
+                Collections.nCopies(7, new Event.Time(10 * 60, 22 * 60)),
                 1
         ), tagService));
     }
