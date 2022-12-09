@@ -60,16 +60,20 @@ public class TestApplication {
                 new GeneratedQuestionResult(new BudgetRestriction(new Event.Budget(100, 1000))),
                 new GeneratedQuestionResult(new DateRestriction(LocalDate.now()))
         ));
+    }
 
-//        try {
-//            telegramBot.execute(SendMessage.builder()
-//                    .chatId(Long.toString(420953808L))
-//                    .text(result.toString())
-//                    .build()
-//            );
-//        } catch (TelegramApiException e) {
-//            System.out.println(e.getMessage());
-//        }
+    @GetMapping("/testFood2")
+    public void testFood2() {
+        var result = predictService.generateTimeTable(List.of(
+                new GeneratedQuestionResult(new TimeRestriction(new Event.Time(16 * 60, Integer.MAX_VALUE))),
+                new GeneratedQuestionResult(new TimeRestriction(new Event.Time(Integer.MIN_VALUE, 20 * 60))),
+                new GeneratedQuestionResult(new CountRestriction(3)),
+                new GeneratedQuestionResult(new FoodPlaceTypeRestriction(List.of(FoodEvent.FoodPlaceType.RESTAURANT))),
+                new GeneratedQuestionResult(new KitchenRestriction(List.of(FoodEvent.KitchenType.EUROPEAN))),
+                new GeneratedQuestionResult(new KitchenRestriction(List.of(FoodEvent.KitchenType.ITALIAN))),
+                new GeneratedQuestionResult(new BudgetRestriction(new Event.Budget(100, 1000))),
+                new GeneratedQuestionResult(new DateRestriction(LocalDate.now()))
+        ));
     }
 
 
