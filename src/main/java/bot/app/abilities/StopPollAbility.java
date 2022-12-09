@@ -45,9 +45,11 @@ public class StopPollAbility extends AbilityTemplate {
 
         pollService.stopPoll(userId);
         SendMessage sm = new SendMessage();
-        sm.setText("Спасибо за ответы, ожидайте когда сервис создаст мероприятие специального для вас, " +
+        sm.setText("*Спасибо за ответы*!\n " +
+                "Ожидайте когда сервис создаст мероприятие специального для вас, " +
                 "чтобы проверить готовность - нажмите `\\check`!");
         sm.setChatId(Long.toString(chatId));
+        sm.setParseMode("Markdown");
         try {
             tgbot.execute(sm);
         } catch (TelegramApiException e) {
