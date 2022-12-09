@@ -39,71 +39,21 @@ public class CheckResultAbility extends AbilityTemplate {
                 .action(messageContext -> {
                     var eventService = bot.getEventBuilderService();
                     var userId = messageContext.user().getId();
-                    System.out.printf("User[%s] check status of results%n", userId);
-                    if (eventService.isEventDone(userId)) {
-                        var plan = eventService.getResult(userId);
-                        String planStr = plan == null
-                                ? "К сожалению, ничего не получилось("
-                                : plan.toString();
-
-                        SendMessage sm = new SendMessage();
-                        sm.setChatId(Long.toString(getChatId(messageContext.update())));
-                        sm.setText(planStr);
-                        sm.setParseMode("Markdown");
-                        try {
-                            Message m = bot.execute(sm);
-                            if (plan != null) {
-                                var req = plan.createMap();
-                                HttpGet request = new HttpGet(req);
-                                CloseableHttpClient httpClient = HttpClientBuilder.create().build();
-
-                                request.addHeader("content-type", "image/png");
-
-                                int fileId = new Random().nextInt();
-                                String fileName = "download-image-" + fileId + ".png";
-                                File file = new File(fileName);
-
-                                try (CloseableHttpResponse response = httpClient.execute(request)) {
-                                    HttpEntity entity = response.getEntity();
-                                    if (entity != null) {
-                                        try (FileOutputStream outstream = new FileOutputStream(file)) {
-                                            entity.writeTo(outstream);
-                                        }
-                                    }
-                                    SendPhoto sendPhoto = new SendPhoto();
-                                    sendPhoto.setChatId(Long.toString(getChatId(messageContext.update())));
-                                    sendPhoto.setPhoto(new InputFile().setMedia(file));
-                                    sendPhoto.setReplyToMessageId(m.getMessageId());
-
-                                    try {
-                                        bot.execute(sendPhoto);
-                                        file.delete();
-                                    } catch (TelegramApiException e) {
-                                        throw new RuntimeException(e);
-                                    }
-                                } catch (IOException e) {
-                                    System.out.println(e.getMessage());
-                                }
-                            }
-                        } catch (TelegramApiException e) {
-                            throw new RuntimeException(e);
-                        }
+                    SendMessage sm = new SendMessage();
+                    sm.setChatId(Long.toString(getChatId(messageContext.update())));
+                    int userPosition = 1 + eventService.queuePosition(userId);
+                    if (userPosition == 0) {
+                        sm.setText("Your event is creating right *now*, please wait a little bit!");
                     } else {
-                        SendMessage sm = new SendMessage();
-                        sm.setChatId(Long.toString(getChatId(messageContext.update())));
-                        int userPosition = 1 + eventService.queuePosition(userId);
-                        if (userPosition == 0) {
-                            sm.setText("Your event is creating right *now*!");
-                        } else {
-                            sm.setText("Your request in queue, before you *" + (userPosition - 1) + "* people.");
-                        }
-                        sm.enableMarkdown(true);
-                        try {
-                            bot.execute(sm);
-                        } catch (TelegramApiException e) {
-                            throw new RuntimeException(e);
-                        }
+                        sm.setText("Your request in queue, before you *" + (userPosition - 1) + "* people.");
                     }
+                    sm.enableMarkdown(true);
+                    try {
+                        bot.execute(sm);
+                    } catch (TelegramApiException e) {
+                        throw new RuntimeException(e);
+                    }
+
                 })
                 .build();
     }

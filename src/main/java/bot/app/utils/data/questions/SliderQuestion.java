@@ -5,6 +5,7 @@ import bot.external.spreadsheets.questions.ChooseQuestionForm.AnswerCell.EdgeTyp
 import org.telegram.telegrambots.meta.api.methods.updatingmessages.EditMessageReplyMarkup;
 import org.telegram.telegrambots.meta.api.objects.replykeyboard.InlineKeyboardMarkup;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.function.BiFunction;
 import java.util.stream.Collectors;
@@ -13,6 +14,8 @@ import java.util.stream.Stream;
 public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
 
     private final BiFunction<String, String, String> changeFunction;
+
+    private String defaultValue;
 
     public SliderQuestion(
             int id,
@@ -47,6 +50,7 @@ public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
                 resultBiFunction
         );
         this.changeFunction = changeFunction;
+        this.defaultValue = answers.get(1).getAnswer();
     }
 
     @Override
@@ -97,5 +101,18 @@ public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
                 changeFunction,
                 resultBiFunction
         );
+    }
+
+    public List<Answer<String>> copyAnswers() {
+        List<Answer<String>> newAnswers = new ArrayList<>();
+        for (Answer<String> answer : answers) {
+            newAnswers.add(new Answer<>(
+                    answer.getAnswer(),
+                    answer.getNextQuestionId(),
+                    answer.getEdgeType()
+            ));
+        }
+        newAnswers.get(1).setAnswer(defaultValue);
+        return newAnswers;
     }
 }

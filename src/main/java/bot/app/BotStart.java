@@ -59,6 +59,7 @@ public class BotStart implements CommandLineRunner {
 
         bot.setPollService(pollService);
         bot.setEventBuilderService(eventBuilderService);
+        bot.getEventBuilderService().setTelegramBot(bot);
 
         botsApi.registerBot(bot);
         bot.execute(SetMyCommands.builder()
