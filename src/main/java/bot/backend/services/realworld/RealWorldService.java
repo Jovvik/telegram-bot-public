@@ -12,12 +12,11 @@ import bot.entities.LocationEntity;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 
 import java.time.DayOfWeek;
-import java.util.Collection;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public abstract class RealWorldService<E extends Event, D extends Description<E>> {
@@ -63,7 +62,7 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
         return dateRestrictions.get(0).validValues().get(0).getDayOfWeek();
     }
 
-    abstract public TablePredicate createPredicate(D description);
+    abstract public TablePredicateContainer createPredicate(D description);
 
     abstract public E generateEvent(D description);
 
@@ -79,5 +78,16 @@ public abstract class RealWorldService<E extends Event, D extends Description<E>
 
         List<Event.Time> lastIntervals = timeRestrictions.get(timeRestrictions.size() - 1).validValues();
         predicate.setTimeTo(lastIntervals.get(lastIntervals.size() - 1).getTo());
+    }
+
+    public static Location getRelevantLocation(List<Location> locations) {
+        // ну было
+        return locations.get(new Random().nextInt(locations.size()));
+    }
+
+    @AllArgsConstructor
+    @Getter
+    public static class TablePredicateContainer {
+        public TablePredicate tablePredicate;
     }
 }

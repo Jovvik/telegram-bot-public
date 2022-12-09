@@ -2,7 +2,6 @@ package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.CultureDescription;
-import bot.backend.nodes.description.FoodDescription;
 import bot.backend.nodes.events.CultureEvent;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
@@ -11,6 +10,8 @@ import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -21,14 +22,13 @@ import java.util.Set;
 @Service
 public class CultureRealWordService extends RealWorldService<CultureEvent, CultureDescription> {
 
-    public final Set<CultureEvent.CultureType> cultureTypes = new HashSet<>();
-
     public CultureRealWordService(LocationService locationService, TagService tagService) {
         super(locationService, tagService);
     }
 
     @Override
-    public TablePredicate createPredicate(CultureDescription description) {
+    public CultureTablePredicateContainer createPredicate(CultureDescription description) {
+        Set<CultureEvent.CultureType> cultureTypes = new HashSet<>();
         Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
 
@@ -40,22 +40,40 @@ public class CultureRealWordService extends RealWorldService<CultureEvent, Cultu
             }
         });
 
-        return new TablePredicate(Category.CULTURE, tags,0, 24 * 60,
+        TablePredicate tablePredicate = new TablePredicate(Category.CULTURE, tags, 0, 24 * 60,
                 this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
+        return new CultureTablePredicateContainer(
+                tablePredicate,
+                cultureTypes
+        );
     }
 
     @Override
-    public CultureEvent generateEvent(CultureDescription description)
-    {
-        TablePredicate predicate = this.createPredicate(description);
+    public CultureEvent generateEvent(CultureDescription description) {
+        CultureTablePredicateContainer container = this.createPredicate(description);
+        TablePredicate predicate = container.tablePredicate;
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
         return new CultureEvent(
-                matchedLocations.get(0),
+                getRelevantLocation(matchedLocations),
                 Category.CULTURE,
                 new Event.Time(predicate.getTimeFrom(), predicate.getTimeTo()),
-                cultureTypes
+                container.cultureTypes
         );
+    }
+
+    @Getter
+    @Setter
+    public static class CultureTablePredicateContainer extends TablePredicateContainer {
+        Set<CultureEvent.CultureType> cultureTypes;
+
+        public CultureTablePredicateContainer(
+                TablePredicate tablePredicate,
+                Set<CultureEvent.CultureType> cultureTypes
+        ) {
+            super(tablePredicate);
+            this.cultureTypes = cultureTypes;
+        }
     }
 }
