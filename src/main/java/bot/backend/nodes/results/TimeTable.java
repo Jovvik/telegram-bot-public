@@ -77,13 +77,27 @@ public class TimeTable {
 
         String res = "wt";
         switch (category) {
-            case FOOD -> res = "yw";
-            case PARTY -> res = "vv";
-            case ACTIVE -> res = "lb";
-            case HEALTH -> res = "gn";
-            case CULTURE -> res = "db";
-            case EXTREME -> res = "rd";
-            case DEFAULT -> res = "wt";
+            case FOOD:
+                res = "yw";
+                break;
+            case PARTY:
+                res = "vv";
+                break;
+            case ACTIVE:
+                res = "lb";
+                break;
+            case HEALTH:
+                res = "gn";
+                break;
+            case CULTURE:
+                res = "db";
+                break;
+            case EXTREME:
+                res = "rd";
+                break;
+            case DEFAULT:
+                res = "wt";
+                break;
         }
 
         return res;
