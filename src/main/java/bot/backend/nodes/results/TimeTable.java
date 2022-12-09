@@ -6,7 +6,15 @@ import bot.backend.nodes.location.Location;
 import bot.external.maps.MapRequest;
 import bot.external.maps.MapService;
 import lombok.AllArgsConstructor;
+import org.apache.http.HttpEntity;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClientBuilder;
 
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -74,7 +82,7 @@ public class TimeTable {
         return res;
     }
 
-    private String createMap() {
+    public String createMap() {
         StringBuilder res = new StringBuilder();
 
         res.append("https://static-maps.yandex.ru/1.x/?size=450,450&l=map")
@@ -93,7 +101,7 @@ public class TimeTable {
         return res.toString();
     }
 
-    private String createRoute() {
+    public String createRoute() {
         StringBuilder res = new StringBuilder();
 
         res.append("https://yandex.ru/maps/2/saint-petersburg/?mode=routesrtt=pd&ruri=~")
@@ -117,10 +125,5 @@ public class TimeTable {
                 eventsOut + "\n\n" +
                 String.format("[Маршрут](%s)", createRoute()) + "\n" +
                 String.format("[Карта](%s)", createMap());
-    }
-
-    public void getPhotoOfMap() {
-        String mapReq = createMap();
-
     }
 }
