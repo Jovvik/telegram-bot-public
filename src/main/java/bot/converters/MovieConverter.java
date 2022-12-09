@@ -16,7 +16,7 @@ public class MovieConverter {
              new Movie(
                     entity.title,
                     entity.runningTime,
-                     entity.genres.stream().map(it -> MovieEvent.GenreType.map.get(it.name)).collect(Collectors.toSet())
+                     entity.genres.stream().map(it -> MovieEvent.GenreType.englishMap.get(it.name)).collect(Collectors.toSet())
              ),
              new Event.Time(entity.startTime, entity.startTime + entity.runningTime),
              entity.location

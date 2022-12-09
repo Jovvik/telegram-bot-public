@@ -41,17 +41,17 @@ public class MovieEvent extends Event {
         CRIME("Боевик", "crime"),
         DOCUMENTARY("Документальный", "documentary"),
         DRAMA("Драма", "drama"),
-//        MELODRAMA("Мелодрама", ),
+        MELODRAMA("Мелодрама", "melodrama"),
         FANTASY("Фантастика", "fantasy"),
         HORROR("Хорор", "horror"),
         MUSICAL("Мюзикл", "musical"),
 //        FAMILY("Семейное"),
         THRILLER("Триллер", "thriller");
 
-        public static Map<String, MovieEvent.GenreType> map = new HashMap<>();
+        public static Map<String, MovieEvent.GenreType> englishMap = new HashMap<>();
 
         static {
-            Arrays.stream(values()).forEach(it -> map.put(it.tagName, it));
+            Arrays.stream(values()).forEach(it -> englishMap.put(it.tagName, it));
         }
 
         private String realName;

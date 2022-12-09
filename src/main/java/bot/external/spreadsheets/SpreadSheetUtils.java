@@ -176,7 +176,7 @@ public class SpreadSheetUtils {
      **/
 
     public MovieEvent.GenreType parseGenre(String sport) {
-        return MovieEvent.GenreType.map.get(sport);
+        return MovieEvent.GenreType.englishMap.get(sport);
     }
 
     public GenreRestriction applyGenre(Object movieType) {

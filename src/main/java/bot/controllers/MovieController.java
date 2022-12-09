@@ -5,6 +5,7 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.movie.MovieSession;
 import bot.entities.LocationEntity;
 import bot.entities.MovieEntity;
+import bot.external.films.FilmMain;
 import bot.external.kudago.MainKudaGo;
 import bot.external.maps.MapMain;
 import bot.services.GenreService;
@@ -27,7 +28,14 @@ public class MovieController {
     public void fillTable() {
         List<MovieEntity> movieEntities = MainKudaGo.fillMovies(MainKudaGo.genres, genreService);
         movieEntities.forEach(movieService::save);
-        System.out.println(1);
+        System.out.println("movies kudago complete");
+    }
+
+    @GetMapping("/addMoviesAvrora")
+    public void fillAvrora() {
+        List<MovieEntity> movieEntities = FilmMain.getSessions(genreService);
+        movieEntities.forEach(movieService::save);
+        System.out.println("avrora complete");
     }
 
 }
