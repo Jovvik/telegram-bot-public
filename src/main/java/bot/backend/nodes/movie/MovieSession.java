@@ -1,6 +1,7 @@
 package bot.backend.nodes.movie;
 
 import bot.backend.nodes.events.Event;
+import bot.backend.nodes.location.Location;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -17,5 +18,5 @@ public class MovieSession {
     public Event.Time time;
 
     // NOTE: This location doesn't have times and rating please understand this
-    public String location;
+    public Location location;
 }

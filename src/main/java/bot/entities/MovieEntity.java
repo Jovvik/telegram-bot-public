@@ -1,11 +1,8 @@
 package bot.entities;
 
-import bot.backend.nodes.events.Event;
-import bot.backend.nodes.events.MovieEvent;
 import lombok.Getter;
 
 import javax.persistence.*;
-import java.util.List;
 import java.util.Set;
 
 @Entity
@@ -25,7 +22,8 @@ public class MovieEntity {
 
     public Integer startTime;
 
-    public String location;
+    @ManyToOne
+    public LocationEntity location;
 
 
 }

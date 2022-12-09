@@ -131,7 +131,8 @@ public class KudaGoServer {
                 JSONObject place = current.getJSONObject("place");
                 MovieSession session = new MovieSession(movie,
                         new Event.Time(current.getInt("datetime"), current.getInt("datetime") + movieResponse.runningTime),
-                        new String(place.getString("title").getBytes(), StandardCharsets.UTF_8));
+                        null);
+//                        new String(place.getString("title").getBytes(), StandardCharsets.UTF_8));
                 responses.add(session);
             } catch (Exception e) {
                 System.out.println(e.getMessage());

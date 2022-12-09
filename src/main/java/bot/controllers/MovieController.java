@@ -23,17 +23,18 @@ public class MovieController {
 
     private final MovieService movieService;
     private final GenreService genreService;
+    private final TagService tagService;
 
     @GetMapping("/addMovies")
     public void fillTable() {
-        List<MovieEntity> movieEntities = MainKudaGo.fillMovies(MainKudaGo.genres, genreService);
+        List<MovieEntity> movieEntities = MainKudaGo.fillMovies(MainKudaGo.genres, genreService, tagService);
         movieEntities.forEach(movieService::save);
         System.out.println("movies kudago complete");
     }
 
     @GetMapping("/addMoviesAvrora")
     public void fillAvrora() {
-        List<MovieEntity> movieEntities = FilmMain.getSessions(genreService);
+        List<MovieEntity> movieEntities = FilmMain.getSessions(genreService, tagService);
         movieEntities.forEach(movieService::save);
         System.out.println("avrora complete");
     }
