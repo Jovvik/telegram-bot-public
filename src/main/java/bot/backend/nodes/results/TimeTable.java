@@ -4,7 +4,6 @@ import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.location.Location;
 import bot.external.maps.MapRequest;
-import bot.external.maps.MapService;
 import lombok.AllArgsConstructor;
 
 import java.util.ArrayList;
@@ -22,16 +21,6 @@ public class TimeTable {
                 .collect(Collectors.toList());
     }
 
-    private static class Point {
-        double latitude;
-        double longitude;
-
-        public Point(double latitude, double longitude) {
-            this.latitude = latitude;
-            this.longitude = longitude;
-        }
-    }
-
     private List<Point> getPoints() {
         List<Point> points = new ArrayList<>();
         for (Event event : events) {
@@ -47,11 +36,11 @@ public class TimeTable {
         MapRequest mapRequest = new MapRequest();
         StringBuilder res = new StringBuilder();
         res.append("&ll=").append(mapRequest.getUserLong())
-            .append("," ).append(mapRequest.getUserLati());
+                .append(",").append(mapRequest.getUserLati());
 
         if (withRadius) {
             res.append("&spn=").append(mapRequest.getRadiusLong())
-                .append(",").append(mapRequest.getRadiusLati());
+                    .append(",").append(mapRequest.getRadiusLati());
         }
 
         return res.toString();
@@ -62,13 +51,27 @@ public class TimeTable {
 
         String res = "wt";
         switch (category) {
-            case FOOD -> res = "yw";
-            case PARTY -> res = "vv";
-            case ACTIVE -> res = "lb";
-            case HEALTH -> res = "gn";
-            case CULTURE -> res = "db";
-            case EXTREME -> res = "rd";
-            case DEFAULT -> res = "wt";
+            case FOOD:
+                res = "yw";
+                break;
+            case PARTY:
+                res = "vv";
+                break;
+            case ACTIVE:
+                res = "lb";
+                break;
+            case HEALTH:
+                res = "gn";
+                break;
+            case CULTURE:
+                res = "db";
+                break;
+            case EXTREME:
+                res = "rd";
+                break;
+            case DEFAULT:
+                res = "wt";
+                break;
         }
 
         return res;
@@ -78,15 +81,15 @@ public class TimeTable {
         StringBuilder res = new StringBuilder();
 
         res.append("https://static-maps.yandex.ru/1.x/?size=450,450&l=map")
-            .append(getLL(true)).append("&pt=");
+                .append(getLL(true)).append("&pt=");
 
         List<Point> points = getPoints();
         for (int i = 0; i < points.size(); i++) {
             Point p = points.get(i);
             res.append(p.longitude).append(",")
-                .append(p.latitude).append(",")
-                .append("pm2").append(getColor(i)).append("l")
-                .append(i + 1).append("~");
+                    .append(p.latitude).append(",")
+                    .append("pm2").append(getColor(i)).append("l")
+                    .append(i + 1).append("~");
         }
         res.delete(res.length() - 1, res.length());
 
@@ -122,5 +125,15 @@ public class TimeTable {
     public void getPhotoOfMap() {
         String mapReq = createMap();
 
+    }
+
+    private static class Point {
+        double latitude;
+        double longitude;
+
+        public Point(double latitude, double longitude) {
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
     }
 }
