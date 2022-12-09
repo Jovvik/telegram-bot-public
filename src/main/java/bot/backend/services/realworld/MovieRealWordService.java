@@ -1,0 +1,109 @@
+package bot.backend.services.realworld;
+
+import bot.backend.nodes.categories.Category;
+import bot.backend.nodes.description.CultureDescription;
+import bot.backend.nodes.description.MovieDescription;
+import bot.backend.nodes.events.CultureEvent;
+import bot.backend.nodes.events.Event;
+import bot.backend.nodes.events.MovieEvent;
+import bot.backend.nodes.location.Location;
+import bot.backend.nodes.restriction.CultureRestriction;
+import bot.backend.nodes.restriction.DateRestriction;
+import bot.backend.nodes.restriction.MovieSessionRestriction;
+import bot.backend.nodes.restriction.Restriction;
+import bot.backend.nodes.restriction.utils.TypedEnum;
+import bot.converters.LocationConverter;
+import bot.entities.GenreEntity;
+import bot.entities.MovieEntity;
+import bot.entities.TagEntity;
+import bot.services.GenreService;
+import bot.services.LocationService;
+import bot.services.MovieService;
+import bot.services.TagService;
+import lombok.AllArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.time.ZoneId;
+import java.util.*;
+
+@Service
+public class MovieRealWordService extends RealWorldService<MovieEvent, MovieDescription> {
+
+    public MovieService movieService;
+
+    public GenreService genreService;
+
+    public MovieRealWordService(LocationService locationService, TagService tagService, MovieService movieService, GenreService genreService) {
+        super(locationService, tagService);
+        this.movieService = movieService;
+        this.genreService = genreService;
+    }
+
+    @Override
+    public TablePredicate createPredicate(MovieDescription description) {
+        return new TablePredicate(Category.CULTURE, null,0, 24 * 60,
+                this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
+    }
+
+    @Override
+    public MovieEvent generateEvent(MovieDescription description)
+    {
+        TablePredicate predicate = this.createPredicate(description);
+        this.setTimeInterval(predicate, description);
+
+//        if (!predicate.getTags().stream().map(it -> it.name).collect(Collectors.toSet()).contains("кино")) {
+
+            LocalDate date = description.getTypedRestrictions(DateRestriction.class).get(0).getValue();
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+            int time = 0;
+            try {
+                time = (int)((sdf.parse(date.toString()).getTime())/ 1000 + 3 * 60 * 60);
+            } catch (Exception e) {
+
+            }
+            List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
+
+            Set<GenreEntity> tags = new HashSet<>();
+
+            restrictions.forEach(res -> {
+                if (res instanceof MovieSessionRestriction) {
+                    var actualRes = (MovieSessionRestriction) res;
+                    tags.addAll(addFromType(actualRes.getValue()));
+                }
+            });
+
+        List<MovieEntity> movieEntities =
+                movieService.findByStartEndAndGenres(
+                        time + predicate.getTimeFrom() * 60,
+                        time + predicate.getTimeTo() * 60,
+                        tags
+                );
+        if (movieEntities.size() == 0) {
+            return null;
+        }
+            MovieEntity entity = movieEntities.get(0);
+            return new MovieEvent(
+                    LocationConverter.convertToLocation(entity.location),
+                    Category.CULTURE,
+                    new Event.Time(entity.startTime % 3600, (entity.startTime + entity.runningTime) % 3600)
+            );
+    }
+
+    private  Set<GenreEntity> addFromType(Collection<? extends TypedEnum> res) {
+        Set<GenreEntity> genres = new HashSet<>();
+
+
+        res.forEach(type -> {
+            genres.add(genreService.findByName(type.getTagName()).orElse(null));
+        });
+
+        return genres;
+    }
+}
+

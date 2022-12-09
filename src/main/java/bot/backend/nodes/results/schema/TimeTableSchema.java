@@ -52,9 +52,9 @@ public abstract class TimeTableSchema {
         return List.of(
                 new MovieEventScheme(),
                 new FoodAndActiveEvent(),
-                new FoodAndCultureEvent()
+                new FoodAndCultureEvent(),
 //                new MassEventSchema(),
-//                new OneFoodEvent()
+                new OneFoodEvent()
 //                new RomanticSchema()
         );
     }

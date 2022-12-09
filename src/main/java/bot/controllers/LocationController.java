@@ -11,6 +11,8 @@ import bot.services.TagService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RestController;
+//import bot.external.maps.MapMain;
+
 
 import java.util.Collections;
 import java.util.List;
@@ -63,9 +65,9 @@ public class LocationController {
 
     @GetMapping("/delete")
     public void deleteByCategory() {
-        locationService.deleteById(1296);
-        locationService.deleteById(1298);
-        locationService.deleteById(1302);
+        for (int i = 1440; i <= 1446;++i) {
+            locationService.deleteById(i);
+        }
     }
 
     @GetMapping("/addLocationsSport")

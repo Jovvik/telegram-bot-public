@@ -7,7 +7,6 @@ import bot.entities.LocationEntity;
 import bot.entities.MovieEntity;
 import bot.external.films.FilmMain;
 import bot.external.kudago.MainKudaGo;
-import bot.external.maps.MapMain;
 import bot.services.GenreService;
 import bot.services.LocationService;
 import bot.services.MovieService;
