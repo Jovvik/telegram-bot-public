@@ -48,10 +48,6 @@ public class CultureEvent extends OutDoorEvent {
         @Getter
         private final String tagName;
 
-        @Override
-        public String getTagName() {
-            return null;
-        }
     }
 
 
