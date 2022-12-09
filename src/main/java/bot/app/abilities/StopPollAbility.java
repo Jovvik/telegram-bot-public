@@ -45,9 +45,9 @@ public class StopPollAbility extends AbilityTemplate {
 
         pollService.stopPoll(userId);
         SendMessage sm = new SendMessage();
-        sm.setText("*Спасибо за ответы*!\n " +
+        sm.setText("*Спасибо за ответы*!\n" +
                 "Ожидайте когда сервис создаст мероприятие специального для вас, " +
-                "чтобы проверить готовность - нажмите `\\check`!");
+                "чтобы проверить готовность - нажмите `/check`!");
         sm.setChatId(Long.toString(chatId));
         sm.setParseMode("Markdown");
         try {

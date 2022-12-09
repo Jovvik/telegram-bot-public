@@ -21,6 +21,9 @@ import java.util.stream.Collectors;
 
 @AllArgsConstructor
 public class TimeTable {
+
+    private static final Point CENTER = new Point(30.313729, 59.947980);
+
     public List<Event> events;
 
     public <E extends Event> List<E> getTypedEvents(Class<E> eventClass) {
@@ -54,8 +57,12 @@ public class TimeTable {
     private String getLL(boolean withRadius) {
         MapRequest mapRequest = new MapRequest();
         StringBuilder res = new StringBuilder();
-        res.append("&ll=").append(mapRequest.getUserLong())
-            .append("," ).append(mapRequest.getUserLati());
+        res.append("&ll=").append(CENTER.latitude)
+            .append("," ).append(CENTER.longitude);
+
+        // TODO return here
+//        res.append("&ll=").append(mapRequest.getUserLong())
+//                .append("," ).append(mapRequest.getUserLati());
 
         if (withRadius) {
             res.append("&spn=").append(mapRequest.getRadiusLong())
