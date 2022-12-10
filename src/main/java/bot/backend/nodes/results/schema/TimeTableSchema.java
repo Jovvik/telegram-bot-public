@@ -53,6 +53,8 @@ public abstract class TimeTableSchema {
                 new MovieEventScheme(),
                 new FoodAndActiveEvent(),
                 new FoodAndCultureEvent(),
+                new CultureEventScheme(),
+                new ActiveEventScheme(),
 //                new MassEventSchema(),
                 new OneFoodEvent()
 //                new RomanticSchema()
