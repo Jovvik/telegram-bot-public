@@ -146,6 +146,11 @@ public class MapResponse {
                         public static class Interval {
                             public String to;
                             public String from;
+
+                            public Interval(String from, String to) {
+                                this.to = to;
+                                this.from = from;
+                            }
                         }
                     }
                 }

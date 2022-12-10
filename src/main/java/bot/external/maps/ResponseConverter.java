@@ -35,12 +35,12 @@ public class ResponseConverter {
         this.tagService = tagService;
     }
 
-    private Integer parseTime(String time) {
+    protected Integer parseTime(String time) {
         String[] splitted = time.split(":");
         return Integer.parseInt(splitted[0]) * 60 + Integer.parseInt(splitted[1]);
     }
 
-    private Event.Time getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
+    protected Event.Time getInterval(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability.Interval> intervals) {
         if (intervals == null) {
             return new Event.Time(0, 24 * 60);
         }
@@ -51,7 +51,7 @@ public class ResponseConverter {
         return new Event.Time(timeFrom, timeTo);
     }
 
-    private List<Event.Time> createDaysAvailabilities
+    protected List<Event.Time> createDaysAvailabilities
             (List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities) {
         List<Event.Time> daysAvailabilities = new ArrayList<>(Collections.nCopies(7, new Event.Time(-1, -1)));
 
@@ -76,7 +76,7 @@ public class ResponseConverter {
         return daysAvailabilities;
     }
 
-    private StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
+    protected StringBuilder getTimeIntervals(List<MapResponse.Feature.Properties.CompanyMetaData.Hours.Availability> availabilities,
                                            String joiner) {
         List<Event.Time> daysAvailabilities = createDaysAvailabilities(availabilities);
         StringBuilder res = new StringBuilder();

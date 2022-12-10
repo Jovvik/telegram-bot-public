@@ -9,6 +9,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 
 @Getter
@@ -40,6 +41,23 @@ public abstract class Event {
 
         @Getter
         public Integer to;
+
+        @Override
+        public boolean equals(Object o) {
+            if (this == o) {
+                return true;
+            }
+            if (o == null || getClass() != o.getClass()) {
+                return false;
+            }
+            Limited limited = (Limited) o;
+            return Objects.equals(from, limited.from) && Objects.equals(to, limited.to);
+        }
+
+        @Override
+        public int hashCode() {
+            return Objects.hash(from, to);
+        }
     }
 
     // In minutes
@@ -62,6 +80,8 @@ public abstract class Event {
         public String toString() {
             return "c " + intToTimeString(from) + " до " + intToTimeString(to);
         }
+
+
     }
 
     // In rubles
