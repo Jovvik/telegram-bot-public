@@ -49,8 +49,13 @@ public class MovieEvent extends CultureEvent {
 
         public static Map<String, MovieEvent.GenreType> englishMap = new HashMap<>();
 
+        public static Map<String, MovieEvent.GenreType> russianMap = new HashMap<>();
+
+
         static {
             Arrays.stream(values()).forEach(it -> englishMap.put(it.tagName, it));
+            Arrays.stream(values()).forEach(it -> russianMap.put(it.realName, it));
+
         }
 
         private String realName;

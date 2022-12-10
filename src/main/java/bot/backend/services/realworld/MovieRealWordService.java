@@ -79,7 +79,7 @@ public class MovieRealWordService extends RealWorldService<MovieEvent, MovieDesc
             return new MovieEvent(
                     LocationConverter.convertToLocation(entity.location),
                     Category.CULTURE,
-                    new Event.Time((entity.startTime % (24 * 60)) + 80, ((entity.startTime + entity.runningTime) % (24 * 60)) + 80)
+                    new Event.Time(((entity.startTime + 3 * 3600)/ 60) % (60 * 24), (((entity.startTime + entity.runningTime + 3 * 3600)/ 60)  % (24 * 60)))
             );
     }
 

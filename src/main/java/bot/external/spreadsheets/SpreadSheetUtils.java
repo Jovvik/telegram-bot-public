@@ -175,7 +175,7 @@ public class SpreadSheetUtils {
      **/
 
     public MovieEvent.GenreType parseGenre(String genre) {
-        return MovieEvent.GenreType.englishMap.get(genre);
+        return MovieEvent.GenreType.russianMap.get(genre);
     }
 
     public MovieSessionRestriction applyGenre(Object movieType) {
