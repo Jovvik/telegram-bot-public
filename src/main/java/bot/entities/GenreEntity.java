@@ -8,7 +8,6 @@ import java.util.Objects;
 
 @Entity
 public class GenreEntity {
-
     @Id
     @GeneratedValue(strategy= GenerationType.AUTO)
     public Long id;
