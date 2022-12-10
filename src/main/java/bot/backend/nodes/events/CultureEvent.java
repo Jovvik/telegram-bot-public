@@ -36,7 +36,8 @@ public class CultureEvent extends OutDoorEvent {
 //        BALLET("Балет" ),
         GALLERY("Выставка/галерея", "выставка"),
         MUSICAL("На мюзикл", "мюзикл"),
-        ANTICAFE("Антикафе", "антикафе");
+        ANTICAFE("Антикафе", "антикафе"),
+        PARK("Прогулка на свежем воздухе", "парк");
 
         public static Map<String, CultureType> map = new HashMap<>();
 
