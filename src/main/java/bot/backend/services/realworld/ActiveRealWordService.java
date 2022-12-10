@@ -9,6 +9,8 @@ import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -19,15 +21,13 @@ import java.util.Set;
 @Service
 public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveDescription> {
 
-    private final List<ActiveEvent.ActiveType> activeTypes = new ArrayList<>();
-
     public ActiveRealWordService(LocationService locationService, TagService tagService) {
         super(locationService, tagService);
     }
 
-
     @Override
-    public TablePredicate createPredicate(ActiveDescription description) {
+    public ActiveTablePredicateContainer createPredicate(ActiveDescription description) {
+        List<ActiveEvent.ActiveType> activeTypes = new ArrayList<>();
         Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
 
@@ -39,23 +39,42 @@ public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveD
             }
         });
 
-        return new TablePredicate(Category.ACTIVE, tags,0, 24 * 60,
-                this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
+        return new ActiveTablePredicateContainer(
+                new TablePredicate(
+                        Category.ACTIVE, tags,
+                        0,
+                        24 * 60,
+                        this.getStartDay(description.getTypedRestrictions(DateRestriction.class))
+                ),
+                activeTypes
+        );
     }
 
     @Override
     public ActiveEvent generateEvent(ActiveDescription description) {
-        TablePredicate predicate = this.createPredicate(description);
+        ActiveTablePredicateContainer container = this.createPredicate(description);
+        TablePredicate predicate = container.getTablePredicate();
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
 
         return new ActiveEvent(
-                matchedLocations.get(0),
+                getRelevantLocation(matchedLocations),
                 Category.ACTIVE,
                 new Event.Time(predicate.getTimeFrom(), predicate.getTimeTo()),
-                activeTypes
+                container.activeTypes
         );
+    }
+
+    @Getter
+    @Setter
+    public static class ActiveTablePredicateContainer extends TablePredicateContainer {
+        List<ActiveEvent.ActiveType> activeTypes;
+
+        public ActiveTablePredicateContainer(TablePredicate tablePredicate, List<ActiveEvent.ActiveType> activeTypes) {
+            super(tablePredicate);
+            this.activeTypes = activeTypes;
+        }
     }
 
 }

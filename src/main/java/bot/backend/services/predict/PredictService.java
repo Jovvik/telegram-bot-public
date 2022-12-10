@@ -100,6 +100,10 @@ public class PredictService {
             timeTables.add(timeTable);
         }
 
+        if (timeTables.isEmpty()) {
+            return null;
+        }
+
         return getBestTimeTable(timeTables);
     }
 
@@ -184,7 +188,8 @@ public class PredictService {
     }
 
     public TimeTable getBestTimeTable(List<TimeTable> timeTables) {
-        return timeTables.get(0);
+        timeTables.sort(Comparator.comparing(timeTable -> timeTable.events.size()));
+        return timeTables.get(timeTables.size() - 1); // TODO
     }
 
     private static List<QuestionResult> mergeTime(List<QuestionResult> data) {

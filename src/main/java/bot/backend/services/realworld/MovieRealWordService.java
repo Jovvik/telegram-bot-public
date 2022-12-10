@@ -1,13 +1,9 @@
 package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
-import bot.backend.nodes.description.CultureDescription;
 import bot.backend.nodes.description.MovieDescription;
-import bot.backend.nodes.events.CultureEvent;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.MovieEvent;
-import bot.backend.nodes.location.Location;
-import bot.backend.nodes.restriction.CultureRestriction;
 import bot.backend.nodes.restriction.DateRestriction;
 import bot.backend.nodes.restriction.MovieSessionRestriction;
 import bot.backend.nodes.restriction.Restriction;
@@ -15,21 +11,14 @@ import bot.backend.nodes.restriction.utils.TypedEnum;
 import bot.converters.LocationConverter;
 import bot.entities.GenreEntity;
 import bot.entities.MovieEntity;
-import bot.entities.TagEntity;
 import bot.services.GenreService;
 import bot.services.LocationService;
 import bot.services.MovieService;
 import bot.services.TagService;
-import lombok.AllArgsConstructor;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalTime;
-import java.time.ZoneId;
 import java.util.*;
 
 @Service
@@ -46,18 +35,16 @@ public class MovieRealWordService extends RealWorldService<MovieEvent, MovieDesc
     }
 
     @Override
-    public TablePredicate createPredicate(MovieDescription description) {
-        return new TablePredicate(Category.CULTURE, null,0, 24 * 60,
-                this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
+    public TablePredicateContainer createPredicate(MovieDescription description) {
+        return null;
     }
 
     @Override
     public MovieEvent generateEvent(MovieDescription description)
     {
-        TablePredicate predicate = this.createPredicate(description);
+        TablePredicate predicate = new TablePredicate(Category.CULTURE, null,0, 24 * 60,
+            this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
         this.setTimeInterval(predicate, description);
-
-//        if (!predicate.getTags().stream().map(it -> it.name).collect(Collectors.toSet()).contains("кино")) {
 
             LocalDate date = description.getTypedRestrictions(DateRestriction.class).get(0).getValue();
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");

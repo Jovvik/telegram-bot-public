@@ -2,6 +2,7 @@ package bot.backend.services.realworld;
 
 import bot.backend.nodes.categories.Category;
 import bot.backend.nodes.description.FoodDescription;
+import bot.backend.nodes.events.ActiveEvent;
 import bot.backend.nodes.events.Event;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.location.Location;
@@ -9,6 +10,8 @@ import bot.backend.nodes.restriction.*;
 import bot.entities.TagEntity;
 import bot.services.LocationService;
 import bot.services.TagService;
+import lombok.Getter;
+import lombok.Setter;
 import org.springframework.stereotype.Service;
 import bot.backend.nodes.events.FoodEvent.KitchenType;
 
@@ -17,16 +20,16 @@ import java.util.*;
 @Service
 public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescription> {
 
-    private final Set<KitchenType> kitchenTypes = new HashSet<>();
-    private final Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
-
     public FoodRealWorldService(LocationService locationService, TagService tagService) {
         super(locationService, tagService);
     }
 
 
     @Override
-    public TablePredicate createPredicate(FoodDescription description) {
+    public FoodTablePredicateContainer createPredicate(FoodDescription description) {
+        Set<KitchenType> kitchenTypes = new HashSet<>();
+        Set<FoodEvent.FoodPlaceType> foodPlaceTypes = new HashSet<>();
+
         Set<TagEntity> tags = new HashSet<>();
         List<Restriction<?, ?>> restrictions = new ArrayList<>(description.restrictions.values());
 
@@ -47,25 +50,48 @@ public class FoodRealWorldService extends RealWorldService<FoodEvent, FoodDescri
             }
         });
 
-        return new TablePredicate(Category.FOOD, tags,0, 24 * 60,
+        TablePredicate tablePredicate = new TablePredicate(Category.FOOD, tags, 0, 24 * 60,
                 this.getStartDay(description.getTypedRestrictions(DateRestriction.class)));
+        return new FoodTablePredicateContainer(
+                tablePredicate,
+                kitchenTypes,
+                foodPlaceTypes
+        );
     }
 
     @Override
     public FoodEvent generateEvent(FoodDescription description) {
-        TablePredicate predicate = this.createPredicate(description);
+        FoodTablePredicateContainer container = this.createPredicate(description);
+        TablePredicate predicate = container.tablePredicate;
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
 
         return new FoodEvent(
-                        matchedLocations.get(0),
+                        getRelevantLocation(matchedLocations),
                         Category.FOOD,
                         new Event.Time(predicate.getTimeFrom(), predicate.getTimeTo()),
-                        new ArrayList<>(kitchenTypes),
+                        new ArrayList<>(container.kitchenTypes),
                         null,
-                        new ArrayList<>(foodPlaceTypes)
+                        new ArrayList<>(container.foodPlaceTypes)
                 );
+    }
+
+    @Getter
+    @Setter
+    public static class FoodTablePredicateContainer extends TablePredicateContainer {
+        Set<KitchenType> kitchenTypes;
+        Set<FoodEvent.FoodPlaceType> foodPlaceTypes;
+
+        public FoodTablePredicateContainer(
+                TablePredicate tablePredicate,
+                Set<KitchenType> kitchenTypes,
+                Set<FoodEvent.FoodPlaceType> foodPlaceTypes
+        ) {
+            super(tablePredicate);
+            this.kitchenTypes = kitchenTypes;
+            this.foodPlaceTypes = foodPlaceTypes;
+        }
     }
 
 }

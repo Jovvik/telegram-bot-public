@@ -28,6 +28,7 @@ out/
 
 ### Local Properties and configs ###
 /src/main/resources/application-local.properties
+/src/main/resources/application-local-test.properties
 /src/main/resources/tokens/
 /src/main/resources/google/
 

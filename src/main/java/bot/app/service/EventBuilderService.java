@@ -1,10 +1,12 @@
 package bot.app.service;
 
+import bot.app.TelegramBot;
 import bot.app.utils.data.questions.QuestionResult;
 import bot.backend.nodes.events.FoodEvent;
 import bot.backend.nodes.results.TimeTable;
 import bot.backend.services.predict.ComposeService;
 import bot.backend.services.predict.PredictService;
+import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,11 @@ public class EventBuilderService {
     private final ExecutorService executor = Executors.newFixedThreadPool(10);
     private final ConcurrentLinkedDeque<Long> waitList = new ConcurrentLinkedDeque<>();
     private final Map<Long, Future<TimeTable>> results = new ConcurrentHashMap<>();
+
+    private final ExecutorService notifyExecutor = Executors.newSingleThreadExecutor();
+
+    @Setter
+    private TelegramBot telegramBot;
 
     @Autowired
     public PredictService predictService;
@@ -43,22 +50,20 @@ public class EventBuilderService {
     public void handleDataAndStartBuild(Long userId, List<QuestionResult> answerData) {
         waitList.add(userId);
         Future<TimeTable> futureResult = executor.submit(() -> {
-            System.out.printf("Event for User[%s] started building%n", userId);
+            System.out.printf("STARTED: Event for User[%s] started building%n", userId);
             waitList.removeFirst();
             var filteredAnswerData = answerData.stream()
                     .filter(q -> q.restriction != null)
                     .collect(Collectors.toList());
-            return predictService.generateTimeTable(filteredAnswerData);
-//            try {
-//                Thread.sleep(5000 + new Random().nextInt(10000));
-//                TimeTable events = new TimeTable(List.of());
-//                System.out.printf("Event for User[%s] is done!%n", userId);
-//                return events;
-//            } catch (Exception e) {
-//                System.out.println("something went wrong");
-//                System.out.println(e.getMessage());
-//                return null;
-//            }
+            TimeTable timeTable = predictService.generateTimeTable(filteredAnswerData);
+            System.out.printf("ENDED: Event for User[%s] created%n", userId);
+            notifyExecutor.submit(() -> {
+                try {
+                    Thread.sleep(100);
+                } catch (InterruptedException ignore) {}
+                telegramBot.notifyUser(timeTable, userId);
+            });
+            return timeTable;
         });
         results.put(userId, futureResult);
     }
