@@ -44,7 +44,7 @@ public class TagController {
 //        List<TagEntity> tags = new ArrayList<>();
 //        for (String category : MapMain.foodCategories) {
         TagEntity tagEntity = new TagEntity();
-        tagEntity.name = "антикафе";
+        tagEntity.name = "аэротруба";
         tagService.save(tagEntity);
 //            tags.add(tagEntity);
 //        }
