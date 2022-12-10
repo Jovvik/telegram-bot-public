@@ -57,16 +57,11 @@ public class SheetsService {
         return new AuthorizationCodeInstalledApp(flow, receiver).authorize("user");
     }
 
-    private List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig, BiFunction<List<Object>, SpreadSheetConfig, BaseQuestion<?>> toQuestionFunction) throws GeneralSecurityException, IOException {
-        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
-        final String range = spreadSheetConfig.getListWithData() + "!" + spreadSheetConfig.getRange();
-        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
-                .setApplicationName(APPLICATION_NAME)
-                .build();
-        ValueRange response = service.spreadsheets().values()
-                .get(SHEET_ID_STATIC, range)
-                .execute();
-        List<List<Object>> values = response.getValues();
+    private List<BaseQuestion<?>> getQuestions(
+            SpreadSheetConfig spreadSheetConfig,
+            BiFunction<List<Object>, SpreadSheetConfig, BaseQuestion<?>> toQuestionFunction
+    ) throws GeneralSecurityException, IOException {
+        List<List<Object>> values = cells(spreadSheetConfig);
         List<BaseQuestion<?>> result = new ArrayList<>();
         if (values == null || values.isEmpty()) {
             System.out.println("No data found.");
@@ -81,20 +76,35 @@ public class SheetsService {
         }
     }
 
+    public List<List<Object>> cells(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
+        final NetHttpTransport HTTP_TRANSPORT = GoogleNetHttpTransport.newTrustedTransport();
+        final String range = spreadSheetConfig.getListWithData() + "!" + spreadSheetConfig.getRange();
+        Sheets service = new Sheets.Builder(HTTP_TRANSPORT, JSON_FACTORY, getCredentials(HTTP_TRANSPORT))
+                .setApplicationName(APPLICATION_NAME)
+                .build();
+        ValueRange response = service.spreadsheets().values()
+                .get(SHEET_ID_STATIC, range)
+                .execute();
+        return response.getValues();
+    }
+
     public List<BaseQuestion<?>> getQuestions(SpreadSheetConfig spreadSheetConfig) throws GeneralSecurityException, IOException {
         return getQuestions(spreadSheetConfig, (row, ssc) -> {
             if (row.isEmpty()) return null;
             try {
-                QuestionType qt = QuestionType.valueOf((String) row.get(1));
-                switch (qt) {
-                    case Choose: return new ChooseQuestionForm(row).getQuestion();
-                    case Slider: return new SliderQuestionForm(row).getQuestion();
-                    case Select: return new SelectQuestionForm(row).getQuestion();
-                    default: return null;
+                if (row.size() >= 2 && (row.get(1) instanceof String)) {
+                    QuestionType qt = QuestionType.valueOf((String) row.get(1));
+                    return switch (qt) {
+                        case Choose -> new ChooseQuestionForm(row).getQuestion();
+                        case Slider -> new SliderQuestionForm(row).getQuestion();
+                        case Select -> new SelectQuestionForm(row).getQuestion();
+                        default -> null;
+                    };
                 }
             } catch (NoSuchMethodException e) {
                 return null;
             }
+            return null;
         });
     }
 
