@@ -97,8 +97,11 @@ public class PredictService {
 
         List<TimeTable> timeTables = new ArrayList<>();
 
+        // TODO this is optimisation to speed up calculations
+        Map<Class<? extends Event>, Event> computedEvents = new HashMap<>();
+
         for (TimeTableSchema timeTableSchema : acceptableSchemas) {
-            var timeTable = trySchema(timeTableSchema, fixedDataBlocks);
+            var timeTable = trySchema(timeTableSchema, fixedDataBlocks, computedEvents);
             if (timeTable == null) {
                 continue;
             }
@@ -138,9 +141,14 @@ public class PredictService {
      *
      * @param timeTableSchema - схема мероприятия
      * @param questionResults - собранные данные
+     * @param computedEvents - уже подсчитанные евенты
      * @return null - если не удалось, иначе не null
      */
-    public TimeTable trySchema(TimeTableSchema timeTableSchema, List<QuestionResult> questionResults) {
+    public TimeTable trySchema(
+            TimeTableSchema timeTableSchema,
+            List<QuestionResult> questionResults,
+            Map<Class<? extends Event>, Event> computedEvents
+    ) {
         List<Event> resultEvents = new ArrayList<>();
 
         Event.Time tr = questionResults.stream()
@@ -173,9 +181,14 @@ public class PredictService {
                 List<Event> events = new ArrayList<>();
 
                 for (int i = 0; i < descriptions.size(); i++) {
-                    Event event = realWorldService.generateEvent(descriptions.get(i));
-                    if (event == null) continue;
-                    events.add(event);
+                    if (computedEvents.containsKey(eventClass)) {
+                        events.add(computedEvents.get(eventClass));
+                    } else {
+                        Event event = realWorldService.generateEvent(descriptions.get(i));
+                        if (event == null) continue;
+                        computedEvents.put(eventClass, event);
+                        events.add(event);
+                    }
                 }
 
                 if (events.isEmpty()) {
