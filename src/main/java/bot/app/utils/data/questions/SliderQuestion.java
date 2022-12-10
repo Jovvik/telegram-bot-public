@@ -97,7 +97,7 @@ public class SliderQuestion extends ChangeableQuestion<Answer<String>> {
         return new SliderQuestion(
                 id,
                 question,
-                answers,
+                copyAnswers(),
                 changeFunction,
                 resultBiFunction
         );
