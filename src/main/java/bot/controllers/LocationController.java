@@ -50,22 +50,22 @@ public class LocationController {
     @GetMapping("/addCustomLocation")
     public void fillCustom() {
         locationService.save(LocationConverter.convertToEntity(new Location(
-                "Веревочный парк FunГрад",
-                Set.of("веревочныйпарк"),
-                Category.ACTIVE,
-        59.86656003420463,
-                30.35018768556594,
-                "89657856160",
-                "http://fungrad.ru/",
-                "Россия, Санкт-Петербург, пр. Космонавтов, 14",
-                Collections.nCopies(7, new Event.Time(10 * 60, 22 * 60)),
+                "Тайм кафе Pled",
+                Set.of("антикафе"),
+                Category.CULTURE,
+                59.92873306185114,
+                30.323951934095952,
+                "89216387178",
+                "https://vk.com/ilovepled",
+                "Россия, Санкт-Петербург, Садовая ул, 32",
+                Collections.nCopies(7, new Event.Time(0, 24 * 60)),
                 1
         ), tagService));
     }
 
     @GetMapping("/delete")
     public void deleteByCategory() {
-        for (int i = 1440; i <= 1446;++i) {
+        for (int i = 1449; i <= 1449;++i) {
             locationService.deleteById(i);
         }
     }
