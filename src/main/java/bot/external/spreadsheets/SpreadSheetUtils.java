@@ -142,11 +142,7 @@ public class SpreadSheetUtils {
     }
 
     public ActiveRestriction applySport(Object sportType) {
-        List<Integer> ints = (List<Integer>) sportType;
-        return new ActiveRestriction(ints.stream()
-                .map(i -> ActiveEvent.ActiveType.values()[i - 1])
-                .collect(Collectors.toList())
-        );
+        return new ActiveRestriction(List.of((ActiveEvent.ActiveType) sportType));
     }
 
     /**
@@ -179,8 +175,8 @@ public class SpreadSheetUtils {
      * MOVIE QUESTIONS
      **/
 
-    public MovieEvent.GenreType parseGenre(String sport) {
-        return MovieEvent.GenreType.englishMap.get(sport);
+    public MovieEvent.GenreType parseGenre(String genre) {
+        return MovieEvent.GenreType.englishMap.get(genre);
     }
 
     public GenreRestriction applyGenre(Object movieType) {
