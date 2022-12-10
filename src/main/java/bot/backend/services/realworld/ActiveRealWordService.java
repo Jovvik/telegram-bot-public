@@ -58,6 +58,10 @@ public class ActiveRealWordService extends RealWorldService<ActiveEvent, ActiveD
 
         List<Location> matchedLocations = this.findLocations(predicate);
 
+        if (matchedLocations.size() == 0) {
+            return null;
+        }
+
         return new ActiveEvent(
                 getRelevantLocation(matchedLocations),
                 Category.ACTIVE,

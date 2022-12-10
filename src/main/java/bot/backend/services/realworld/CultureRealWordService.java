@@ -55,6 +55,11 @@ public class CultureRealWordService extends RealWorldService<CultureEvent, Cultu
         this.setTimeInterval(predicate, description);
 
         List<Location> matchedLocations = this.findLocations(predicate);
+
+        if (matchedLocations.size() == 0) {
+            return null;
+        }
+
         return new CultureEvent(
                 getRelevantLocation(matchedLocations),
                 Category.CULTURE,

@@ -50,7 +50,7 @@ public class MovieRealWordService extends RealWorldService<MovieEvent, MovieDesc
             SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
             int time = 0;
             try {
-                time = (int)((sdf.parse(date.toString()).getTime())/ 1000 + 3 * 60 * 60);
+                time = (int)((sdf.parse(date.toString()).getTime())/ 1000);
             } catch (Exception e) {
 
             }
@@ -75,10 +75,11 @@ public class MovieRealWordService extends RealWorldService<MovieEvent, MovieDesc
             return null;
         }
             MovieEntity entity = movieEntities.get(0);
+            entity.location.locationName = entity.location.locationName + "\nФильм: " + entity.title;
             return new MovieEvent(
                     LocationConverter.convertToLocation(entity.location),
                     Category.CULTURE,
-                    new Event.Time(entity.startTime % 3600, (entity.startTime + entity.runningTime) % 3600)
+                    new Event.Time((entity.startTime % (24 * 60)) + 80, ((entity.startTime + entity.runningTime) % (24 * 60)) + 80)
             );
     }
 

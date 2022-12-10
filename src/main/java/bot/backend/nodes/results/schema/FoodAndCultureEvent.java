@@ -15,8 +15,8 @@ public class FoodAndCultureEvent extends TimeTableSchema {
 
     public List<Class<? extends Event>> eventOrder() {
         return List.of(
-                FoodEvent.class,
-                CultureEvent.class
+                CultureEvent.class,
+                FoodEvent.class
         );
     }
 
