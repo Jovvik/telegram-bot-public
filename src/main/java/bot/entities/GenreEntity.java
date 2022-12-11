@@ -18,7 +18,7 @@ public class GenreEntity {
     public boolean equals(Object o) {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
-        TagEntity tagEntity = (TagEntity) o;
+        GenreEntity tagEntity = (GenreEntity) o;
         return id.equals(tagEntity.id) && name.equals(tagEntity.name);
     }
 
