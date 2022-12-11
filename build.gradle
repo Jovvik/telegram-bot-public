@@ -8,6 +8,7 @@ apply plugin: 'java'
 apply plugin: 'io.spring.dependency-management'
 apply plugin: 'org.jetbrains.kotlin.jvm'
 apply plugin: 'org.springframework.boot'
+apply plugin: 'jacoco'
 
 group 'org.example'
 version '1.0-SNAPSHOT'
@@ -42,3 +43,12 @@ dependencies {
 test {
     useJUnitPlatform()
 }
+
+jacocoTestReport {
+    reports {
+        xml.enabled true
+        html.enabled false
+    }
+}
+
+check.dependsOn jacocoTestReport
